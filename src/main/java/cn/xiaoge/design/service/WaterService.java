@@ -44,4 +44,7 @@ public interface WaterService {
      */
     boolean deleteById(Integer id);
 
+    Object findAll(Integer page, String order, Integer size);
+
+
 }

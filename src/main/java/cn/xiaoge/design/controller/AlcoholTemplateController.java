@@ -62,14 +62,8 @@ public class AlcoholTemplateController {
 
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("update")
-    public ReturnBean update(
-            Integer id,
-            @Size(max = 50) String name,
-            Integer length,
-            MultipartFile file,
-            Integer purposeId,
-            Integer materialId,
-            Integer boxTypeId) throws Exception {
+    public ReturnBean update(Integer id, @Size(max = 50) String name, Integer length, MultipartFile file,
+                             Integer purposeId, Integer materialId, Integer boxTypeId) throws Exception {
 
 
         AlcoholTemplate alcoholTemplate = new AlcoholTemplate();
@@ -89,17 +83,11 @@ public class AlcoholTemplateController {
         alcoholTemplate.setBoxTypeId(boxTypeId);
         alcoholTemplateService.updateNotNull(alcoholTemplate);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
-
-
     }
 
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("updateStyle")
-    public ReturnBean updateStyle(
-            Integer id,
-            String header1Style,
-            String header2Style,
-            String bodyStyle
+    public ReturnBean updateStyle(Integer id, String header1Style, String header2Style, String bodyStyle
 
     ) throws Exception {
 

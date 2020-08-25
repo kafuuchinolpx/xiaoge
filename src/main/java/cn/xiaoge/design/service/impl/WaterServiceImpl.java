@@ -1,13 +1,14 @@
 package cn.xiaoge.design.service.impl;
-
 import cn.xiaoge.design.entity.Water;
+import cn.xiaoge.design.entity.vo.PageBean;
 import cn.xiaoge.design.repository.WaterRepository;
 import cn.xiaoge.design.service.WaterService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-
-import javax.annotation.Resource;
-import java.util.List;
+import org.springframework.util.StringUtils;
 import java.util.Optional;
 
 /**
@@ -71,4 +72,25 @@ public class WaterServiceImpl implements WaterService {
         waterRepository.deleteById(id);
         return true;
     }
+
+    @Override
+    public Object findAll(Integer page, String order, Integer size) {
+        Pageable pageable;
+        if (!StringUtils.isEmpty(order)) {
+            String[] s = order.split(" ");
+            if (s.length == 2) {
+                Sort sort = new Sort(Sort.Direction.fromString(s[1]), s[0]);
+                pageable = PageRequest.of(page - 1, size, sort);
+            } else {
+                pageable = PageRequest.of(page - 1, size);
+            }
+        } else {
+            pageable = PageRequest.of(page - 1, size);
+        }
+        return PageBean.of(waterRepository.findAll(pageable), order, "");
+    }
+
+
+
+
 }
