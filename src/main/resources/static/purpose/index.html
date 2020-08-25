@@ -1,0 +1,283 @@
+<!DOCTYPE>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用途</title>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.form/4.0.0/jquery.form.min.js"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+
+</head>
+<body >
+<div id="purpose_app" class="container-fluid" v-cloak>
+    <div class="row" style="margin-top: 8px;margin-bottom: 18px">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+            <div class="row">
+                <div class="col-xs-12 h4">用途：</div>
+                <div class="col-lg-9 col-md-8 col-sm-7 col-xs-4">
+                    <div class="btn btn-primary btn-sm" @click="edit_it(0)">
+                        <i class="fa fa-plus"></i> &nbsp;添加
+                    </div>
+                    <div class="btn btn-warning btn-sm hidden-xs" @click="edit_it(-1)">
+                        <i class="fa fa-pencil"></i> &nbsp;批量修改
+                    </div>
+
+                    <div class="btn btn-danger btn-sm hidden-xs" @click="delete_items()">
+                        <i class="fa fa-trash-o"></i> &nbsp;批量删除
+                    </div>
+                    <div class="btn btn-default btn-sm hidden-xs" @click="select_all">
+                        <i class="fa fa-hand-o-down"></i> &nbsp;<span v-if="!is_select_all">不</span>全选
+                    </div>
+
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-5 col-xs-8">
+                    <div class="input-group">
+                        <span class="input-group-addon">用途名</span>
+                        <input type="text" class="form-control" v-model="search_key">
+                        <span class="input-group-addon" @click="reload_data()">搜索</span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-top: 10px">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(d,index) in page_data.content">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <table style="width: 100%">
+                                <tr>
+                                    <td>用途名</td>
+                                    <td >{{d.name}}</td>
+                                </tr>
+                                <tr>
+                                    <td>备注</td>
+                                    <td >{{d.remark}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>创建时间</td>
+                                    <td> {{d.createTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td>修改时间</td>
+                                    <td> {{d.updateTime}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2">
+                                        <span style="cursor: pointer;margin-top: 20px;display: block;">
+                                            <span class=" btn-info btn-sm"  @click="show_it(d.id)">详情</span>
+                                            <span class=" btn-warning btn-sm"  @click="edit_it(d.id)">编辑</span>
+                                            <span class=" btn-danger btn-sm" @click="delete_it(d.id)">删除</span>
+                                            <label class="checkbox-inline pull-right hidden-xs">
+                                                <input type="checkbox" :value="d.id" v-model="delete_id_list" >选择
+                                            </label>
+                                        </span>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-5 col-sm-12 col-xs-12">
+                    <label>
+                        <select class="input-sm" v-model="page_size">
+                            <option value="10">10</option>
+                            <option value="16">16</option>
+                            <option value="30">30</option>
+                            <option value="60">60</option>
+                            <option value="100">100</option>
+                        </select>
+                        页面大小
+                    </label>
+                    条数：{{page_data.totalCount}}
+                    页数：{{page_index}}/{{page_data.pageCount}}
+                </div>
+                <div class="col-lg-6 col-md-7 col-sm-12 col-xs-12">
+                    <ul class="pagination" style="margin: 0;">
+                        <li class="hidden-xs">
+                            <a href="javascript:" @click="goto_page(1)">首页</a>
+                        </li>
+                        <li :class="page_index>1" class=" previous ">
+                            <a href="javascript:" @click="goto_page(page_data.page-1)">上一页</a>
+                        </li>
+                        <li v-for="d in page_data.pageCount"
+                            v-if="page_index<5?(d<8):page_index>page_data.pageCount-4?(d>page_data.pageCount-7):(d<page_index+4&&d>page_index-4)"
+                            :class="page_data.page==d?'active':''">
+                            <a href="javascript:" @click="goto_page(d)">{{d}} </a>
+                        </li>
+                        <li :class="page_data.pageCount>page_index">
+                            <a href="javascript:"  @click="goto_page(page_data.page+1)">下一页</a>
+                        </li>
+                        <li class="hidden-xs">
+                            <a href="javascript:" @click="goto_page(page_data.pageCount)">末页</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    new Vue({
+        el: '#purpose_app',
+        data: {
+            delete_id_list: [],
+            is_select_all: true,
+            page_index: 1,//页面索引
+            page_data: {},//页面对象
+            page_size: 16,//页面大小
+            search_key: "",//搜索关键字
+            order: "",//排序属性
+            orderType: true,//排序类型
+        },
+        watch: {//监听数据变化
+            page_size: function (val, oldVal) {//一旦页面大小发生变化，页码自动变为1
+                var vm = this;
+                vm.page_index = 1;
+                vm.reload_data();
+            }
+        },
+        created: function () {//vue对象创建完成
+            this.reload_data();
+        },
+        methods: {
+            //根据指定列排序
+            order_by: function (orderField,data){
+                this.order = orderField + " " + data;
+                this.reload_data();
+                this.orderType = !this.orderType;
+            },
+            //重载数据
+            reload_data: function () {
+                var vm = this;
+
+
+                $.post("/design/purpose/findAll", {
+                    page: vm.page_index,
+                    searchKey: vm.search_key,
+                    order: vm.order,
+                    size: vm.page_size
+                }, function (data) {
+                    if (data.ok) {
+                        vm.page_data = data.obj;
+                        return;
+                    }
+                    if (data.code == 401){
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                });
+            },
+            //跳转指定页
+            goto_page: function (page) {
+                var vm = this;
+                if (page > 0 && vm.page_index != page && page <= vm.page_data.pageCount) {
+                    vm.page_index = page;
+                    vm.reload_data();
+                }
+            },
+            //删除
+            delete_it: function (id) {
+                var vm = this;
+                layer.confirm('您确定要删除吗？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.post("/design/purpose/delete", {id: id}, function (data) {
+                        if (data.ok) {
+                            vm.reload_data();
+                            layer.alert(data.msg);
+                        }else {
+                            layer.alert(data.msg + ":" + data.obj);
+                        }
+
+                    })
+                });
+            },
+            //全选
+            select_all:function () {
+                var vm = this;
+                vm.is_select_all = !vm.is_select_all;
+                if (vm.is_select_all) {
+                    vm.delete_id_list = [];
+                } else { //实现全选
+                    vm.delete_id_list = [];
+                    vm.page_data.content.forEach(function (item, i) {
+                        vm.delete_id_list.push(item.id);
+                    });
+                }
+            },
+            //批量删除
+            delete_items:function (){
+                var vm = this;
+                if(this.delete_id_list.length!=0){
+                    layer.confirm('您确定要删除吗？', {
+                        btn: ['确定', '取消'] //按钮
+                    }, function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "/design/purpose/delete",
+                            data: {ids: vm.delete_id_list.toString()},
+                            dataType: "json",
+                            async: false,
+                            success: function (data){
+                                layer.msg(data.msg);
+                            }
+                        });
+                        vm.reload_data();
+                    });
+                }else {
+                    layer.alert("请选择删除的对象")
+                }
+            },
+            //编辑该菜单
+            edit_it: function (id) {
+                var vm=this;
+                if (document.body.clientWidth < 768) {
+                    location.href = '/design/purpose/edit.html?id=' + id + "&list=" + vm.delete_id_list + "&page=" + location.href.split("#")[1];
+                }else {
+                    layer.open({
+                        type: 2,
+                        title: '用途',
+                        shade: false,
+                        offset: '100px',
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['800px', '600px'],
+                        content: '/design/purpose/edit.html?id=' + id + "&list=" + vm.delete_id_list,
+                        end: function (){
+                            vm.reload_data();
+                        }
+                    });
+                }
+            },
+            //详情
+            show_it: function (id) {
+                if (document.body.clientWidth < 768) {
+                    location.href = '/design/purpose/show.html?id=' + id;
+                }else {
+                    layer.open({
+                        type: 2,
+                        title: '用途',
+                        shade: false,
+                        offset: '100px',
+                        maxmin: true, //开启最大化最小化按钮
+                        area: ['800px', '600px'],
+                        content: '/design/purpose/show.html?id=' + id,
+                    });
+                }
+            },
+        }
+    })
+</script>
+</body>
+</html>

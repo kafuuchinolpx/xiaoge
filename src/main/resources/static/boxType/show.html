@@ -1,0 +1,135 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <title>盒型</title>
+    <script src="https://cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/jquery.form/4.0.0/jquery.form.min.js"></script>
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/layer/2.2/layer.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+        .code {
+            border: 1px solid #43478e;
+        }
+
+        .code table {
+            border-top: 1px solid #ccc;
+            border-left: 1px solid #ccc;
+        }
+
+        .code table td,
+        table th {
+            border-bottom: 1px solid #ccc;
+            border-right: 1px solid #ccc;
+            padding: 3px 5px;
+        }
+
+        .code table th {
+            border-bottom: 2px solid #ccc;
+            text-align: center;
+        }
+
+        .code blockquote {
+            display: block;
+            border-left: 8px solid #d0e5f2;
+            padding: 5px 10px;
+            margin: 10px 0;
+            line-height: 1.4;
+            font-size: 100%;
+            background-color: #f1f1f1;
+        }
+
+        .code code {
+            display: inline-block;
+            *display: inline;
+            *zoom: 1;
+            background-color: #f1f1f1;
+            border-radius: 3px;
+            padding: 3px 5px;
+            margin: 0 3px;
+        }
+
+        .code pre code {
+            display: block;
+        }
+
+        .code ul, ol {
+            margin: 10px 0 10px 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="show_boxType_app" class="container-fluid" v-cloak>
+    <div class="h4 text-center" onclick="history.back()"><i class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>盒型</div>
+    <table class="table table-bordered table-hover"  style="width: 100%;word-break:break-all;">
+        <tr>
+            <td>盒型名字</td>
+            <td >{{obj.name}}</td>
+        </tr>
+        <tr>
+            <td>备注</td>
+            <td >{{obj.remark}}</td>
+        </tr>
+        <tr>
+            <td>创建时间</td>
+            <td> {{obj.createTime}}</td>
+        </tr>
+        <tr>
+            <td>修改时间</td>
+            <td> {{obj.updateTime}}</td>
+        </tr>
+    </table>
+
+
+</div>
+<script>
+    new Vue({
+        el: '#show_boxType_app',
+        data: {
+            id: get_parameter("id"),
+            obj: {},
+        },
+        created: function () {
+            var vm = this;
+
+            if (vm.id > 0) {
+                $.post("/design/boxType/findById", {id: vm.id}, function (data) {
+                    if (data.ok) {
+                        vm.obj = data.obj;
+                        return;
+                    }
+                    if (data.code == 401){
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                });
+            }
+        },
+        methods: {
+            close_this:function  (){
+                var index = parent.layer.getFrameIndex(window.name);
+                parent.layer.close(index);
+            }
+
+        }
+    })
+
+    //获取路径中的值
+    function get_parameter(name) {
+        var lot = location.search;
+        var reg = new RegExp(".*" + name + "\\s*=([^=&#]*)(?=&|#|).*", "g");
+        return decodeURIComponent(lot.replace(reg, "$1"));
+    }
+</script>
+</body>
+</html>

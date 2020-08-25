@@ -1,0 +1,29 @@
+spring:
+  application:
+    name: design
+  datasource:
+    url: jdbc:mysql://47.106.193.31:3306/design?characterEncoding=utf-8&useSSL=false
+    username: root
+    password: 123456
+    driver-class-name: com.mysql.jdbc.Driver
+
+    hikari:
+      #连接池最大连接数，默认是10
+      maximum-pool-size: 10
+      #最小空闲连接数量
+      minimum-idle: 3
+      #空闲连接存活最大时间，默认600000（10分钟）
+      idle-timeout: 180000
+  jpa:
+    show-sql: true
+    database-platform: org.hibernate.dialect.MySQL57InnoDBDialect
+    hibernate:
+      ddl-auto: update
+  jmx:
+    default-domain: design
+enableSwagger2: true
+server:
+  servlet:
+    context-path: /design
+  port: 8080
+filePath: C:/resource/design/

@@ -1,0 +1,173 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <title>订单</title>
+    <script src="https://cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
+    <script src="https://cdn.bootcss.com/jquery.form/4.0.0/jquery.form.min.js"></script>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="https://cdn.bootcss.com/twitter-bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/3.1.0/wangEditor.min.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="edit_order_app" class="container-fluid" v-cloak>
+    <div class="h4 text-center" onclick="history.back()"><i class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>订单</div>
+    <form id="my_form" enctype="multipart/form-data" method="post">
+        <input name="id" v-model="obj.id" hidden="hidden"/>
+        <table class="table table-bordered table-hover">
+            <tr>
+                <td>应用用户</td>
+                <td>
+                    <select v-model="obj.userId"  name="userId"
+                            class="form-control">
+                        <option v-for="appUser in appUser_list"
+                                :value="appUser.id">{{appUser.name}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr >
+                <td>支付状态</td>
+                <td>
+                    <input type="text" class="form-control"  name="payStatus" v-model="obj.payStatus" maxlength="11">
+                </td>
+            </tr>
+            <tr >
+                <td>详细信息</td>
+                <td>
+                    <textarea class="form-control" name="info" v-model="obj.info" rows="3"></textarea>
+                </td>
+            </tr>
+            <tr >
+                <td>文件1</td>
+                <td>
+                    <input type="text" class="form-control"  name="file1" v-model="obj.file1" maxlength="11">
+                </td>
+            </tr>
+            <tr >
+                <td>文件2</td>
+                <td>
+                    <input type="text" class="form-control"  name="file2" v-model="obj.file2" maxlength="11">
+                </td>
+            </tr>
+        </table>
+        <div>
+            <button type="button" @click="com_the_form()" class="btn btn-primary btn-block">提交</button>
+            <button type="button" @click="close_this()" class="btn btn-success btn-block">取消</button>
+        </div>
+    </form>
+</div>
+<script>
+    new Vue({
+        el: '#edit_order_app',
+        data: {
+            id: get_parameter("id"),
+            obj: {},
+            appUser_list: [],
+        },
+        created: function () {
+            var vm = this;
+            $.ajax({
+                type: "POST",
+                url: "/design/appUser/findAll",
+                data: {page: 1, size: 10000,searchKey:'',order:''},
+                dataType: "json",
+                async: false,
+                success: function (data){
+                    if (data.ok) {
+                        vm.appUser_list = data.obj.content;
+                        return;
+                    }
+                    if (data.code == 401){
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                }
+            });
+
+            if (vm.id > 0) {
+                $.post("/design/order/findById", {id: vm.id}, function (data) {
+                    if (data.ok) {
+                        vm.obj = data.obj;
+                        return;
+                    }
+                    if (data.code == 401){
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                });
+            }else {
+            }
+        },
+        methods: {
+            close_this: function  (){
+                if (document.body.clientWidth < 576) {
+                    history.back();
+                }else {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+            },
+            com_the_form: function () {
+                //数据校验
+                var vm = this;
+
+                var myUrl
+                if (vm.id != 0) {
+                    //修改
+                    myUrl = "/design/order/update";
+                }else {
+                    //添加
+                    var myUrl = "/design/order/add"
+                }
+                $("#my_form").attr("action", myUrl).ajaxSubmit({
+                    async: false,
+                    data:{
+                        ids: get_parameter("list"),
+                    },//额外数据
+                    success: function (data) {
+                        if (data.ok) {
+                            if (document.body.clientWidth < 768) {
+                                location.href = "/design#"+get_parameter("page");
+                            }else {
+                                vm.close_this();
+                            }
+                            return;
+                        }
+                        if (data.code == 401){
+                            location.href = "/design/login.html?redirectUrl=" + location.href;
+                            return;
+                        }
+                        layer.alert(data.msg + ":" + data.obj);
+                    },
+                    error:function () {
+                        layer.alert("网络错误，请检查")
+                    }
+                });
+            }
+
+        }
+    })
+
+    //获取路径中的值
+    function get_parameter(name) {
+        var lot = location.search;
+        var reg = new RegExp(".*" + name + "\\s*=([^=&#]*)(?=&|#|).*", "g");
+        return decodeURIComponent(lot.replace(reg, "$1"));
+    }
+</script>
+</body>
+</html>
