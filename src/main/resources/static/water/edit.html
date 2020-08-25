@@ -152,7 +152,7 @@
             });
 
             if (vm.id > 0) {
-                $.post("/design/alcoholTemplate/findById", {id: vm.id}, function (data) {
+                $.post("/design/water/findById", {id: vm.id}, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;
                         return;
@@ -183,10 +183,10 @@
                 var myUrl
                 if (vm.id != 0) {
                     //修改
-                    myUrl = "/design/alcoholTemplate/update";
+                    myUrl = "/design/water/update";
                 }else {
                     //添加
-                    var myUrl = "/design/alcoholTemplate/add"
+                    var myUrl = "/design/water/add"
                 }
                 $("#my_form").attr("action", myUrl).ajaxSubmit({
                     async: false,

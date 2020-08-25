@@ -1,4 +1,6 @@
 package cn.xiaoge.design.controller;
+
+import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.entity.Water;
 import cn.xiaoge.design.entity.vo.ReturnBean;
 import cn.xiaoge.design.service.WaterService;
@@ -11,6 +13,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.io.File;
@@ -101,11 +104,43 @@ public class WaterController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
+//    @ApiOperation(value = "水模板修改不为空的属性")
+//    @PostMapping("updateStyle")
+//    public ReturnBean updateStyle(Integer id, String header1Style, String header2Style, String bodyStyle
+//
+//    ) throws Exception {
+//
+//        System.out.println(bodyStyle);
+//        Water water = new Water();
+//
+//        water.setId(id);
+//        if (!StringUtils.isEmpty(header1Style)) {
+//            water.setHeader1Style(header1Style);
+//        }
+//        if (!StringUtils.isEmpty(header2Style)) {
+//            water.setHeader2Style(header2Style);
+//        }
+//        if (!StringUtils.isEmpty(bodyStyle)) {
+//            water.setBodyStyle(bodyStyle);
+//        }
+//
+//        waterService.updateNotNull(alcoholTemplate);
+//        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+//
+//
+//    }
+
 
     @ApiOperation(value = "水模板分页查询全部")
     @PostMapping("findAll")
     public ReturnBean findAll(@RequestParam(defaultValue = "1") Integer page, String order,
                               @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, waterService.findAll(page, order, size));
+    }
+
+    @ApiOperation(value = "水模板根据id查询单个")
+    @PostMapping("findById")
+    public ReturnBean findById(@RequestParam Integer id) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, waterService.findById(id));
     }
 }

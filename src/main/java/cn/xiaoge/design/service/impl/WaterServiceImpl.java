@@ -1,4 +1,5 @@
 package cn.xiaoge.design.service.impl;
+
 import cn.xiaoge.design.entity.Water;
 import cn.xiaoge.design.entity.vo.PageBean;
 import cn.xiaoge.design.repository.WaterRepository;
@@ -9,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
+
 import java.util.Optional;
 
 /**
@@ -90,7 +92,10 @@ public class WaterServiceImpl implements WaterService {
         return PageBean.of(waterRepository.findAll(pageable), order, "");
     }
 
-
+    @Override
+    public Object findById(Integer id) {
+        return waterRepository.findById(id);
+    }
 
 
 }

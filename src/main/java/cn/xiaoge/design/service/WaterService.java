@@ -47,4 +47,5 @@ public interface WaterService {
     Object findAll(Integer page, String order, Integer size);
 
 
+    Object findById(Integer id);
 }
