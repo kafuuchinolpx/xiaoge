@@ -2,7 +2,8 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
     <title>智能设计</title>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/jquery/3.2.0/jquery.min.js"></script>
@@ -11,15 +12,16 @@
     <script src="https://cdn.bootcss.com/layer/2.3/layer.js"></script>
     <script src="https://cdn.bootcss.com/vue/2.2.0/vue.min.js"></script>
     <style>
-        #right_div::-webkit-scrollbar{
+        #right_div::-webkit-scrollbar {
             display: none;
         }
-        @media only screen and (max-width: 768px){
-            #left_div{
+
+        @media only screen and (max-width: 768px) {
+            #left_div {
                 display: none;
             }
 
-            #right_div{
+            #right_div {
                 width: 100% !important;
             }
         }
@@ -27,45 +29,47 @@
 </head>
 <body>
 
-    <div style="border-radius: 0px; z-index: 100000;height: 60px;background: #323232;">
-        <div style="background: #F09B22;height: 60px;width: 150px;line-height: 60px;text-align: center;float: left;color: white;font-size: 130%;font-weight: bold" onclick="show_model_nav()" title="2020-8-14 17:21:08">
-           智能设计
-        </div>
-        <span class="pull-right" style="line-height: 60px;margin-right: 30px;color: white" onclick="logout()" id="logout_span">退出&nbsp;<i
-                    class="fa fa-user"></i>&nbsp;</span>
+<div style="border-radius: 0px; z-index: 100000;height: 60px;background: #323232;">
+    <div style="background: #F09B22;height: 60px;width: 150px;line-height: 60px;text-align: center;float: left;color: white;font-size: 130%;font-weight: bold"
+         onclick="show_model_nav()" title="2020-8-14 17:21:08">
+        智能设计
     </div>
-    <div>
-        <div id="left_div"
-             style="width: 150px;float: left;background: #323232;height: calc(100% - 60px);position: relative;">
-            <div id="nav">
+    <span class="pull-right" style="line-height: 60px;margin-right: 30px;color: white" onclick="logout()"
+          id="logout_span">退出&nbsp;<i
+            class="fa fa-user"></i>&nbsp;</span>
+</div>
+<div>
+    <div id="left_div"
+         style="width: 150px;float: left;background: #323232;height: calc(100% - 60px);position: relative;">
+        <div id="nav">
 
-            </div>
-            <div style="width: 10px;height: 100%;background: #fff;position: absolute;top: 0;right: -10px;cursor: pointer;line-height: 700px;z-index: 1000;text-align: center"
-                 onclick="hide_left()">
-                ‖
-            </div>
         </div>
-        <div id="right_div" class="container-fluid"
-             style="width: calc(100% - 150px);float: left;height: calc(100% - 60px);overflow-y: scroll;">
-            <div class="row" id="tab-content" >
-
-
-            </div>
+        <div style="width: 10px;height: 100%;background: #fff;position: absolute;top: 0;right: -10px;cursor: pointer;line-height: 700px;z-index: 1000;text-align: center"
+             onclick="hide_left()">
+            ‖
         </div>
     </div>
+    <div id="right_div" class="container-fluid"
+         style="width: calc(100% - 150px);float: left;height: calc(100% - 60px);overflow-y: scroll;">
+        <div class="row" id="tab-content">
+
+
+        </div>
+    </div>
+</div>
 </body>
 
 <script>
 
     function hide_left() {
-        if($("#left_div").css("width")=='150px'){
-            $("#left_div").css("width",'15px');
+        if ($("#left_div").css("width") == '150px') {
+            $("#left_div").css("width", '15px');
             $("#nav").hide();
-            $("#right_div").css("width",'calc(100% - 20px)');
-        }else {
-            $("#left_div").css("width",'150px');
+            $("#right_div").css("width", 'calc(100% - 20px)');
+        } else {
+            $("#left_div").css("width", '150px');
             $("#nav").show();
-            $("#right_div").css("width",'calc(100% - 150px)');
+            $("#right_div").css("width", 'calc(100% - 150px)');
         }
     }
 
@@ -75,7 +79,7 @@
                 $(document.body).prepend("<div style='background:rgba(3,3,3,0.3);width: 100%;height: 100%;position: absolute;z-index: 100000;' id='hide_div' onclick='this_hide(this)'><div  style='width: 150px;float:left;background: #323232;height: calc(100% - 60px);position: relative;margin-top: 60px;'>" + $("#nav").html() + "</div></div>")
             }
             $("#hide_div").show();
-        }else{
+        } else {
             hide_left();
         }
     }
@@ -85,24 +89,25 @@
     }
 
 
-    var item_list=[
+    var item_list = [
         {'name': '盒型管理', 'url': '/design/boxType/index.html'},
         {'name': '材料管理', 'url': '/design/material/index.html'},
         {'name': '用途管理', 'url': '/design/purpose/index.html'},
         {'name': '酒模板管理', 'url': '/design/alcoholTemplate/index.html'},
+        {'name': '水模板管理', 'url': '/design/water/index.html'},
         {'name': '订单管理', 'url': '/design/order/index.html'},
         {'name': '应用用户管理', 'url': '/design/appUser/index.html'},
         {'name': '应用版本管理', 'url': '/design/appVersion/index.html'},
         {'name': '系统用户管理', 'url': '/design/systemUser/index.html'},
     ]
 
-    function open_iframe(obj ,index) {
+    function open_iframe(obj, index) {
         if ($("#iframe" + index).length == 0) {
             $('#tab-content').append('<div id="iframe' + index + '"></div>')
             $('#iframe' + index).load(item_list[index].url);
         }
         $('#iframe' + index).show().siblings().hide();
-        $(obj).css("background",'white').css("color","black").siblings().css("background",'none').css("color","white");
+        $(obj).css("background", 'white').css("color", "black").siblings().css("background", 'none').css("color", "white");
     }
 
     $(function () {
@@ -114,33 +119,32 @@
             if (index) {
                 $('#tab-content').append('<div id="iframe' + index + '"></div>')
                 $('#iframe' + index).load(item_list[index].url);
-                $("#nav").children("a").eq(index).css("background",'white').css("color","black");
+                $("#nav").children("a").eq(index).css("background", 'white').css("color", "black");
                 return;
             }
         }
         $('#tab-content').append('<div id="iframe0"></div>')
         $('#iframe0').load(item_list[0].url);
-        $("#nav").children("a").eq(0).css("background",'white').css("color","black");
+        $("#nav").children("a").eq(0).css("background", 'white').css("color", "black");
     })
-
 
 
     function logout() {
         layer.confirm('您确定要退出吗？', {
             btn: ['确定', '取消'] //按钮
         }, function () {
-            $.post("/design/logout",{},function () {
+            $.post("/design/logout", {}, function () {
                 location.reload();
             })
         });
 
     }
 
-    $.post("/design/userInfo",{},function (data) {
-        if(data.ok){
+    $.post("/design/userInfo", {}, function (data) {
+        if (data.ok) {
             $("#logout_span").append(data.obj.name)
-        }else {
-            location.href="/design/login.html?redirectUrl="+location.href
+        } else {
+            location.href = "/design/login.html?redirectUrl=" + location.href
         }
     })
 

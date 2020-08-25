@@ -17,7 +17,7 @@ import javax.validation.constraints.Size;
 @Api(tags = {"04.用途接口"})
 @RequestMapping("purpose")
 @Validated
-public class PurposeController {
+    public class PurposeController {
 
     @Autowired
     private PurposeService purposeService;

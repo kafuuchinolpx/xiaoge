@@ -11,10 +11,11 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 
 @SpringBootApplication
 //session30*60秒过期
-@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 1800)
+@EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600*24)
 public class DesignApplication extends SpringBootServletInitializer{
 
   public static void main(String[] args) {
+
     SpringApplication.run(DesignApplication.class, args);
   }
 

@@ -9,7 +9,7 @@ spring:
 
     hikari:
       #连接池最大连接数，默认是10
-      maximum-pool-size: 10
+      maximum-pool-size: 100
       #最小空闲连接数量
       minimum-idle: 3
       #空闲连接存活最大时间，默认600000（10分钟）
