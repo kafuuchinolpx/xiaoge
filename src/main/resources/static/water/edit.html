@@ -58,28 +58,6 @@
                     </select>
                 </td>
             </tr>
-            <tr>
-                <td>材料</td>
-                <td>
-                    <select v-model="obj.materialId" name="materialId"
-                            class="form-control">
-                        <option v-for="material in material_list"
-                                :value="material.id">{{material.name}}
-                        </option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td>盒型</td>
-                <td>
-                    <select v-model="obj.boxTypeId" name="boxTypeId"
-                            class="form-control">
-                        <option v-for="boxType in boxType_list"
-                                :value="boxType.id">{{boxType.name}}
-                        </option>
-                    </select>
-                </td>
-            </tr>
         </table>
         <div>
             <button type="button" @click="com_the_form()" class="btn btn-primary btn-block">提交</button>
@@ -94,8 +72,6 @@
             id: get_parameter("id"),
             obj: {},
             purpose_list: [],
-            material_list: [],
-            boxType_list: [],
         },
         created: function () {
             var vm = this;
@@ -108,42 +84,6 @@
                 success: function (data) {
                     if (data.ok) {
                         vm.purpose_list = data.obj.content;
-                        return;
-                    }
-                    if (data.code == 401) {
-                        location.href = "/design/login.html?redirectUrl=" + location.href;
-                        return;
-                    }
-                    layer.alert(data.msg + ":" + data.obj);
-                }
-            });
-            $.ajax({
-                type: "POST",
-                url: "/design/material/findAll",
-                data: {page: 1, size: 10000, searchKey: '', order: ''},
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    if (data.ok) {
-                        vm.material_list = data.obj.content;
-                        return;
-                    }
-                    if (data.code == 401) {
-                        location.href = "/design/login.html?redirectUrl=" + location.href;
-                        return;
-                    }
-                    layer.alert(data.msg + ":" + data.obj);
-                }
-            });
-            $.ajax({
-                type: "POST",
-                url: "/design/boxType/findAll",
-                data: {page: 1, size: 10000, searchKey: '', order: ''},
-                dataType: "json",
-                async: false,
-                success: function (data) {
-                    if (data.ok) {
-                        vm.boxType_list = data.obj.content;
                         return;
                     }
                     if (data.code == 401) {

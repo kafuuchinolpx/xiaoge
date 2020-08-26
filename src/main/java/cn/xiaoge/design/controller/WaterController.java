@@ -50,8 +50,6 @@ public class WaterController {
             water.setImage(uuid8 + type);
         }
         water.setPurposeId(purposeId);
-        water.setMaterialId(materialId);
-        water.setBoxTypeId(boxTypeId);
         waterService.insert(water);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
@@ -81,8 +79,6 @@ public class WaterController {
             water.setImage(uuid8 + type);
         }
         water.setPurposeId(purposeId);
-        water.setMaterialId(materialId);
-        water.setBoxTypeId(boxTypeId);
         waterService.update(water);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }

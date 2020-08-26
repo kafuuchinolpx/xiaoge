@@ -123,8 +123,6 @@
                     <td @click="order_by('length',orderType?'asc':'desc')">最大长度<i class="fa fa-sort"></i></td>
                     <td @click="order_by('image',orderType?'asc':'desc')">图片<i class="fa fa-sort"></i></td>
                     <td @click="order_by('purposeId',orderType?'asc':'desc')">用途 <i class="fa fa-sort"></i></td>
-                    <td @click="order_by('materialId',orderType?'asc':'desc')">材料 <i class="fa fa-sort"></i></td>
-                    <td @click="order_by('boxTypeId',orderType?'asc':'desc')">盒型 <i class="fa fa-sort"></i></td>
                     <td width="110px" @click="order_by('createTime',orderType?'asc':'desc')" class="hidden-xs">创建时间<i
                             class="fa fa-sort"></i></td>
                     <td width="110px" @click="order_by('updateTime',orderType?'asc':'desc')" class="hidden-xs">修改时间<i
@@ -144,8 +142,6 @@
                     <td>{{d.length}}</td>
                     <td><img :src="d.image" height="40px"></td>
                     <td><span v-for="i in purpose_list" v-if="i.id==d.purposeId">{{i.name}}</span></td>
-                    <td><span v-for="i in material_list" v-if="i.id==d.materialId">{{i.name}}</span></td>
-                    <td><span v-for="i in boxType_list" v-if="i.id==d.boxTypeId">{{i.name}}</span></td>
                     <td class="hidden-xs"> {{d.createTime}}</td>
                     <td class="hidden-xs"> {{d.updateTime}}</td>
                     <td class="notOut text-right">
@@ -212,8 +208,6 @@
             order: "",//排序属性
             orderType: true,//排序类型
             purpose_list: [],//级联对象数组
-            material_list: [],//级联对象数组
-            boxType_list: [],//级联对象数组
         },
         watch: {//监听数据变化
             page_size: function (val, oldVal) {//一旦页面大小发生变化，页码自动变为1
@@ -261,52 +255,6 @@
 
 
                 //同步获取级联的属性
-                $.ajax({
-                    type: "POST",
-                    url: "/design/material/findAll",
-                    data: {page: 1, size: 10000, searchKey: '', order: ''},
-                    dataType: "json",
-                    async: false,
-                    success: function (data) {
-                        if (data.ok) {
-                            vm.material_list = data.obj.content;
-                            return;
-                        }
-                        if (data.code == 401) {
-                            location.href = "/design/login.html?redirectUrl=" + location.href;
-                            return;
-                        }
-                        layer.alert(data.msg + ":" + data.obj);
-                    },
-                    error: function () {
-                        layer.alert("网络错误，请检查")
-                    }
-                });
-
-
-                //同步获取级联的属性
-                $.ajax({
-                    type: "POST",
-                    url: "/design/boxType/findAll",
-                    data: {page: 1, size: 10000, searchKey: '', order: ''},
-                    dataType: "json",
-                    async: false,
-                    success: function (data) {
-                        if (data.ok) {
-                            vm.boxType_list = data.obj.content;
-                            return;
-                        }
-                        if (data.code == 401) {
-                            location.href = "/design/login.html?redirectUrl=" + location.href;
-                            return;
-                        }
-                        layer.alert(data.msg + ":" + data.obj);
-                    },
-                    error: function () {
-                        layer.alert("网络错误，请检查")
-                    }
-                });
-
 
                 $.post("/design/water/findAll", {
                     page: vm.page_index,

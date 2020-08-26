@@ -23,8 +23,6 @@ public class Water implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    private Integer boxTypeId;
-
     //创建时间
     @CreationTimestamp
     @Column(updatable = false)
@@ -34,8 +32,6 @@ public class Water implements Serializable {
     private String image;
 
     private Integer length;
-
-    private Integer materialId;
 
     private String name;
 
