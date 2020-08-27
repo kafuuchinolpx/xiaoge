@@ -1,9 +1,11 @@
 package cn.xiaoge.design.service.impl;
 
+import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.entity.Water;
 import cn.xiaoge.design.entity.vo.PageBean;
 import cn.xiaoge.design.repository.WaterRepository;
 import cn.xiaoge.design.service.WaterService;
+import cn.xiaoge.design.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -97,5 +99,20 @@ public class WaterServiceImpl implements WaterService {
         return waterRepository.findById(id);
     }
 
-
+    @Override
+    public void updateNotNull(Water water) {
+        Optional<Water> byId = waterRepository.findById(water.getId());
+        if (byId.isPresent()) {
+            Water obj = byId.get();
+            if (water.getHeaderStyle() != null) {
+                obj.setHeaderStyle(water.getHeaderStyle());
+            }
+            if (water.getBodyStyle() != null) {
+                obj.setBodyStyle(water.getBodyStyle());
+            }
+            System.out.println("*****************************" + obj);
+            waterRepository.save(obj);
+        }
+    }
 }
+

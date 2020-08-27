@@ -3,6 +3,7 @@ package cn.xiaoge.design.entity;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
@@ -42,11 +43,14 @@ public class Water implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
+    //标题样式
+    @Type(type = "text")
     private String bodyStyle;
 
-    private String header1style;
 
-    private String header2style;
+    //标题样式
+    @Type(type = "text")
+    private String headerStyle;
 
 
 }

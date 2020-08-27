@@ -48,4 +48,6 @@ public interface WaterService {
 
 
     Object findById(Integer id);
+
+    void updateNotNull(Water water);
 }

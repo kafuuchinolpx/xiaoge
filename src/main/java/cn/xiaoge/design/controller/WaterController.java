@@ -1,6 +1,5 @@
 package cn.xiaoge.design.controller;
 
-import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.entity.Water;
 import cn.xiaoge.design.entity.vo.ReturnBean;
 import cn.xiaoge.design.service.WaterService;
@@ -56,21 +55,12 @@ public class WaterController {
 
     @ApiOperation(value = "水模板修改不为空的属性")
     @PostMapping("update")
-    public ReturnBean update(
-            Integer id,
-            @Size(max = 50) String name,
-            Integer length,
-            MultipartFile file,
-            Integer purposeId,
-            Integer materialId,
-            Integer boxTypeId) throws Exception {
-
-
+    public ReturnBean update(Integer id, @Size(max = 50) String name, Integer length, MultipartFile file, Integer purposeId, Integer materialId, Integer boxTypeId) throws Exception {
         Water water = new Water();
         water.setId(id);
         water.setName(name);
         water.setLength(length);
-        if (file != null) {
+        if (file != null && file.getSize() != 0) {
             String uuid8 = UUIDUtil.getUUID8();
             String fileName = file.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
@@ -100,31 +90,21 @@ public class WaterController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
-//    @ApiOperation(value = "水模板修改不为空的属性")
-//    @PostMapping("updateStyle")
-//    public ReturnBean updateStyle(Integer id, String header1Style, String header2Style, String bodyStyle
-//
-//    ) throws Exception {
-//
-//        System.out.println(bodyStyle);
-//        Water water = new Water();
-//
-//        water.setId(id);
-//        if (!StringUtils.isEmpty(header1Style)) {
-//            water.setHeader1Style(header1Style);
-//        }
-//        if (!StringUtils.isEmpty(header2Style)) {
-//            water.setHeader2Style(header2Style);
-//        }
-//        if (!StringUtils.isEmpty(bodyStyle)) {
-//            water.setBodyStyle(bodyStyle);
-//        }
-//
-//        waterService.updateNotNull(alcoholTemplate);
-//        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
-//
-//
-//    }
+    @ApiOperation(value = "水模板修改不为空的属性")
+    @PostMapping("updateStyle")
+    public ReturnBean updateStyle(Integer id, String headerStyle, String bodyStyle) throws Exception {
+
+        Water water = new Water();
+        water.setId(id);
+        if (!StringUtils.isEmpty(headerStyle)) {
+            water.setHeaderStyle(headerStyle);
+        }
+        if (!StringUtils.isEmpty(bodyStyle)) {
+            water.setBodyStyle(bodyStyle);
+        }
+        waterService.updateNotNull(water);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
 
 
     @ApiOperation(value = "水模板分页查询全部")
