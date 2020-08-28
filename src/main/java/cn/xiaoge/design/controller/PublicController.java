@@ -114,7 +114,6 @@ public class PublicController {
 
     @Autowired
     private PurposeService purposeService;
-
     @ApiOperation(value = "用途分页查询全部")
     @PostMapping("app/purpose/findAll")
     public ReturnBean purposeFindAll(
@@ -127,7 +126,6 @@ public class PublicController {
 
     @Autowired
     private AlcoholTemplateService alcoholTemplateService;
-
     @ApiOperation(value = "app根据boxtypeId")
     @PostMapping("app/alcoholTemplate/findAll")
     public ReturnBean findByIdWithBoxType(
@@ -152,12 +150,7 @@ public class PublicController {
 
     @PostMapping("app/order/add")
     @ApiOperation(value = "订单添加")
-    public ReturnBean add(
-            Integer userId,
-            @RequestParam(defaultValue = "'未支付'") String payStatus,
-            String info,
-            MultipartFile file1,
-            MultipartFile file2) throws Exception {
+    public ReturnBean add(Integer userId, @RequestParam(defaultValue = "'未支付'") String payStatus, String info,MultipartFile file1, MultipartFile file2) throws Exception {
         Order order = new Order();
         order.setUserId(userId);
         order.setPayStatus(payStatus);

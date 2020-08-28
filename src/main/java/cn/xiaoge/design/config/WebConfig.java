@@ -1,11 +1,10 @@
 package cn.xiaoge.design.config;
-
-import org.springframework.context.annotation.Bean;
 import cn.xiaoge.design.interceptor.FirstInterceptor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter;
 import javax.servlet.http.HttpSessionListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +14,7 @@ import java.util.List;
 public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(getFirstInterceptor()).addPathPatterns("/boxType/*","/material/*","/purpose/*","/alcoholTemplate/*","/order/*","/appUser/*","/appVersion/*","/systemUser/*");
+        registry.addInterceptor(getFirstInterceptor()).addPathPatterns("/boxType/*", "/material/*", "/purpose/*", "/alcoholTemplate/*", "/order/*", "/appUser/*", "/appVersion/*", "/systemUser/*");
     }
 
     @Bean
@@ -24,14 +23,14 @@ public class WebConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public SessionEventHttpSessionListenerAdapter getSessionEventHttpSessionListenerAdapter(){
+    public SessionEventHttpSessionListenerAdapter getSessionEventHttpSessionListenerAdapter() {
         List<HttpSessionListener> listeners = new ArrayList<>();
         listeners.add(getHttpSessionListener());
         return new SessionEventHttpSessionListenerAdapter(listeners);
     }
 
     @Bean
-    public HttpSessionListener getHttpSessionListener(){
+    public HttpSessionListener getHttpSessionListener() {
         return new MySessionListener();
     }
 

@@ -140,7 +140,7 @@
     <div class="img_back">
         <img class="image" v-if="obj.image" :src="'/design/'+obj.image" width="500px">
         <p class="back_color" v-bind:style="headerStyle">{{header2Text}}</p>
-        <p class="back_color" v-bind:style="bodyStyle">{{bodyText}}</p>
+<!--        <p class="back_color" v-bind:style="bodyStyle">{{bodyText}}</p>-->
     </div>
     <div style="width: 630px;height: 1000px;margin-left: 520px;overflow: hidden;margin-top: 10px;text-align: center">
         <div class="header2Class">
@@ -232,7 +232,7 @@
         el: '#show_water_app',
         data: {
             header2Text: "小鸽订制",
-            bodyText: "酒精度： %vol             净含量： ml\n香型：                         生产许可号：\n执行标准：\n生产厂家：\n厂址：",
+            // bodyText: "酒精度： %vol             净含量： ml\n香型：                         生产许可号：\n执行标准：\n生产厂家：\n厂址：",
             id: get_parameter("id"),
             obj: {},
             headerStyle: {
@@ -270,10 +270,10 @@
                     if (data.ok) {
                         vm.obj = data.obj;
                         if (data.obj.bodyStyle) {
-                            bodyStyle = JSON.parse(data.obj.bodyStyle);
+                            vm.bodyStyle = JSON.parse(data.obj.bodyStyle);
                         }
                         if (data.obj.headerStyle) {
-                            headerStyle = JSON.parse(data.obj.headerStyle);
+                            vm.headerStyle = JSON.parse(data.obj.headerStyle);
                         }
                         console.info(headerStyle)
                         return;

@@ -73,11 +73,8 @@ public class AppUserController {
             appUserService.updateNotNull(appUser);
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
         }
-
         return ReturnBean.of(ReturnBean.AnswerCode.PARAMETER_ERROR,"id和ids必须传一个");
-
     }
-
 
     @PostMapping("delete")
     @ApiOperation(value = "应用用户根据id删除")
@@ -104,9 +101,6 @@ public class AppUserController {
             @Max(value=10000) @RequestParam(defaultValue = "15") Integer size) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, appUserService.findAll(page,order,size));
     }
-
-
-
 
     @ApiOperation(value = "应用用户根据id查询单个")
     @PostMapping("findById")
