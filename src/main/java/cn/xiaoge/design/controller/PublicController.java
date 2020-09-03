@@ -145,6 +145,15 @@ public class PublicController {
     }
 
     @Autowired
+    AppUserService appUserService;
+    @ApiOperation(value = "app用户注册")
+    @PostMapping("user/zhuChe")
+    public ReturnBean zhuChe(AppUser appUser) {
+        appUserService.add(appUser);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+    @Autowired
     private OrderService orderService;
     @Value("${filePath}")
     private String filePath;

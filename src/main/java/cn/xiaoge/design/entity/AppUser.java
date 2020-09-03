@@ -43,7 +43,9 @@ public class AppUser implements Serializable {
     @Column(length = 11)
     private String address;
 
-
+    //邮箱
+    @Type(type = "text")
+    private String email;
 
     //创建时间
     @CreationTimestamp
