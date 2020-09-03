@@ -2,7 +2,7 @@ spring:
   application:
     name: design
   datasource:
-    url: jdbc:mysql://47.106.193.31:3306/design?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://47.106.193.31/design?characterEncoding=utf-8&useSSL=false
     username: root
     password: 123456
     driver-class-name: com.mysql.jdbc.Driver

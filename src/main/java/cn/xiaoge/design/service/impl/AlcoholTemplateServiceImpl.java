@@ -147,11 +147,7 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     }
 
     @Override
-    public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan    (
-            Integer boxTypeId,
-            Integer materialId,
-            Integer purposeId,
-            int length) {
+    public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer purposeId, int length) {
 
         return  alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId,materialId,purposeId,length);
     }

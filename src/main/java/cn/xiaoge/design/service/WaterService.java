@@ -1,5 +1,6 @@
 package cn.xiaoge.design.service;
 
+import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.entity.Water;
 
 import java.util.List;
@@ -50,4 +51,8 @@ public interface WaterService {
     Object findById(Integer id);
 
     void updateNotNull(Water water);
+
+    Object findAll();
+
+    List<Water> findByPurposeIdAndLengthGreaterThan(Integer purposeId, int length);
 }

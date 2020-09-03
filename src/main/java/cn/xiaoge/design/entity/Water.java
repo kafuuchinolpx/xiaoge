@@ -19,7 +19,6 @@ import java.util.Date;
 @Data
 @Entity
 public class Water implements Serializable {
-    private static final long serialVersionUID = 353860199727601739L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -30,13 +29,22 @@ public class Water implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
+    //图片
+    @Column(length = 50)
     private String image;
 
     private Integer length;
 
+    //模板名称
+    @Column(length = 50)
     private String name;
 
+    //用途
+
     private Integer purposeId;
+
+    @Transient
+    private Purpose purpose;
 
     //最后修改时间
     @UpdateTimestamp

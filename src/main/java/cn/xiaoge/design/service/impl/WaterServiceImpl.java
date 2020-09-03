@@ -13,6 +13,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -113,6 +114,16 @@ public class WaterServiceImpl implements WaterService {
             System.out.println("*****************************" + obj);
             waterRepository.save(obj);
         }
+    }
+
+    @Override
+    public Object findAll() {
+        return waterRepository.findAll();
+    }
+
+    @Override
+    public List<Water> findByPurposeIdAndLengthGreaterThan(Integer purposeId, int length) {
+        return waterRepository.findByPurposeIdAndLengthGreaterThan(purposeId, length);
     }
 }
 

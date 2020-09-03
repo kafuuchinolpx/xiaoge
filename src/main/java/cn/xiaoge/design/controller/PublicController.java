@@ -1,9 +1,6 @@
 package cn.xiaoge.design.controller;
 
-import cn.xiaoge.design.entity.AlcoholTemplate;
-import cn.xiaoge.design.entity.AppUser;
-import cn.xiaoge.design.entity.Order;
-import cn.xiaoge.design.entity.SystemUser;
+import cn.xiaoge.design.entity.*;
 import cn.xiaoge.design.entity.vo.ReturnBean;
 import cn.xiaoge.design.service.*;
 import cn.xiaoge.design.util.UUIDUtil;
@@ -55,9 +52,7 @@ public class PublicController {
 
     @ApiOperation(value = "App登录")
     @PostMapping("app/login")
-    public ReturnBean appLogin(
-            @RequestParam String telephone,
-            @RequestParam String password) {
+    public ReturnBean appLogin(@RequestParam String telephone, @RequestParam String password) {
         AppUser user = userService.findByTelephoneAndPassword(telephone, password);
         if (user != null) {
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, user);
@@ -114,6 +109,7 @@ public class PublicController {
 
     @Autowired
     private PurposeService purposeService;
+
     @ApiOperation(value = "用途分页查询全部")
     @PostMapping("app/purpose/findAll")
     public ReturnBean purposeFindAll(
@@ -126,14 +122,19 @@ public class PublicController {
 
     @Autowired
     private AlcoholTemplateService alcoholTemplateService;
+
     @ApiOperation(value = "app根据boxtypeId")
     @PostMapping("app/alcoholTemplate/findAll")
-    public ReturnBean findByIdWithBoxType(
-            @RequestParam(defaultValue = "1") Integer boxTypeId,
-            @RequestParam(defaultValue = "1") Integer materialId,
-            @RequestParam(defaultValue = "1") Integer purposeId,
-            String alcoholName) {
+    public ReturnBean findByIdWithBoxType(@RequestParam(defaultValue = "1") Integer boxTypeId, @RequestParam(defaultValue = "1") Integer materialId,
+                                          @RequestParam(defaultValue = "1") Integer purposeId, String alcoholName) {
         List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId, materialId, purposeId, alcoholName.length());
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+    }
+
+    @ApiOperation(value = "app根据waterPurpose")
+    @PostMapping("app/water/findAll")
+    public ReturnBean findByIdWithPurpose(@RequestParam(defaultValue = "1") Integer purposeId, String waterName) {
+        List<Water> list = waterService.findByPurposeIdAndLengthGreaterThan(purposeId, waterName.length());
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
 
@@ -150,7 +151,7 @@ public class PublicController {
 
     @PostMapping("app/order/add")
     @ApiOperation(value = "订单添加")
-    public ReturnBean add(Integer userId, @RequestParam(defaultValue = "'未支付'") String payStatus, String info,MultipartFile file1, MultipartFile file2) throws Exception {
+    public ReturnBean add(Integer userId, @RequestParam(defaultValue = "'未支付'") String payStatus, String info, MultipartFile file1, MultipartFile file2) throws Exception {
         Order order = new Order();
         order.setUserId(userId);
         order.setPayStatus(payStatus);
@@ -162,21 +163,27 @@ public class PublicController {
             File file = new File(filePath + uuid8 + type);
             file1.transferTo(file);
             order.setFile1(uuid8 + type);
-
         }
         if (file2 != null && !file2.isEmpty()) {
-
             String uuid8 = UUIDUtil.getUUID8();
             String fileName = file2.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file = new File(filePath + uuid8 + type);
             file2.transferTo(file);
             order.setFile2(uuid8 + type);
-
         }
 
         orderService.add(order);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+    @Autowired
+    WaterService waterService;
+
+    @ApiOperation("水订制分割查询")
+    @PostMapping({"app/water/fengGeChaXun"})
+    public ReturnBean fengGeChaXun() {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, waterService.findAll());
     }
 
 }
