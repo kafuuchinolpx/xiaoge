@@ -90,6 +90,12 @@
             </td>
         </tr>
         <tr>
+            <td>风格</td>
+            <td>
+                <span v-for="i in style_list" v-if="i.id==obj.styleId">{{i.name}}</span>
+            </td>
+        </tr>
+        <tr>
             <td>材料</td>
             <td>
                 <span v-for="i in material_list" v-if="i.id==obj.materialId">{{i.name}}</span>
@@ -120,6 +126,7 @@
             id: get_parameter("id"),
             obj: {},
             purpose_list: [],
+            style_list: [],
             material_list: [],
             boxType_list: [],
         },
@@ -134,6 +141,24 @@
                 success: function (data){
                     if (data.ok) {
                         vm.purpose_list = data.obj.content;
+                        return;
+                    }
+                    if (data.code == 401){
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                }
+            });
+            $.ajax({
+                type: "POST",
+                url: "/design/style/findAll",
+                data: {page: 1, size: 10000},
+                dataType: "json",
+                async: false,
+                success: function (data){
+                    if (data.ok) {
+                        vm.style_list = data.obj.content;
                         return;
                     }
                     if (data.code == 401){

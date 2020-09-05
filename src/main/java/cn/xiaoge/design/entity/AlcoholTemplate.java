@@ -41,6 +41,12 @@ public class AlcoholTemplate implements Serializable {
     private Purpose purpose;
     //材料
 
+    private Integer styleId;
+
+    @Transient
+    private Purpose style;
+    //风格
+
     private Integer materialId;
 
     @Transient

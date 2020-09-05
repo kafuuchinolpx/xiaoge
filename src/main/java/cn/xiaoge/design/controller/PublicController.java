@@ -121,6 +121,16 @@ public class PublicController {
     }
 
     @Autowired
+    private StyleService styleService;
+
+    @ApiOperation(value = "用途分页查询全部")
+    @PostMapping("app/style/findAll")
+    public ReturnBean styleFindAll(@RequestParam(defaultValue = "1") Integer page, String searchKey, String order,
+                                   @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, styleService.findAll(page, searchKey, order, size));
+    }
+
+    @Autowired
     private AlcoholTemplateService alcoholTemplateService;
 
     @ApiOperation(value = "app根据boxtypeId")
@@ -146,6 +156,7 @@ public class PublicController {
 
     @Autowired
     AppUserService appUserService;
+
     @ApiOperation(value = "app用户注册")
     @PostMapping("user/zhuChe")
     public ReturnBean zhuChe(AppUser appUser) {

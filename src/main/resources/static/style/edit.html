@@ -1,0 +1,131 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <title>风格</title>
+    <script src="/design/resource/js/vue.js"></script>
+  <script src="/design/resource/js/jquery.min.js"></script>
+   <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+     <script src="/design/resource/layer/layer.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/3.1.0/wangEditor.min.js"></script>
+    <style>
+        [v-cloak]{
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="edit_style_app" class="container-fluid" v-cloak>
+    <div class="h4 text-center" onclick="history.back()"><i class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>风格</div>
+    <form id="my_form" enctype="multipart/form-data" method="post">
+        <input name="id" v-model="obj.id" hidden="hidden"/>
+        <table class="table table-bordered table-hover">
+            <tr >
+                <td>风格名</td>
+                <td>
+                    <input type="text" class="form-control"  name="name" v-model="obj.name" maxlength="11">
+                </td>
+            </tr>
+            <tr >
+                <td>备注</td>
+                <td>
+                    <textarea class="form-control" name="remark" v-model="obj.remark" rows="3"></textarea>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <button type="button" @click="com_the_form()" class="btn btn-primary btn-block">提交</button>
+            <button type="button" @click="close_this()" class="btn btn-success btn-block">取消</button>
+        </div>
+    </form>
+</div>
+<script>
+    new Vue({
+        el: '#edit_style_app',
+        data: {
+            id: get_parameter("id"),
+            obj: {},
+        },
+        created: function () {
+            var vm = this;
+
+            if (vm.id > 0) {
+                $.post("/design/style/findById", {id: vm.id}, function (data) {
+                    if (data.ok) {
+                        vm.obj = data.obj;
+                        return;
+                    }
+                    if (data.code == 401){
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                });
+            }else {
+            }
+        },
+        methods: {
+            close_this: function  (){
+                if (document.body.clientWidth < 576) {
+                    history.back();
+                }else {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+            },
+            com_the_form: function () {
+                //数据校验
+                var vm = this;
+
+                var myUrl
+                if (vm.id != 0) {
+                    //修改
+                    myUrl = "/design/style/update";
+                }else {
+                    //添加
+                    var myUrl = "/design/style/add"
+                }
+                $("#my_form").attr("action", myUrl).ajaxSubmit({
+                    async: false,
+                    data:{
+                        ids: get_parameter("list"),
+                    },//额外数据
+                    success: function (data) {
+                        if (data.ok) {
+                            if (document.body.clientWidth < 768) {
+                                location.href = "/design#"+get_parameter("page");
+                            }else {
+                                vm.close_this();
+                            }
+                            return;
+                        }
+                        if (data.code == 401){
+                            location.href = "/design/login.html?redirectUrl=" + location.href;
+                            return;
+                        }
+                        layer.alert(data.msg + ":" + data.obj);
+                    },
+                    error:function () {
+                        layer.alert("网络错误，请检查")
+                    }
+                });
+            }
+
+        }
+    })
+
+    //获取路径中的值
+    function get_parameter(name) {
+        var lot = location.search;
+        var reg = new RegExp(".*" + name + "\\s*=([^=&#]*)(?=&|#|).*", "g");
+        return decodeURIComponent(lot.replace(reg, "$1"));
+    }
+</script>
+</body>
+</html>

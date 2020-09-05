@@ -34,13 +34,8 @@ public class AlcoholTemplateController {
 
     @PostMapping("add")
     @ApiOperation(value = "酒模板添加")
-    public ReturnBean add(
-            @Size(max = 50) String name,
-            Integer length,
-            MultipartFile file,
-            Integer purposeId,
-            Integer materialId,
-            Integer boxTypeId) throws Exception {
+    public ReturnBean add(@Size(max = 50) String name, Integer length, MultipartFile file, Integer purposeId, Integer styleId,
+                          Integer materialId, Integer boxTypeId) throws Exception {
         AlcoholTemplate alcoholTemplate = new AlcoholTemplate();
         alcoholTemplate.setName(name);
         alcoholTemplate.setLength(length);
@@ -54,6 +49,7 @@ public class AlcoholTemplateController {
             alcoholTemplate.setImage(uuid8 + type);
         }
         alcoholTemplate.setPurposeId(purposeId);
+        alcoholTemplate.setStyleId(styleId);
         alcoholTemplate.setMaterialId(materialId);
         alcoholTemplate.setBoxTypeId(boxTypeId);
         alcoholTemplateService.add(alcoholTemplate);
@@ -63,8 +59,7 @@ public class AlcoholTemplateController {
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("update")
     public ReturnBean update(Integer id, @Size(max = 50) String name, Integer length, MultipartFile file,
-                             Integer purposeId, Integer materialId, Integer boxTypeId) throws Exception {
-
+                             Integer purposeId, Integer styleId, Integer materialId, Integer boxTypeId) throws Exception {
 
         AlcoholTemplate alcoholTemplate = new AlcoholTemplate();
         alcoholTemplate.setId(id);
@@ -79,6 +74,7 @@ public class AlcoholTemplateController {
             alcoholTemplate.setImage(uuid8 + type);
         }
         alcoholTemplate.setPurposeId(purposeId);
+        alcoholTemplate.setStyleId(styleId);
         alcoholTemplate.setMaterialId(materialId);
         alcoholTemplate.setBoxTypeId(boxTypeId);
         alcoholTemplateService.updateNotNull(alcoholTemplate);
@@ -131,10 +127,7 @@ public class AlcoholTemplateController {
 
     @ApiOperation(value = "酒模板分页查询全部")
     @PostMapping("findAll")
-    public ReturnBean findAll(
-            @RequestParam(defaultValue = "1") Integer page,
-            String order,
-            @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
+    public ReturnBean findAll(@RequestParam(defaultValue = "1") Integer page, String order, @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findAll(page, order, size));
     }
 

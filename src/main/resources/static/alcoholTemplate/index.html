@@ -116,13 +116,13 @@
                         <input type="checkbox" @click="select_all"/>
                     </td>
                     <td width="60px" class="hidden-xs">
-                        编号
                     </td>
 
                     <td @click="order_by('name',orderType?'asc':'desc')">模板名称<i class="fa fa-sort"></i></td>
                     <td @click="order_by('length',orderType?'asc':'desc')">最大长度<i class="fa fa-sort"></i></td>
                     <td @click="order_by('image',orderType?'asc':'desc')">图片<i class="fa fa-sort"></i></td>
                     <td @click="order_by('purposeId',orderType?'asc':'desc')">用途 <i class="fa fa-sort"></i></td>
+                    <td @click="order_by('styleId',orderType?'asc':'desc')">风格 <i class="fa fa-sort"></i></td>
                     <td @click="order_by('materialId',orderType?'asc':'desc')">材料 <i class="fa fa-sort"></i></td>
                     <td @click="order_by('boxTypeId',orderType?'asc':'desc')">盒型 <i class="fa fa-sort"></i></td>
                     <td width="110px" @click="order_by('createTime',orderType?'asc':'desc')" class="hidden-xs">创建时间<i
@@ -144,6 +144,7 @@
                     <td>{{d.length}}</td>
                     <td><img :src="d.image" height="40px"></td>
                     <td><span v-for="i in purpose_list" v-if="i.id==d.purposeId">{{i.name}}</span></td>
+                    <td><span v-for="i in style_list" v-if="i.id==d.styleId">{{i.name}}</span></td>
                     <td><span v-for="i in material_list" v-if="i.id==d.materialId">{{i.name}}</span></td>
                     <td><span v-for="i in boxType_list" v-if="i.id==d.boxTypeId">{{i.name}}</span></td>
                     <td class="hidden-xs"> {{d.createTime}}</td>
@@ -212,6 +213,7 @@
             order: "",//排序属性
             orderType: true,//排序类型
             purpose_list: [],//级联对象数组
+            style_list: [],//级联对象数组
             material_list: [],//级联对象数组
             boxType_list: [],//级联对象数组
         },
@@ -247,6 +249,28 @@
                     success: function (data) {
                         if (data.ok) {
                             vm.purpose_list = data.obj.content;
+                            return;
+                        }
+                        if (data.code == 401) {
+                            location.href = "/design/login.html?redirectUrl=" + location.href;
+                            return;
+                        }
+                        layer.alert(data.msg + ":" + data.obj);
+                    },
+                    error: function () {
+                        layer.alert("网络错误，请检查")
+                    }
+                });
+
+                $.ajax({
+                    type: "POST",
+                    url: "/design/style/findAll",
+                    data: {page: 1, size: 10000, searchKey: '', order: ''},
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        if (data.ok) {
+                            vm.style_list = data.obj.content;
                             return;
                         }
                         if (data.code == 401) {
