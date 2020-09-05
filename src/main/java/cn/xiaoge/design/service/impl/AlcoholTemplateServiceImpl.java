@@ -114,7 +114,6 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         return null;
     }
 
-
     @Autowired
     private BoxTypeRepository boxTypeRepository;
 
@@ -134,8 +133,6 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         }
         return null;
     }
-
-
 
     @Override
     public AlcoholTemplate findById(Integer id) {
