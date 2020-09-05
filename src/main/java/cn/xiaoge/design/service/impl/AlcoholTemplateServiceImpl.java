@@ -148,4 +148,10 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
 
         return  alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId,materialId,purposeId,length);
     }
+
+    @Override
+    public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, int length) {
+
+        return  alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId,materialId,styleId,length);
+    }
 }

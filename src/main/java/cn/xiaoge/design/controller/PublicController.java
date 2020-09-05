@@ -136,8 +136,8 @@ public class PublicController {
     @ApiOperation(value = "app根据boxtypeId")
     @PostMapping("app/alcoholTemplate/findAll")
     public ReturnBean findByIdWithBoxType(@RequestParam(defaultValue = "1") Integer boxTypeId, @RequestParam(defaultValue = "1") Integer materialId,
-                                          @RequestParam(defaultValue = "1") Integer purposeId, String alcoholName) {
-        List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId, materialId, purposeId, alcoholName.length());
+                                          @RequestParam(defaultValue = "1") Integer styleId, String alcoholName) {
+        List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
 
