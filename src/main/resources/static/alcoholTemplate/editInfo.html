@@ -7,10 +7,10 @@
           content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
     <title>酒模板</title>
     <script src="/design/resource/js/vue.js"></script>
-  <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   <script src="/design/resource/js/jquery.form.min.js"></script>
-     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/layer/2.2/layer.js"></script>
     <style>
         [v-cloak] {
@@ -44,19 +44,19 @@
         }
 
         .bodyClass p {
-            text-align:left ;
+            text-align: left;
             margin-top: 6px;
             margin-bottom: 4px;
         }
 
         .header1Class p {
             margin-top: 6px;
-            text-align:left ;
+            text-align: left;
             margin-bottom: 4px;
         }
 
         .header2Class p {
-            text-align:left ;
+            text-align: left;
             margin-top: 6px;
             margin-bottom: 4px;
         }
@@ -71,6 +71,7 @@
         .back_color {
             background: rgba(0, 0, 0, 0.1);
         }
+
         @font-face {
             font-family: 阿里汉仪智能黑体;
             src: local("阿里汉仪智能黑体"),
@@ -80,51 +81,56 @@
         @font-face {
             font-family: 变体美术字;
             src: local("变体美术字"),
-            url("/design/fonts/变体美术字.ttf")format("truetype");
+            url("/design/fonts/变体美术字.ttf") format("truetype");
         }
 
-      
 
         @font-face {
             font-family: 方正滕占敏竹刻简;
             src: local("方正滕占敏竹刻简"),
-            url("/design/fonts/方正滕占敏竹刻简.ttf")format("truetype");
+            url("/design/fonts/方正滕占敏竹刻简.ttf") format("truetype");
         }
+
         @font-face {
             font-family: 方正字迹-吕建德行楷简体;
             src: local("方正字迹-吕建德行楷简体"),
-            url("/design/fonts/方正字迹-吕建德行楷简体.ttf")format("truetype");
+            url("/design/fonts/方正字迹-吕建德行楷简体.ttf") format("truetype");
         }
-        
+
         @font-face {
             font-family: 汉仪家国宋W;
             src: local("汉仪家国宋W"),
-            url("/design/fonts/汉仪家国宋W.ttf")format("truetype");
+            url("/design/fonts/汉仪家国宋W.ttf") format("truetype");
         }
+
         @font-face {
             font-family: 个性印章;
             src: local("个性印章"),
-            url("/design/fonts/个性印章.ttf")format("truetype");
+            url("/design/fonts/个性印章.ttf") format("truetype");
         }
+
         @font-face {
             font-family: 黄庭坚书法字体;
             src: local("黄庭坚书法字体"),
-            url("/design/fonts/黄庭坚书法字体.ttf")format("truetype");
+            url("/design/fonts/黄庭坚书法字体.ttf") format("truetype");
         }
+
         @font-face {
             font-family: 李旭科书法;
             src: local("李旭科书法"),
-            url("/design/fonts/李旭科书法.ttf")format("truetype");
+            url("/design/fonts/李旭科书法.ttf") format("truetype");
         }
+
         @font-face {
             font-family: 招牌字体;
             src: local("招牌字体"),
-            url("/design/fonts/招牌字体.ttf")format("truetype");
+            url("/design/fonts/招牌字体.ttf") format("truetype");
         }
+
         @font-face {
             font-family: 正行楷简体;
             src: local("正行楷简体"),
-            url("/design/fonts/正行楷简体.ttf")format("truetype");
+            url("/design/fonts/正行楷简体.ttf") format("truetype");
         }
 
 
@@ -181,7 +187,7 @@
             <p>高度</p>
             <input class="form-control" v-model="header1Style.height">
             <br>
-            <span class="btn btn-primary btn-block" @click="saveHeader1Style()">保存标题样式</span>
+            <span class="btn btn-primary btn-block" @click="saveHeader2Style()">一键保存所有</span>
         </div>
         <div class="header2Class">
             <h2>酒标(右)样式</h2>
@@ -221,47 +227,47 @@
             <p>高度</p>
             <input class="form-control" v-model="header2Style.height">
             <br>
-            <span class="btn btn-primary btn-block" @click="saveHeader2Style()">保存标题样式</span>
+
         </div>
-        <div class="bodyClass">
-            <h2>酒盒样式</h2>
-            <p>文本</p>
-            <input class="form-control" v-model="bodyText" type="text">
-            <p>颜色</p>
-            <input class="form-control" v-model="bodyStyle.color" type="color">
-            <p>上边距</p>
-            <input class="form-control" v-model="bodyStyle.top">
-            <p>左边距</p>
-            <input class="form-control" v-model="bodyStyle.left">
-            <p>字体大小</p>
-            <input class="form-control" v-model="bodyStyle.fontSize">
-            <p>字体</p>
-            <select class="form-control" v-model="bodyStyle.fontFamily">
-                <option>阿里汉仪智能黑体</option>
-                <option>变体美术字</option>
-                <option>方正滕占敏竹刻简</option>
-                <option>方正字迹-吕建德行楷简体</option>
-                <option>个性印章</option>
-                <option>汉仪家国宋W</option>
-                <option>黄庭坚书法字体</option>
-                <option>李旭科书法</option>
-                <option>招牌字体</option>
-                <option>正行楷简体</option>
-            </select>
-            <p>文字方向</p>
-            <select class="form-control" v-model="bodyStyle.writingMode">
-                <option value="tb">从上到下</option>
-                <option value="unset">从左向右</option>
-            </select>
-            <p>X轴旋转</p>
-            <input class="form-control" v-model="bodyStyle.transform">
-            <p>宽度</p>
-            <input class="form-control" v-model="bodyStyle.width">
-            <p>高度</p>
-            <input class="form-control" v-model="bodyStyle.height">
-            <br>
-            <span class="btn btn-primary btn-block" @click="saveBodyStyle()">保存内容样式</span>
-        </div>
+        <!--        <div class="bodyClass">-->
+        <!--            <h2>酒盒样式</h2>-->
+        <!--            <p>文本</p>-->
+        <!--            <input class="form-control" v-model="bodyText" type="text">-->
+        <!--            <p>颜色</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.color" type="color">-->
+        <!--            <p>上边距</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.top">-->
+        <!--            <p>左边距</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.left">-->
+        <!--            <p>字体大小</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.fontSize">-->
+        <!--            <p>字体</p>-->
+        <!--            <select class="form-control" v-model="bodyStyle.fontFamily">-->
+        <!--                <option>阿里汉仪智能黑体</option>-->
+        <!--                <option>变体美术字</option>-->
+        <!--                <option>方正滕占敏竹刻简</option>-->
+        <!--                <option>方正字迹-吕建德行楷简体</option>-->
+        <!--                <option>个性印章</option>-->
+        <!--                <option>汉仪家国宋W</option>-->
+        <!--                <option>黄庭坚书法字体</option>-->
+        <!--                <option>李旭科书法</option>-->
+        <!--                <option>招牌字体</option>-->
+        <!--                <option>正行楷简体</option>-->
+        <!--            </select>-->
+        <!--            <p>文字方向</p>-->
+        <!--            <select class="form-control" v-model="bodyStyle.writingMode">-->
+        <!--                <option value="tb">从上到下</option>-->
+        <!--                <option value="unset">从左向右</option>-->
+        <!--            </select>-->
+        <!--            <p>X轴旋转</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.transform">-->
+        <!--            <p>宽度</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.width">-->
+        <!--            <p>高度</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.height">-->
+        <!--            <br>-->
+        <!--            <span class="btn btn-primary btn-block" @click="saveBodyStyle()">保存内容样式</span>-->
+        <!--        </div>-->
     </div>
     <div>
 
@@ -283,8 +289,8 @@
                 transform: "rotateX(0deg) rotateY(0deg)",
                 writingMode: "tb",
                 fontFamily: '李旭科书法',
-                top: '300px',
-                left: '90px',
+                top: "300px",
+                left: "90px",
                 position: 'absolute',
                 color: 'black',
                 fontSize: '80px'
@@ -295,8 +301,8 @@
                 transform: "rotateX(0deg) rotateY(0deg)",
                 writingMode: "tb",
                 fontFamily: '李旭科书法',
-                top: '100px',
-                left: '300px',
+                top: "100px",
+                left: "300px",
                 position: 'absolute',
                 color: 'black',
                 fontSize: '80px'
@@ -348,25 +354,12 @@
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             },
-            saveBodyStyle() {
-                var vm = this;
-                $.post("/design/alcoholTemplate/updateStyle", {
-                    id: vm.id,
-                    bodyStyle: JSON.stringify(vm.bodyStyle)
-                }, function (data) {
-                    if (data.ok) {
-                        vm.obj = data.obj;
-                        layer.msg(data.msg)
-                        return;
-                    }
-                    layer.alert(data.msg + ":" + data.obj);
-                });
-            },
+
             saveHeader1Style() {
                 var vm = this;
                 $.post("/design/alcoholTemplate/updateStyle", {
                     id: vm.id,
-                    header1Style: JSON.stringify(vm.header1Style)
+
                 }, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;
@@ -380,12 +373,13 @@
                 var vm = this;
                 $.post("/design/alcoholTemplate/updateStyle", {
                     id: vm.id,
+                    header1Style: JSON.stringify(vm.header1Style),
                     header2Style: JSON.stringify(vm.header2Style)
                 }, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;
                         layer.msg(data.msg)
-                        return;
+                        location.reload();
                     }
                     layer.alert(data.msg + ":" + data.obj);
                 });

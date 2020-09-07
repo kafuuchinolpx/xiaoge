@@ -9,14 +9,12 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
 @SpringBootApplication
-//session30*60秒过期
+//session24*60秒过期
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600 * 24)
 @EnableSwagger2
 public class DesignApplication extends SpringBootServletInitializer {
 
-    public static void main(String[] args) {
-        SpringApplication.run(DesignApplication.class, args);
-    }
+    public static void main(String[] args) { SpringApplication.run(DesignApplication.class, args); }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {

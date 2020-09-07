@@ -48,10 +48,14 @@ public class AlcoholTemplateController {
             file.transferTo(file1);
             alcoholTemplate.setImage(uuid8 + type);
         }
+        String header1style = "{\"width\":\"100px\",\"height\":\"280px\",\"transform\":\"rotateX(0deg) rotateY(0deg)\",\"writingMode\":\"tb\",\"fontFamily\":\"李旭科书法\",\"top\":\"410px\",\"left\":\"31px\",\"position\":\"absolute\",\"color\":\"#e9d826\",\"fontSize\":\"25px\"}";
+        String header2style = "{\"width\":\"100px\",\"height\":\"320px\",\"transform\":\"rotateX(0deg) rotateY(0deg)\",\"writingMode\":\"tb\",\"fontFamily\":\"李旭科书法\",\"top\":\"225px\",\"left\":\"250px\",\"position\":\"absolute\",\"color\":\"#dfd826\",\"fontSize\":\"60px\"}";
         alcoholTemplate.setPurposeId(purposeId);
         alcoholTemplate.setStyleId(styleId);
         alcoholTemplate.setMaterialId(materialId);
         alcoholTemplate.setBoxTypeId(boxTypeId);
+        alcoholTemplate.setHeader1Style(header1style);
+        alcoholTemplate.setHeader2Style(header2style);
         alcoholTemplateService.add(alcoholTemplate);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
@@ -83,11 +87,10 @@ public class AlcoholTemplateController {
 
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("updateStyle")
-    public ReturnBean updateStyle(Integer id, String header1Style, String header2Style, String bodyStyle
+    public ReturnBean updateStyle(Integer id, String header1Style, String header2Style
 
     ) throws Exception {
 
-        System.out.println(bodyStyle);
         AlcoholTemplate alcoholTemplate = new AlcoholTemplate();
 
         alcoholTemplate.setId(id);
@@ -97,14 +100,10 @@ public class AlcoholTemplateController {
         if (!StringUtils.isEmpty(header2Style)) {
             alcoholTemplate.setHeader2Style(header2Style);
         }
-        if (!StringUtils.isEmpty(bodyStyle)) {
-            alcoholTemplate.setBodyStyle(bodyStyle);
-        }
 
+        System.out.println("alcoholTemplate*************" + alcoholTemplate);
         alcoholTemplateService.updateNotNull(alcoholTemplate);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
-
-
     }
 
 
