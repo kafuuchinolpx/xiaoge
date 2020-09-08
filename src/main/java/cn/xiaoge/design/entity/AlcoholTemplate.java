@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.*;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -25,8 +26,11 @@ public class AlcoholTemplate implements Serializable {
     @Column(length = 50)
     private String name;
 
-    //长度
+    //编辑文本名字
+    @Column(length = 10)
+    private String remark;
 
+    //长度
     private Integer length;
 
     //图片

@@ -87,7 +87,7 @@ public class AlcoholTemplateController {
 
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("updateStyle")
-    public ReturnBean updateStyle(Integer id, String header1Style, String header2Style
+    public ReturnBean updateStyle(Integer id, String headerText, String header1Style, String header2Style
 
     ) throws Exception {
 
@@ -100,8 +100,7 @@ public class AlcoholTemplateController {
         if (!StringUtils.isEmpty(header2Style)) {
             alcoholTemplate.setHeader2Style(header2Style);
         }
-
-        System.out.println("alcoholTemplate*************" + alcoholTemplate);
+        alcoholTemplate.setRemark(headerText);
         alcoholTemplateService.updateNotNull(alcoholTemplate);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }

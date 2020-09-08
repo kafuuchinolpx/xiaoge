@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
+
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -71,8 +72,6 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     }
 
 
-
-
     @Autowired
     private PurposeRepository purposeRepository;
 
@@ -82,9 +81,9 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         if (byId.isPresent()) {
             AlcoholTemplate alcoholTemplate = byId.get();
             Integer purposeId = alcoholTemplate.getPurposeId();
-            if (purposeId!=null) {
+            if (purposeId != null) {
                 Optional<Purpose> optionalPurpose = purposeRepository.findById(purposeId);
-                if (optionalPurpose.isPresent()){
+                if (optionalPurpose.isPresent()) {
                     alcoholTemplate.setPurpose(optionalPurpose.get());
                 }
             }
@@ -103,9 +102,9 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         if (byId.isPresent()) {
             AlcoholTemplate alcoholTemplate = byId.get();
             Integer materialId = alcoholTemplate.getMaterialId();
-            if (materialId!=null) {
+            if (materialId != null) {
                 Optional<Material> optionalMaterial = materialRepository.findById(materialId);
-                if (optionalMaterial.isPresent()){
+                if (optionalMaterial.isPresent()) {
                     alcoholTemplate.setMaterial(optionalMaterial.get());
                 }
             }
@@ -123,9 +122,9 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         if (byId.isPresent()) {
             AlcoholTemplate alcoholTemplate = byId.get();
             Integer boxTypeId = alcoholTemplate.getBoxTypeId();
-            if (boxTypeId!=null) {
+            if (boxTypeId != null) {
                 Optional<BoxType> optionalBoxType = boxTypeRepository.findById(boxTypeId);
-                if (optionalBoxType.isPresent()){
+                if (optionalBoxType.isPresent()) {
                     alcoholTemplate.setBoxType(optionalBoxType.get());
                 }
             }
@@ -144,14 +143,8 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     }
 
     @Override
-    public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer purposeId, int length) {
-
-        return  alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId,materialId,purposeId,length);
-    }
-
-    @Override
     public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, int length) {
 
-        return  alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId,materialId,styleId,length);
+        return alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndStyleIdAndLength(boxTypeId, materialId, styleId, length);
     }
 }

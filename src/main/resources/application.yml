@@ -2,11 +2,11 @@ spring:
   application:
     name: design
   datasource:
-    url: jdbc:mysql://127.0.0.1/design?characterEncoding=utf-8&useSSL=false
-#    url: jdbc:mysql://47.106.193.31/design?characterEncoding=utf-8&useSSL=false
+#    url: jdbc:mysql://127.0.0.1/design?characterEncoding=utf-8&useSSL=false
+    url: jdbc:mysql://47.106.193.31/design?characterEncoding=utf-8&useSSL=false
     username: root
-    password: xiaoge123456
-#    password: 123456
+#    password: xiaoge123456
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
 
     hikari:
@@ -28,5 +28,5 @@ server:
   servlet:
     context-path: /design
   port: 8080
-#filePath: C:/resource/design/
-filePath: /root/resource/design/
+filePath: C:/resource/design/
+#filePath: /root/resource/design/

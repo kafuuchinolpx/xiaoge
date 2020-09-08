@@ -143,8 +143,8 @@
     <div class="img_back">
 
         <img class="image" v-if="obj.image" :src="'/design/'+obj.image" width="500px">
-        <p class="back_color" v-bind:style="header1Style">{{header1Text}}</p>
-        <p class="back_color" v-bind:style="header2Style">{{header2Text}}</p>
+        <p class="back_color" v-bind:style="header1Style">{{headerText}}</p>
+        <p class="back_color" v-bind:style="header2Style">{{headerText}}</p>
         <p class="back_color" v-bind:style="bodyStyle">{{bodyText}}</p>
     </div>
     <div style="width: 630px;height: 1000px;margin-left: 520px;overflow: hidden;margin-top: 10px;text-align: center">
@@ -152,7 +152,7 @@
             <h2>酒标(左)样式</h2>
 
             <p>文本</p>
-            <input class="form-control" v-model="header1Text" type="text">
+            <input class="form-control" v-model="headerText" type="text">
 
             <p>颜色</p>
             <input class="form-control" v-model="header1Style.color" type="color">
@@ -192,7 +192,7 @@
         <div class="header2Class">
             <h2>酒标(右)样式</h2>
             <p>文本</p>
-            <input class="form-control" v-model="header2Text" type="text">
+            <input class="form-control" v-model="headerText" type="text">
 
             <p>颜色</p>
             <input class="form-control" v-model="header2Style.color" type="color">
@@ -278,8 +278,7 @@
         el: '#show_alcoholTemplate_app',
 
         data: {
-            header1Text: "酱刊",
-            header2Text: "酱刊",
+            headerText: "酱刊",
             bodyText: "酒精度： %vol             净含量： ml\n香型：                         生产许可号：\n执行标准：\n生产厂家：\n厂址：",
             id: get_parameter("id"),
             obj: {},
@@ -339,6 +338,9 @@
                         if (data.obj.header2Style) {
                             vm.header2Style = JSON.parse(data.obj.header2Style);
                         }
+                        if (data.obj.remark) {
+                            vm.headerText = data.obj.remark
+                        }
                         return;
                     }
                     if (data.code == 401) {
@@ -355,24 +357,11 @@
                 parent.layer.close(index);
             },
 
-            saveHeader1Style() {
-                var vm = this;
-                $.post("/design/alcoholTemplate/updateStyle", {
-                    id: vm.id,
-
-                }, function (data) {
-                    if (data.ok) {
-                        vm.obj = data.obj;
-                        layer.msg(data.msg)
-                        return;
-                    }
-                    layer.alert(data.msg + ":" + data.obj);
-                });
-            },
             saveHeader2Style() {
                 var vm = this;
                 $.post("/design/alcoholTemplate/updateStyle", {
                     id: vm.id,
+                    headerText: vm.headerText,
                     header1Style: JSON.stringify(vm.header1Style),
                     header2Style: JSON.stringify(vm.header2Style)
                 }, function (data) {
