@@ -11,12 +11,13 @@ import org.springframework.stereotype.Component;
 
 /**
  * 应用启动加载文件
+ *
  * @author Louis
  * @date Dec 12, 2018
  */
 @Component
 public class AlipayProperties {
-    
+
     public static final String APP_ID = "appId";
     public static final String PRIVARY_KEY = "privateKey";
     public static final String PUBLIC_KEY = "publicKey";
@@ -26,7 +27,9 @@ public class AlipayProperties {
     public static final String CHARSET = "charset";
     public static final String GATEWAY_URL = "gatewayUrl";
     public static final String LOG_PATH = "logPath";
-    
+    public static final String app_auth_token = "appAuthToken";
+    public static final String version = "version";
+
     /**
      * 保存加载配置参数
      */
@@ -53,9 +56,10 @@ public class AlipayProperties {
             new Exception("配置文件加载失败");
         }
     }
-    
+
     /**
      * 获取配置参数值
+     *
      * @param key
      * @return
      */
@@ -98,5 +102,12 @@ public class AlipayProperties {
     public static String getLogPath() {
         return propertiesMap.get(LOG_PATH);
     }
-    
+
+    public static String getApp_auth_token() {
+        return propertiesMap.get(app_auth_token);
+    }
+
+    public static String getVersion() {
+        return propertiesMap.get(version);
+    }
 }

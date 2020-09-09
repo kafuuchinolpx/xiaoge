@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * 订单接口
- * 
+ *
  * @author Louis
  * @date Dec 12, 2018
  */
@@ -24,6 +24,7 @@ public class AlipayController {
 
     /**
      * 阿里支付
+     *
      * @param subject
      * @param body
      * @return
