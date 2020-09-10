@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.*;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -36,6 +37,11 @@ public class Order implements Serializable {
     @Column(length = 11)
     private String info;
 
+    //酒详细
+    @Type(type = "text")
+    @Column(length = 11)
+    private String wineParameters;
+
     //文件1
     @Column(length = 11)
     private String file1;
@@ -43,7 +49,6 @@ public class Order implements Serializable {
     //文件2
     @Column(length = 11)
     private String file2;
-
 
 
     //创建时间

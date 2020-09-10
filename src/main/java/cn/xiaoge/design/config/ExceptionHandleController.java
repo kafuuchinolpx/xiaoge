@@ -1,6 +1,5 @@
 package cn.xiaoge.design.config;
 
-
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindException;
 import cn.xiaoge.design.entity.vo.ReturnBean;
@@ -11,8 +10,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import javax.validation.ConstraintViolationException;
 
 /**
-* 全局异常处理器
-*/
+ * 全局异常处理器
+ * @author 19070
+ */
 @RestControllerAdvice
 @Slf4j
 public class ExceptionHandleController {
@@ -28,10 +28,10 @@ public class ExceptionHandleController {
     }
 
     /**
-    * 参数校检异常
-    */
+     * 参数校检异常
+     */
     @ExceptionHandler(ConstraintViolationException.class)
-        public ReturnBean validExceptionHandle(ConstraintViolationException e) {
+    public ReturnBean validExceptionHandle(ConstraintViolationException e) {
         log.error(e.getMessage(), e);
         return ReturnBean.of(ReturnBean.AnswerCode.PARAMETER_ERROR, e.getMessage());
     }

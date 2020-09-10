@@ -5,19 +5,19 @@
     <title>订单</title>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="/design/resource/js/vue.js"></script>
-  <script src="/design/resource/js/jquery.min.js"></script>
-   <script src="/design/resource/js/jquery.form.min.js"></script>
-     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
-     <script src="/design/resource/layer/layer.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/layer/layer.js"></script>
     <style>
-        [v-cloak]{
+        [v-cloak] {
             display: none;
         }
     </style>
-     <script src="/design/resource/js/FileSaver.min.js"></script>
+    <script src="/design/resource/js/FileSaver.min.js"></script>
     <script>
-        function  wordExport  (fileName,dom) {
-            fileName = typeof fileName !== 'undefined' ? fileName: "jQuery-Word-Export";
+        function wordExport(fileName, dom) {
+            fileName = typeof fileName !== 'undefined' ? fileName : "jQuery-Word-Export";
             var static = {
                 mhtml: {
                     top: "<!DOCTYPE html>\n<html>\n_html_</html>",
@@ -31,7 +31,7 @@
             // Remove hidden elements from the output
             markup.find("*").each(function () {
                 var self = $(this);
-                if (self.hasClass("notOut")){
+                if (self.hasClass("notOut")) {
                     self.remove();
                 }
             });
@@ -76,7 +76,7 @@
             //TODO: load css from included stylesheet
 
             // Aggregate parts of the file together
-            var fileContent = static.mhtml.top.replace("_html_",  static.mhtml.body.replace("_body_",markup.prop("outerHTML"))) + mhtmlBottom;
+            var fileContent = static.mhtml.top.replace("_html_", static.mhtml.body.replace("_body_", markup.prop("outerHTML"))) + mhtmlBottom;
 
             // Create a Blob with the file contents
             var blob = new Blob([fileContent], {
@@ -87,7 +87,7 @@
     </script>
 
 </head>
-<body >
+<body>
 <div id="order_app" class="container-fluid" v-cloak>
     <div class="row" style="margin-top: 8px;margin-bottom: 18px">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -106,9 +106,9 @@
             </div>
             <table class="table table-striped table-hover" id="order_table" style="word-break: break-all;">
                 <thead>
-                <tr >
+                <tr>
                     <td width="30px" class="notOut hidden-xs">
-                        <input type="checkbox"  @click="select_all" />
+                        <input type="checkbox" @click="select_all"/>
                     </td>
                     <td width="60px" class="hidden-xs">
                         编号
@@ -117,31 +117,35 @@
                     <td @click="order_by('userId',orderType?'asc':'desc')">应用用户 <i class="fa fa-sort"></i></td>
                     <td @click="order_by('payStatus',orderType?'asc':'desc')">支付状态<i class="fa fa-sort"></i></td>
                     <td @click="order_by('info',orderType?'asc':'desc')">详细信息<i class="fa fa-sort"></i></td>
+                    <td @click="order_by('wineParameters',orderType?'asc':'desc')">酒信息<i class="fa fa-sort"></i></td>
                     <td @click="order_by('file1',orderType?'asc':'desc')">文件1<i class="fa fa-sort"></i></td>
                     <td @click="order_by('file2',orderType?'asc':'desc')">文件2<i class="fa fa-sort"></i></td>
-                    <td width="110px" @click="order_by('createTime',orderType?'asc':'desc')" class="hidden-xs">创建时间<i class="fa fa-sort"></i></td>
-                    <td width="110px" @click="order_by('updateTime',orderType?'asc':'desc')" class="hidden-xs">修改时间<i class="fa fa-sort"></i></td>
-                    <td class="notOut text-right" style="min-width: 160px;" >编辑</td>
+                    <td width="110px" @click="order_by('createTime',orderType?'asc':'desc')" class="hidden-xs">创建时间<i
+                            class="fa fa-sort"></i></td>
+                    <td width="110px" @click="order_by('updateTime',orderType?'asc':'desc')" class="hidden-xs">修改时间<i
+                            class="fa fa-sort"></i></td>
+                    <td class="notOut text-right" style="min-width: 160px;">编辑</td>
                 </tr>
                 </thead>
                 <tbody>
                 <tr v-for="(d,index) in page_data.content">
                     <td class="notOut hidden-xs">
-                        <input type="checkbox" :value="d.id" v-model="delete_id_list" >
+                        <input type="checkbox" :value="d.id" v-model="delete_id_list">
                     </td>
                     <td class="hidden-xs">
                         {{index+1}}
                     </td>
-                     <td><span v-for="i in appUser_list" v-if="i.id==d.userId">{{i.name}}</span></td>
-                     <td >{{d.payStatus}}</td>
-                     <td >{{d.info}}</td>
-                     <td >{{d.file1}}</td>
-                     <td >{{d.file2}}</td>
-                        <td class="hidden-xs"> {{d.createTime}}</td>
-                        <td class="hidden-xs"> {{d.updateTime}}</td>
+                    <td><span v-for="i in appUser_list" v-if="i.id==d.userId">{{i.name}}</span></td>
+                    <td>{{d.payStatus}}</td>
+                    <td>{{d.info}}</td>
+                    <td>{{d.wineParameters}}</td>
+                    <td>{{d.file1}}</td>
+                    <td>{{d.file2}}</td>
+                    <td class="hidden-xs"> {{d.createTime}}</td>
+                    <td class="hidden-xs"> {{d.updateTime}}</td>
                     <td class="notOut text-right">
                         <span style="cursor: pointer">
-                            <span class=" btn-info btn-sm"  @click="show_it(d.id)">详情</span>
+                            <span class=" btn-info btn-sm" @click="show_it(d.id)">详情</span>
                             <span class=" btn-danger btn-sm" @click="delete_it(d.id)">删除</span>
                         </span>
                     </td>
@@ -177,7 +181,7 @@
                             <a href="javascript:" @click="goto_page(d)">{{d}} </a>
                         </li>
                         <li :class="page_data.pageCount>page_index">
-                            <a href="javascript:"  @click="goto_page(page_data.page+1)">下一页</a>
+                            <a href="javascript:" @click="goto_page(page_data.page+1)">下一页</a>
                         </li>
                         <li class="hidden-xs">
                             <a href="javascript:" @click="goto_page(page_data.pageCount)">末页</a>
@@ -214,7 +218,7 @@
         },
         methods: {
             //根据指定列排序
-            order_by: function (orderField,data){
+            order_by: function (orderField, data) {
                 this.order = orderField + " " + data;
                 this.reload_data();
                 this.orderType = !this.orderType;
@@ -228,23 +232,23 @@
                 $.ajax({
                     type: "POST",
                     url: "/design/appUser/findAll",
-                    data: {page: 1,size: 10000,searchKey: '',order: ''},
+                    data: {page: 1, size: 10000, searchKey: '', order: ''},
                     dataType: "json",
                     async: false,
-                    success: function (data){
+                    success: function (data) {
                         if (data.ok) {
                             vm.appUser_list = data.obj.content;
                             return;
                         }
-                        if (data.code == 401){
+                        if (data.code == 401) {
                             location.href = "/design/login.html?redirectUrl=" + location.href;
                             return;
                         }
                         layer.alert(data.msg + ":" + data.obj);
                     },
-                     error: function () {
-                         layer.alert("网络错误，请检查")
-                     }
+                    error: function () {
+                        layer.alert("网络错误，请检查")
+                    }
                 });
 
 
@@ -257,7 +261,7 @@
                         vm.page_data = data.obj;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return
                     }
@@ -282,7 +286,7 @@
                         if (data.ok) {
                             vm.reload_data();
                             layer.alert(data.msg);
-                        }else {
+                        } else {
                             layer.alert(data.msg + ":" + data.obj);
                         }
 
@@ -290,7 +294,7 @@
                 });
             },
             //全选
-            select_all:function (event) {
+            select_all: function (event) {
                 var vm = this;
                 if (!event.currentTarget.checked) {
                     vm.delete_id_list = [];
@@ -302,13 +306,13 @@
                 }
             },
             //导出表格
-            order_out_table:function (){
+            order_out_table: function () {
                 wordExport("订单", "#order_table");
             },
             //批量删除
-            delete_items:function (){
+            delete_items: function () {
                 var vm = this;
-                if(this.delete_id_list.length!=0){
+                if (this.delete_id_list.length != 0) {
                     layer.confirm('您确定要删除吗？', {
                         btn: ['确定', '取消'] //按钮
                     }, function () {
@@ -318,22 +322,22 @@
                             data: {ids: vm.delete_id_list.toString()},
                             dataType: "json",
                             async: false,
-                            success: function (data){
+                            success: function (data) {
                                 layer.msg(data.msg);
                             }
                         });
                         vm.reload_data();
                     });
-                }else {
+                } else {
                     layer.alert("请选择删除的对象")
                 }
             },
             //编辑该菜单
             edit_it: function (id) {
-                var vm=this;
+                var vm = this;
                 if (document.body.clientWidth < 768) {
                     location.href = '/design/order/edit.html?id=' + id + "&list=" + vm.delete_id_list + "&page=" + location.href.split("#")[1];
-                }else {
+                } else {
                     layer.open({
                         type: 2,
                         title: '订单',
@@ -342,7 +346,7 @@
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '600px'],
                         content: '/design/order/edit.html?id=' + id + "&list=" + vm.delete_id_list,
-                        end: function (){
+                        end: function () {
                             vm.reload_data();
                         }
                     });
@@ -352,7 +356,7 @@
             show_it: function (id) {
                 if (document.body.clientWidth < 768) {
                     location.href = '/design/order/show.html?id=' + id;
-                }else {
+                } else {
                     layer.open({
                         type: 2,
                         title: '订单',

@@ -172,11 +172,12 @@ public class PublicController {
     @PostMapping("app/order/add")
     @ApiOperation(value = "订单添加")
     public ReturnBean add(Integer userId, @RequestParam(defaultValue = "'未支付'") String payStatus, String boxId, String boxName,
-                          String info, MultipartFile file1, MultipartFile file2) throws Exception {
+                          String info, String wineParameters, MultipartFile file1, MultipartFile file2) throws Exception {
         Order order = new Order();
         order.setUserId(userId);
         order.setPayStatus(payStatus);
         order.setInfo(info + "boxId:" + boxId + "name:" + boxName);
+        order.setWineParameters(wineParameters);
         if (file1 != null && !file1.isEmpty()) {
             String uuid8 = UUIDUtil.getUUID8();
             String fileName = file1.getOriginalFilename();

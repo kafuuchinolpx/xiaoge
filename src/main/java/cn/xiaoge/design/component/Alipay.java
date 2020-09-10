@@ -23,7 +23,9 @@ public class Alipay {
      * @throws AlipayApiException
      */
     public String pay(AlipayBean alipayBean) throws AlipayApiException {
-        // 1、获得初始化的AlipayClient
+        /**
+         * 1、获得初始化的AlipayClient
+         */
         String serverUrl = AlipayProperties.getGatewayUrl();
         String appId = AlipayProperties.getAppId();
         String privateKey = AlipayProperties.getPrivateKey();
