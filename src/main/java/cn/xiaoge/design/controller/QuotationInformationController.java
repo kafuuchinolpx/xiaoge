@@ -35,10 +35,8 @@ public class QuotationInformationController {
 
     @ApiOperation(value = "报价修改不为空的属性")
     @PostMapping("update")
-    public ReturnBean update(
-            Integer id,
-            String ids,
-            @Size(max = 11) String name, Double price) {
+    public ReturnBean update(Integer id, String ids,
+                             @Size(max = 11) String name, Double price) {
         if (!StringUtils.isEmpty(ids)) {
             String[] split = ids.split(",");
             for (String s : split) {

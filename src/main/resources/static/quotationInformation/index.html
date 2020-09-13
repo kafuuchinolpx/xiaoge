@@ -5,19 +5,19 @@
     <title>价格</title>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="/design/resource/js/vue.js"></script>
-  <script src="/design/resource/js/jquery.min.js"></script>
-   <script src="/design/resource/js/jquery.form.min.js"></script>
-     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
-     <script src="/design/resource/layer/layer.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/layer/layer.js"></script>
     <style>
-        [v-cloak]{
+        [v-cloak] {
             display: none;
         }
     </style>
 
 </head>
-<body >
-<div id="boxType_app" class="container-fluid" v-cloak>
+<body>
+<div id="quotationInformation_app" class="container-fluid" v-cloak>
     <div class="row" style="margin-top: 8px;margin-bottom: 18px">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="row">
@@ -47,19 +47,18 @@
                 </div>
             </div>
             <div class="row" style="margin-top: 10px">
-                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12"  v-for="(d,index) in page_data.content">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12" v-for="(d,index) in page_data.content">
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <table style="width: 100%">
                                 <tr>
                                     <td>名字</td>
-                                    <td >{{d.name}}</td>
+                                    <td>{{d.name}}</td>
                                 </tr>
                                 <tr>
                                     <td>价格</td>
-                                    <td >{{d.remark}}</td>
+                                    <td>{{d.price}}</td>
                                 </tr>
-
                                 <tr>
                                     <td>创建时间</td>
                                     <td> {{d.createTime}}</td>
@@ -71,11 +70,11 @@
                                 <tr>
                                     <td colspan="2">
                                         <span style="cursor: pointer;margin-top: 20px;display: block;">
-                                            <span class=" btn-info btn-sm"  @click="show_it(d.id)">详情</span>
-                                            <span class=" btn-warning btn-sm"  @click="edit_it(d.id)">编辑</span>
+                                            <span class=" btn-info btn-sm" @click="show_it(d.id)">详情</span>
+                                            <span class=" btn-warning btn-sm" @click="edit_it(d.id)">编辑</span>
                                             <span class=" btn-danger btn-sm" @click="delete_it(d.id)">删除</span>
                                             <label class="checkbox-inline pull-right hidden-xs">
-                                                <input type="checkbox" :value="d.id" v-model="delete_id_list" >选择
+                                                <input type="checkbox" :value="d.id" v-model="delete_id_list">选择
                                             </label>
                                         </span>
                                     </td>
@@ -114,7 +113,7 @@
                             <a href="javascript:" @click="goto_page(d)">{{d}} </a>
                         </li>
                         <li :class="page_data.pageCount>page_index">
-                            <a href="javascript:"  @click="goto_page(page_data.page+1)">下一页</a>
+                            <a href="javascript:" @click="goto_page(page_data.page+1)">下一页</a>
                         </li>
                         <li class="hidden-xs">
                             <a href="javascript:" @click="goto_page(page_data.pageCount)">末页</a>
@@ -129,7 +128,7 @@
 
 <script>
     new Vue({
-        el: '#boxType_app',
+        el: '#quotationInformation_app',
         data: {
             delete_id_list: [],
             is_select_all: true,
@@ -152,7 +151,7 @@
         },
         methods: {
             //根据指定列排序
-            order_by: function (orderField,data){
+            order_by: function (orderField, data) {
                 this.order = orderField + " " + data;
                 this.reload_data();
                 this.orderType = !this.orderType;
@@ -162,7 +161,7 @@
                 var vm = this;
 
 
-                $.post("/design/boxType/findAll", {
+                $.post("/design/quotationInformation/findAll", {
                     page: vm.page_index,
                     searchKey: vm.search_key,
                     order: vm.order,
@@ -172,7 +171,7 @@
                         vm.page_data = data.obj;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return
                     }
@@ -193,11 +192,11 @@
                 layer.confirm('您确定要删除吗？', {
                     btn: ['确定', '取消'] //按钮
                 }, function () {
-                    $.post("/design/boxType/delete", {id: id}, function (data) {
+                    $.post("/design/quotationInformation/delete", {id: id}, function (data) {
                         if (data.ok) {
                             vm.reload_data();
                             layer.alert(data.msg);
-                        }else {
+                        } else {
                             layer.alert(data.msg + ":" + data.obj);
                         }
 
@@ -205,7 +204,7 @@
                 });
             },
             //全选
-            select_all:function () {
+            select_all: function () {
                 var vm = this;
                 vm.is_select_all = !vm.is_select_all;
                 if (vm.is_select_all) {
@@ -218,34 +217,34 @@
                 }
             },
             //批量删除
-            delete_items:function (){
+            delete_items: function () {
                 var vm = this;
-                if(this.delete_id_list.length!=0){
+                if (this.delete_id_list.length != 0) {
                     layer.confirm('您确定要删除吗？', {
                         btn: ['确定', '取消'] //按钮
                     }, function () {
                         $.ajax({
                             type: "POST",
-                            url: "/design/boxType/delete",
+                            url: "/design/quotationInformation/delete",
                             data: {ids: vm.delete_id_list.toString()},
                             dataType: "json",
                             async: false,
-                            success: function (data){
+                            success: function (data) {
                                 layer.msg(data.msg);
                             }
                         });
                         vm.reload_data();
                     });
-                }else {
+                } else {
                     layer.alert("请选择删除的对象")
                 }
             },
             //编辑该菜单
             edit_it: function (id) {
-                var vm=this;
+                var vm = this;
                 if (document.body.clientWidth < 768) {
-                    location.href = '/design/boxType/edit.html?id=' + id + "&list=" + vm.delete_id_list + "&page=" + location.href.split("#")[1];
-                }else {
+                    location.href = '/design/quotationInformation/edit.html?id=' + id + "&list=" + vm.delete_id_list + "&page=" + location.href.split("#")[1];
+                } else {
                     layer.open({
                         type: 2,
                         title: '价格',
@@ -253,8 +252,8 @@
                         offset: '100px',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '600px'],
-                        content: '/design/boxType/edit.html?id=' + id + "&list=" + vm.delete_id_list,
-                        end: function (){
+                        content: '/design/quotationInformation/edit.html?id=' + id + "&list=" + vm.delete_id_list,
+                        end: function () {
                             vm.reload_data();
                         }
                     });
@@ -263,8 +262,8 @@
             //详情
             show_it: function (id) {
                 if (document.body.clientWidth < 768) {
-                    location.href = '/design/boxType/show.html?id=' + id;
-                }else {
+                    location.href = '/design/quotationInformation/show.html?id=' + id;
+                } else {
                     layer.open({
                         type: 2,
                         title: '价格',
@@ -272,7 +271,7 @@
                         offset: '100px',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '600px'],
-                        content: '/design/boxType/show.html?id=' + id,
+                        content: '/design/quotationInformation/show.html?id=' + id,
                     });
                 }
             },

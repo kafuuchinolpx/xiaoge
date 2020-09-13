@@ -3,39 +3,41 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
-    <title>盒型</title>
+    <meta name="viewport"
+          content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <title>报价</title>
     <script src="/design/resource/js/vue.js"></script>
-  <script src="/design/resource/js/jquery.min.js"></script>
-   <script src="/design/resource/js/jquery.form.min.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.form.min.js"></script>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
-     <script src="/design/resource/layer/layer.js"></script>
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/layer/layer.js"></script>
     <script src="https://cdn.bootcss.com/wangEditor/3.1.0/wangEditor.min.js"></script>
     <style>
-        [v-cloak]{
+        [v-cloak] {
             display: none;
         }
     </style>
 </head>
 
 <body>
-
-<div id="edit_boxType_app" class="container-fluid" v-cloak>
-    <div class="h4 text-center" onclick="history.back()"><i class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>盒型</div>
+<div id="edit_quotationInformation_app" class="container-fluid" v-cloak>
+    <div class="h4 text-center" onclick="history.back()"><i
+            class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>报价
+    </div>
     <form id="my_form" enctype="multipart/form-data" method="post">
         <input name="id" v-model="obj.id" hidden="hidden"/>
         <table class="table table-bordered table-hover">
-            <tr >
+            <tr>
                 <td>盒型名字*</td>
                 <td>
-                    <input type="text" class="form-control"  name="name" v-model="obj.name" maxlength="11">
+                    <input type="text" class="form-control" name="name" v-model="obj.name" maxlength="11">
                 </td>
             </tr>
-            <tr >
-                <td>备注</td>
+            <tr>
+                <td>价格*</td>
                 <td>
-                    <textarea class="form-control" name="remark" v-model="obj.remark" rows="3"></textarea>
+                    <textarea class="form-control" name="price" v-model="obj.price" rows="3"></textarea>
                 </td>
             </tr>
         </table>
@@ -47,7 +49,7 @@
 </div>
 <script>
     new Vue({
-        el: '#edit_boxType_app',
+        el: '#edit_quotationInformation_app',
         data: {
             id: get_parameter("id"),
             obj: {},
@@ -56,25 +58,25 @@
             var vm = this;
 
             if (vm.id > 0) {
-                $.post("/design/boxType/findById", {id: vm.id}, function (data) {
+                $.post("/design/quotationInformation/findById", {id: vm.id}, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return;
                     }
                     layer.alert(data.msg + ":" + data.obj);
                 });
-            }else {
+            } else {
             }
         },
         methods: {
-            close_this: function  (){
+            close_this: function () {
                 if (document.body.clientWidth < 576) {
                     history.back();
-                }else {
+                } else {
                     var index = parent.layer.getFrameIndex(window.name);
                     parent.layer.close(index);
                 }
@@ -82,40 +84,45 @@
             com_the_form: function () {
                 //数据校验
                 var vm = this;
-                if(vm.obj.name == null || vm.obj.name == ''){
+                if (vm.obj.name == null || vm.obj.name == '') {
                     layer.alert("盒型名字不能为空");
+                    return;
+                }
+
+                if (vm.obj.price == null || vm.obj.price == '') {
+                    layer.alert("报价价格不能为空");
                     return;
                 }
 
                 var myUrl
                 if (vm.id != 0) {
                     //修改
-                    myUrl = "/design/boxType/update";
-                }else {
+                    myUrl = "/design/quotationInformation/update";
+                } else {
                     //添加
-                    var myUrl = "/design/boxType/add"
+                    var myUrl = "/design/quotationInformation/add"
                 }
                 $("#my_form").attr("action", myUrl).ajaxSubmit({
                     async: false,
-                    data:{
+                    data: {
                         ids: get_parameter("list"),
                     },//额外数据
                     success: function (data) {
                         if (data.ok) {
                             if (document.body.clientWidth < 768) {
-                                location.href = "/design#"+get_parameter("page");
-                            }else {
+                                location.href = "/design#" + get_parameter("page");
+                            } else {
                                 vm.close_this();
                             }
                             return;
                         }
-                        if (data.code == 401){
+                        if (data.code == 401) {
                             location.href = "/design/login.html?redirectUrl=" + location.href;
                             return;
                         }
                         layer.alert(data.msg + ":" + data.obj);
                     },
-                    error:function () {
+                    error: function () {
                         layer.alert("网络错误，请检查")
                     }
                 });
