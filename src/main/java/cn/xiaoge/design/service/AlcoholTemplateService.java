@@ -66,4 +66,6 @@ public interface AlcoholTemplateService {
     AlcoholTemplate findById(Integer id);
 
     List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, int length);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length);
 }

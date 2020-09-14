@@ -147,4 +147,9 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
 
         return alcoholTemplateRepository.findByBoxTypeIdAndMaterialIdAndStyleIdAndLength(boxTypeId, materialId, styleId, length);
     }
+
+    @Override
+    public List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length) {
+        return alcoholTemplateRepository.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, length);
+    }
 }

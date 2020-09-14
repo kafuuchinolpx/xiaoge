@@ -15,4 +15,5 @@ public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate
 
     List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLength(Integer boxTypeId, Integer materialId, Integer styleId, int length);
 
+    List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length);
 }

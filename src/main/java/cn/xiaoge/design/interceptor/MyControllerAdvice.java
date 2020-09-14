@@ -19,8 +19,7 @@ public class MyControllerAdvice {
         String dateNowStr = sdf.format(date);
         ModelAndView mv = new ModelAndView("error");
         mv.addObject("exception", ex);
-        System.out.println("有一个异常已捕获:");
-        System.out.println(dateNowStr + mv);
+        System.out.println("有一个异常已捕获:" + dateNowStr + mv);
         return mv;
     }
 }

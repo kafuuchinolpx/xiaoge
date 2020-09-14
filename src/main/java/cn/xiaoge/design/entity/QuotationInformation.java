@@ -34,6 +34,10 @@ public class QuotationInformation implements Serializable {
      */
     private Double price;
     /**
+     * 分组
+     */
+    private Integer grouping;
+    /**
      * 创建时间
      */
     @CreationTimestamp

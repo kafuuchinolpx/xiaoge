@@ -137,8 +137,15 @@ public class PublicController {
     @PostMapping("app/alcoholTemplate/findAll")
     public ReturnBean findByIdWithBoxType(@RequestParam(defaultValue = "1") Integer boxTypeId, @RequestParam(defaultValue = "1") Integer materialId,
                                           @RequestParam(defaultValue = "1") Integer styleId, String alcoholName) {
-        List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        if (materialId == 0 && styleId == 0) {
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else {
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        }
+
+
     }
 
     @ApiOperation(value = "app根据waterPurpose")
