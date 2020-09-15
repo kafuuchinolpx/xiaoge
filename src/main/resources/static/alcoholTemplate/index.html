@@ -5,16 +5,16 @@
     <title>酒模板</title>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <script src="/design/resource/js/vue.js"></script>
-  <script src="/design/resource/js/jquery.min.js"></script>
-   <script src="/design/resource/js/jquery.form.min.js"></script>
-     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
-     <script src="/design/resource/layer/layer.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/layer/layer.js"></script>
     <style>
         [v-cloak] {
             display: none;
         }
     </style>
-     <script src="/design/resource/js/FileSaver.min.js"></script>
+    <script src="/design/resource/js/FileSaver.min.js"></script>
     <script>
         function wordExport(fileName, dom) {
             fileName = typeof fileName !== 'undefined' ? fileName : "jQuery-Word-Export";
@@ -97,7 +97,9 @@
                     <div class="btn btn-primary btn-sm" @click="edit_it(0)">
                         <i class="fa fa-plus"></i> &nbsp;添加
                     </div>
-
+                    <div class="btn btn-success btn-sm" @click="add_group()">
+                        <i class="fa fa-plus"></i> &nbsp;添加分组
+                    </div>
                     <div class="btn btn-danger btn-sm hidden-xs" @click="delete_items()">
                         <i class="fa fa-trash-o"></i> &nbsp;批量删除
                     </div>
@@ -120,6 +122,7 @@
 
                     <td @click="order_by('name',orderType?'asc':'desc')">模板名称<i class="fa fa-sort"></i></td>
                     <td @click="order_by('length',orderType?'asc':'desc')">最大长度<i class="fa fa-sort"></i></td>
+                    <td @click="order_by('group_List',orderType?'asc':'desc')">分组<i class="fa fa-sort"></i></td>
                     <td @click="order_by('image',orderType?'asc':'desc')">图片<i class="fa fa-sort"></i></td>
                     <td @click="order_by('purposeId',orderType?'asc':'desc')">用途 <i class="fa fa-sort"></i></td>
                     <td @click="order_by('styleId',orderType?'asc':'desc')">风格 <i class="fa fa-sort"></i></td>
@@ -142,6 +145,7 @@
                     </td>
                     <td>{{d.name}}</td>
                     <td>{{d.length}}</td>
+                    <td><span v-for="i in group_List" v-if="i.id==d.groupId">{{i.name}}</span></td>
                     <td><img :src="d.image" height="40px"></td>
                     <td><span v-for="i in purpose_list" v-if="i.id==d.purposeId">{{i.name}}</span></td>
                     <td><span v-for="i in style_list" v-if="i.id==d.styleId">{{i.name}}</span></td>
@@ -199,7 +203,6 @@
             </div>
         </div>
     </div>
-
 </div>
 
 <script>
@@ -216,6 +219,7 @@
             style_list: [],//级联对象数组
             material_list: [],//级联对象数组
             boxType_list: [],//级联对象数组
+            group_List: [],//分组对象数组
         },
         watch: {//监听数据变化
             page_size: function (val, oldVal) {//一旦页面大小发生变化，页码自动变为1
@@ -238,6 +242,24 @@
             reload_data: function () {
                 var vm = this;
 
+                $.ajax({
+                    type: "POST",
+                    url: "/design/alcoholTemplateGroup/findAll",
+                    data: {},
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        if (data.ok) {
+                            vm.group_List = data.obj;
+                            return;
+                        }
+                        if (data.code == 401) {
+                            location.href = "/design/login.html?redirectUrl=" + location.href;
+                            return;
+                        }
+                        layer.alert(data.msg + ":" + data.obj);
+                    }
+                });
 
                 //同步获取级联的属性
                 $.ajax({
@@ -448,6 +470,22 @@
                         content: '/design/alcoholTemplate/show.html?id=' + id,
                     });
                 }
+            },
+            //分组添加
+            add_group: function () {
+                var vm = this;
+                layer.open({
+                    type: 2,
+                    title: '分组添加',
+                    shadeClose: false,  //阴影
+                    shade: 0.5,  //透明度
+                    offset: '100px',
+                    area: ['80%', '80%'],
+                    content: '/design/alcoholTemplate/groupEdit.html', //iframe的url
+                    end: function () {
+                        vm.reload_data();
+                    }
+                });
             },
             //详情
             edit_Info: function (id) {

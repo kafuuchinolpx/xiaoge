@@ -1,0 +1,184 @@
+<!DOCTYPE>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <title>分组</title>
+    <script src="/design/resource/js/vue.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/layer/layer.js"></script>
+    <script src="https://cdn.bootcss.com/wangEditor/3.1.0/wangEditor.min.js"></script>
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+<div id="edit_alcoholTemplateGroup_app" class="container-fluid" v-cloak>
+    <div class="h4 text-center" onclick="history.back()"><i
+            class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>分组
+    </div>
+    <form id="my_form" enctype="multipart/form-data" method="post">
+        <table class="table table-bordered table-hover">
+            <tr>
+                <td>分组名字</td>
+                <td>
+                    <input type="text" class="form-control" name="name" v-model="name" maxlength="50">
+                </td>
+            </tr>
+            <tr>
+                <td>当前拥有分组</td>
+                <td>
+                    <select v-model="group_id" name="id" class="form-control">
+                        <option :value="0">无</option>
+                        <option v-for="purpose in group_List"
+                                :value="purpose.id">{{purpose.name}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+        </table>
+        <div>
+            <button type="button" @click="submit_data()" class="btn btn-primary btn-block">提交</button>
+            <button type="button" @click="delete_group()" class="btn btn-danger btn-block">删除当前选择的组</button>
+            <button type="button" @click="close_this()" class="btn btn-success btn-block">取消</button>
+        </div>
+    </form>
+</div>
+<script>
+    new Vue({
+        el: '#edit_alcoholTemplateGroup_app',
+        data: {
+            name: '',
+            group_List: [],
+            group_id: 0,
+        },
+        created: function () {
+            var vm = this;
+            $.ajax({
+                type: "POST",
+                url: "/design/alcoholTemplateGroup/findAll",
+                data: {},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data.ok) {
+                        vm.group_List = data.obj;
+                        return;
+                    }
+                    if (data.code == 401) {
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                }
+            });
+        },
+        methods: {
+            loadData: function () {
+                var vm = this;
+                $.ajax({
+                    type: "POST",
+                    url: "/design/alcoholTemplateGroup/findAll",
+                    data: {},
+                    dataType: "json",
+                    async: false,
+                    success: function (data) {
+                        if (data.ok) {
+                            vm.group_List = data.obj;
+                            return;
+                        }
+                        if (data.code == 401) {
+                            location.href = "/design/login.html?redirectUrl=" + location.href;
+                            return;
+                        }
+                        layer.alert(data.msg + ":" + data.obj);
+                    }
+                });
+            },
+            submit_data() {
+                var vm = this;
+                $.post("/design/alcoholTemplateGroup/add", {id: vm.group_id, name: vm.name}, function (data) {
+                    if (data.ok) {
+                        vm.loadData();
+                    } else {
+                        layer.alert("录入错误")
+                    }
+
+                })
+            },
+            close_this: function () {
+                if (document.body.clientWidth < 576) {
+                    history.back();
+                } else {
+                    var index = parent.layer.getFrameIndex(window.name);
+                    parent.layer.close(index);
+                }
+            },
+            delete_group: function () {
+                var vm = this;
+                layer.confirm('您确定要删除吗？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.post("/design/alcoholTemplateGroup/deleteById", {id: vm.group_id}, function (data) {
+                        if (data.ok) {
+                            layer.alert(data.msg);
+                            vm.loadData();
+                            vm.group_id = 0;
+                        } else {
+                            layer.alert(data.msg + ":" + data.obj);
+                        }
+                    })
+                });
+            },
+            com_the_form: function () {
+                //数据校验
+                var vm = this;
+
+                var myUrl
+                if (vm.id != 0) {
+                    //修改
+                    myUrl = "/design/alcoholTemplate/update";
+                } else {
+                    //添加
+                    var myUrl = "/design/alcoholTemplate/add"
+                }
+                $("#my_form").attr("action", myUrl).ajaxSubmit({
+                    async: false,
+                    data: {
+                        ids: get_parameter("list"),
+                    },//额外数据
+                    success: function (data) {
+                        if (data.ok) {
+                            if (document.body.clientWidth < 768) {
+                                location.href = "/design#" + get_parameter("page");
+                            } else {
+                                vm.close_this();
+                            }
+                            return;
+                        }
+                        if (data.code == 401) {
+                            location.href = "/design/login.html?redirectUrl=" + location.href;
+                            return;
+                        }
+                        layer.alert(data.msg + ":" + data.obj);
+                    },
+                    error: function () {
+                        layer.alert("网络错误，请检查")
+                    }
+                });
+            }
+
+        }
+    })
+</script>
+</body>
+</html>

@@ -38,13 +38,18 @@ public class AlcoholTemplate implements Serializable {
     private String image;
 
     //用途
-
     private Integer purposeId;
 
     @Transient
     private Purpose purpose;
-    //材料
 
+    //分组
+    private Integer groupId;
+
+    @Transient
+    private AlcoholTemplateGroup alcoholTemplateGroup;
+
+    //材料
     private Integer styleId;
 
     @Transient

@@ -144,8 +144,6 @@ public class PublicController {
             List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
         }
-
-
     }
 
     @ApiOperation(value = "app根据waterPurpose")
