@@ -3,18 +3,20 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=0.8, minimum-scale=0.8,maximum-scale=0.8, user-scalable=no">
     <title>酒模板</title>
     <script src="/design/resource/js/vue.js"></script>
-  <script src="/design/resource/js/jquery.min.js"></script>
+    <script src="/design/resource/js/jquery.min.js"></script>
     <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
-   <script src="/design/resource/js/jquery.form.min.js"></script>
-     <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
+    <script src="/design/resource/js/jquery.form.min.js"></script>
+    <link href="/design/resource/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.bootcss.com/layer/2.2/layer.js"></script>
     <style>
-        [v-cloak]{
+        [v-cloak] {
             display: none;
         }
+
         .code {
             border: 1px solid #43478e;
         }
@@ -69,11 +71,13 @@
 <body>
 
 <div id="show_alcoholTemplate_app" class="container-fluid" v-cloak>
-    <div class="h4 text-center" onclick="history.back()"><i class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>酒模板</div>
-    <table class="table table-bordered table-hover"  style="width: 100%;word-break:break-all;">
+    <div class="h4 text-center" onclick="history.back()"><i
+            class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>酒模板
+    </div>
+    <table class="table table-bordered table-hover" style="width: 100%;word-break:break-all;">
         <tr>
             <td>模板名称</td>
-            <td >{{obj.name}}</td>
+            <td>{{obj.name}}</td>
         </tr>
         <tr>
             <td>长度</td>
@@ -81,7 +85,13 @@
         </tr>
         <tr>
             <td>图片</td>
-            <td ><img v-if="obj.image" :src="'/design/'+obj.image" width="100%"></td>
+            <td><img v-if="obj.image" :src="'/design/'+obj.image" width="100%"></td>
+        </tr>
+        <tr>
+            <td>分组</td>
+            <td>
+                <span v-for="i in group_List" v-if="i.id==obj.groupId">{{i.name}}</span>
+            </td>
         </tr>
         <tr>
             <td>用途</td>
@@ -116,8 +126,6 @@
             <td> {{obj.updateTime}}</td>
         </tr>
     </table>
-
-
 </div>
 <script>
     new Vue({
@@ -129,21 +137,42 @@
             style_list: [],
             material_list: [],
             boxType_list: [],
+            group_List: [],
         },
         created: function () {
             var vm = this;
+
+            $.ajax({
+                type: "POST",
+                url: "/design/alcoholTemplateGroup/findAll",
+                data: {},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data.ok) {
+                        vm.group_List = data.obj;
+                        return;
+                    }
+                    if (data.code == 401) {
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                }
+            });
+
             $.ajax({
                 type: "POST",
                 url: "/design/purpose/findAll",
                 data: {page: 1, size: 10000},
                 dataType: "json",
                 async: false,
-                success: function (data){
+                success: function (data) {
                     if (data.ok) {
                         vm.purpose_list = data.obj.content;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return;
                     }
@@ -156,12 +185,12 @@
                 data: {page: 1, size: 10000},
                 dataType: "json",
                 async: false,
-                success: function (data){
+                success: function (data) {
                     if (data.ok) {
                         vm.style_list = data.obj.content;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return;
                     }
@@ -174,12 +203,12 @@
                 data: {page: 1, size: 10000},
                 dataType: "json",
                 async: false,
-                success: function (data){
+                success: function (data) {
                     if (data.ok) {
                         vm.material_list = data.obj.content;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return;
                     }
@@ -192,12 +221,12 @@
                 data: {page: 1, size: 10000},
                 dataType: "json",
                 async: false,
-                success: function (data){
+                success: function (data) {
                     if (data.ok) {
                         vm.boxType_list = data.obj.content;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return;
                     }
@@ -211,7 +240,7 @@
                         vm.obj = data.obj;
                         return;
                     }
-                    if (data.code == 401){
+                    if (data.code == 401) {
                         location.href = "/design/login.html?redirectUrl=" + location.href;
                         return;
                     }
@@ -220,7 +249,7 @@
             }
         },
         methods: {
-            close_this:function  (){
+            close_this: function () {
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             }

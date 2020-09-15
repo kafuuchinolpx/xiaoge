@@ -34,7 +34,7 @@ public class AlcoholTemplateController {
 
     @PostMapping("add")
     @ApiOperation(value = "酒模板添加")
-    public ReturnBean add(@Size(max = 50) String name, Integer length, MultipartFile file, Integer purposeId, Integer styleId,
+    public ReturnBean add(@Size(max = 50) String name, Integer length, MultipartFile file, Integer groupId, Integer purposeId, Integer styleId,
                           Integer materialId, Integer boxTypeId) throws Exception {
         AlcoholTemplate alcoholTemplate = new AlcoholTemplate();
         alcoholTemplate.setName(name);
@@ -50,6 +50,7 @@ public class AlcoholTemplateController {
         }
         String header1style = "{\"width\":\"100px\",\"height\":\"280px\",\"transform\":\"rotateX(0deg) rotateY(0deg)\",\"writingMode\":\"tb\",\"fontFamily\":\"李旭科书法\",\"top\":\"410px\",\"left\":\"31px\",\"position\":\"absolute\",\"color\":\"#e9d826\",\"fontSize\":\"25px\"}";
         String header2style = "{\"width\":\"100px\",\"height\":\"320px\",\"transform\":\"rotateX(0deg) rotateY(0deg)\",\"writingMode\":\"tb\",\"fontFamily\":\"李旭科书法\",\"top\":\"225px\",\"left\":\"250px\",\"position\":\"absolute\",\"color\":\"#dfd826\",\"fontSize\":\"60px\"}";
+        alcoholTemplate.setGroupId(groupId);
         alcoholTemplate.setPurposeId(purposeId);
         alcoholTemplate.setStyleId(styleId);
         alcoholTemplate.setMaterialId(materialId);
@@ -63,7 +64,7 @@ public class AlcoholTemplateController {
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("update")
     public ReturnBean update(Integer id, @Size(max = 50) String name, Integer length, MultipartFile file,
-                             Integer purposeId, Integer styleId, Integer materialId, Integer boxTypeId) throws Exception {
+                             Integer groupId, Integer purposeId, Integer styleId, Integer materialId, Integer boxTypeId) throws Exception {
 
         AlcoholTemplate alcoholTemplate = new AlcoholTemplate();
         alcoholTemplate.setId(id);
@@ -77,6 +78,7 @@ public class AlcoholTemplateController {
             file.transferTo(file1);
             alcoholTemplate.setImage(uuid8 + type);
         }
+        alcoholTemplate.setGroupId(groupId);
         alcoholTemplate.setPurposeId(purposeId);
         alcoholTemplate.setStyleId(styleId);
         alcoholTemplate.setMaterialId(materialId);

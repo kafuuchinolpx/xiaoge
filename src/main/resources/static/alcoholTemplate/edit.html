@@ -48,6 +48,17 @@
                 </td>
             </tr>
             <tr>
+                <td>分组</td>
+                <td>
+                    <select v-model="obj.groupId" name="groupId"
+                            class="form-control">
+                        <option v-for="group in group_List"
+                                :value="group.id">{{group.name}}
+                        </option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
                 <td>用途</td>
                 <td>
                     <select v-model="obj.purposeId" name="purposeId"
@@ -108,9 +119,30 @@
             style_list: [],
             material_list: [],
             boxType_list: [],
+            group_List: [],
         },
         created: function () {
             var vm = this;
+
+            $.ajax({
+                type: "POST",
+                url: "/design/alcoholTemplateGroup/findAll",
+                data: {},
+                dataType: "json",
+                async: false,
+                success: function (data) {
+                    if (data.ok) {
+                        vm.group_List = data.obj;
+                        return;
+                    }
+                    if (data.code == 401) {
+                        location.href = "/design/login.html?redirectUrl=" + location.href;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                }
+            });
+
             $.ajax({
                 type: "POST",
                 url: "/design/purpose/findAll",
@@ -211,7 +243,6 @@
             com_the_form: function () {
                 //数据校验
                 var vm = this;
-
 
                 var myUrl
                 if (vm.id != 0) {
