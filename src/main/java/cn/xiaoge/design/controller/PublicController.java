@@ -212,4 +212,9 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, waterService.findAll());
     }
 
+    @ApiOperation("手机app父子查询")
+    @PostMapping("app/AlcoholTemplateController/findallByApp")
+    public ReturnBean findAllByApp() {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findAllApp());
+    }
 }

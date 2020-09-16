@@ -1,9 +1,9 @@
 package cn.xiaoge.design.service.impl;
 
+import cn.xiaoge.design.entity.*;
 import cn.xiaoge.design.entity.vo.PageBean;
+import cn.xiaoge.design.repository.*;
 import cn.xiaoge.design.service.AlcoholTemplateService;
-import cn.xiaoge.design.entity.AlcoholTemplate;
-import cn.xiaoge.design.repository.AlcoholTemplateRepository;
 import cn.xiaoge.design.util.*;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,12 +15,6 @@ import java.util.Optional;
 import org.springframework.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import cn.xiaoge.design.entity.Purpose;
-import cn.xiaoge.design.repository.PurposeRepository;
-import cn.xiaoge.design.entity.Material;
-import cn.xiaoge.design.repository.MaterialRepository;
-import cn.xiaoge.design.entity.BoxType;
-import cn.xiaoge.design.repository.BoxTypeRepository;
 
 @Service
 public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
@@ -28,6 +22,8 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
 
     @Autowired
     private AlcoholTemplateRepository alcoholTemplateRepository;
+    @Autowired
+    private AlcoholTemplateGroupRepository alcoholTemplateGroupRepository;
 
 
     @Override
@@ -52,7 +48,6 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
             alcoholTemplateRepository.save(obj);
         }
     }
-
 
     @Override
     public PageBean<AlcoholTemplate> findAll(Integer page, String order, Integer size) {
@@ -151,5 +146,12 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     @Override
     public List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length) {
         return alcoholTemplateRepository.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, length);
+    }
+
+    @Override
+    public List<AlcoholTemplate> findAllApp() {
+        List<AlcoholTemplate> alcoholTemplates = alcoholTemplateRepository.findAllByGroupId(0);
+        alcoholTemplates.forEach(o -> o.setSon(alcoholTemplateRepository.findByGroupId(o.getId())));
+        return alcoholTemplates;
     }
 }

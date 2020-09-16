@@ -49,6 +49,8 @@ public class AlcoholTemplate implements Serializable {
     @Transient
     private AlcoholTemplateGroup alcoholTemplateGroup;
 
+    @Transient
+    private List<AlcoholTemplate> son;
     //材料
     private Integer styleId;
 

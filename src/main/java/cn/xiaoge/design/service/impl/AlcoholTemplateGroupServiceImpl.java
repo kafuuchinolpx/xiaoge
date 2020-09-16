@@ -1,21 +1,12 @@
 package cn.xiaoge.design.service.impl;
 
+import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.entity.AlcoholTemplateGroup;
-import cn.xiaoge.design.entity.BoxType;
-import cn.xiaoge.design.entity.Material;
-import cn.xiaoge.design.entity.Purpose;
-import cn.xiaoge.design.entity.vo.PageBean;
-import cn.xiaoge.design.repository.*;
+import cn.xiaoge.design.repository.AlcoholTemplateGroupRepository;
 import cn.xiaoge.design.service.AlcoholTemplateGroupService;
-import cn.xiaoge.design.service.AlcoholTemplateService;
 import cn.xiaoge.design.util.BeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;

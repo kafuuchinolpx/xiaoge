@@ -68,4 +68,11 @@ public interface AlcoholTemplateService {
     List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, int length);
 
     List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length);
+
+    /**
+     * app父子查询
+     *
+     * @return 集合
+     */
+    List<AlcoholTemplate> findAllApp();
 }

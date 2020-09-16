@@ -43,4 +43,6 @@ public interface AlcoholTemplateGroupService {
      * @param id 主键
      */
     AlcoholTemplateGroup findById(Integer id);
+
+
 }

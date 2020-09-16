@@ -50,8 +50,8 @@
             <tr>
                 <td>分组</td>
                 <td>
-                    <select v-model="obj.groupId" name="groupId"
-                            class="form-control">
+                    <select v-model="obj.groupId" name="groupId" class="form-control">
+                        <option value="0">无分组</option>
                         <option v-for="group in group_List"
                                 :value="group.id">{{group.name}}
                         </option>
