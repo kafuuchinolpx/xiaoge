@@ -12,15 +12,13 @@ import org.springframework.data.domain.Pageable;
 
 public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate, Integer> {
 
-
-    List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer purposeId, int length);
-
-    List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLength(Integer boxTypeId, Integer materialId, Integer styleId, int length);
-
-    List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length);
-
     List<AlcoholTemplate> findAllByGroupId(int i);
 
-
     List<AlcoholTemplate> findByGroupId(int i);
+
+    List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndGroupIdAndLength(Integer boxTypeId, Integer materialId, Integer styleId, int i, int length);
+
+    List<AlcoholTemplate> findAllByBoxTypeIdAndGroupIdAndLengthGreaterThan(Integer boxTypeId, int i, int length);
+
+    List<AlcoholTemplate> findByGroupIdAndLength(Integer id, int length);
 }

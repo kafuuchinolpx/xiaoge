@@ -117,9 +117,8 @@
                     <td width="30px" class="notOut hidden-xs">
                         <input type="checkbox" @click="select_all"/>
                     </td>
-                    <td width="60px" class="hidden-xs">
+                    <td @click="order_by('id',orderType?'asc':'desc')">编号<i class="fa fa-sort"></i></td>
                     </td>
-
                     <td @click="order_by('name',orderType?'asc':'desc')">模板名称<i class="fa fa-sort"></i></td>
                     <td @click="order_by('length',orderType?'asc':'desc')">最大长度<i class="fa fa-sort"></i></td>
                     <td @click="order_by('group_List',orderType?'asc':'desc')">分组<i class="fa fa-sort"></i></td>
@@ -140,9 +139,7 @@
                     <td class="notOut hidden-xs">
                         <input type="checkbox" :value="d.id" v-model="delete_id_list">
                     </td>
-                    <td class="hidden-xs">
-                        {{index+1}}
-                    </td>
+                    <td>{{d.id}}</td>
                     <td>{{d.name}}</td>
                     <td>{{d.length}}</td>
                     <td><span v-for="i in group_List" v-if="i.id==d.groupId">{{i.name}}</span></td>

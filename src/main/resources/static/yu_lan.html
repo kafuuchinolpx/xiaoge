@@ -1,0 +1,194 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>白酒预览</title>
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=0"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <style>
+        @font-face {
+            font-family: 阿里汉仪智能黑体;
+            src: local("阿里汉仪智能黑体"),
+            url("fonts/alihanyizhinengheiti.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 方正字迹-吕建德行楷简体;
+            src: local("方正字迹-吕建德行楷简体"),
+            url("fonts/fangzhengziji.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 汉仪家国宋W;
+            src: local("汉仪家国宋W"),
+            url("fonts/hanyijiaguosong.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 个性印章;
+            src: local("个性印章"),
+            url("fonts/gexingyinzhang.ttf") format("truetype");
+        }
+
+
+        @font-face {
+            font-family: 李旭科书法;
+            src: local("李旭科书法"),
+            url("fonts/lixukeshufa.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 招牌字体;
+            src: local("招牌字体"),
+            url("fonts/zhaopaiziti.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 正行楷简体;
+            src: local("正行楷简体"),
+            url("fonts/zhengxingkaijianti.ttf") format("truetype");
+        }
+
+        .alcoholList {
+            margin: 5px auto;
+            width: 500px;
+            position: relative;
+            text-align: center;
+
+        }
+
+        .alcoholList div {
+            text-align: left;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body style="background: #000000;">
+<div id="app" class="mui-content mui-scroll-wrapper">
+    <p>{{alcoholListSon}}</p>
+    <div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-bottom:-4px;"></div>
+    <div class="alcoholList" v-for="(d,index) in alcoholList" v-if="index==selectIndex"
+         v-for="(d,index) in alcoholListSon" v-if="index1==selectIndex1"
+         @click="changeIndex1(1)">
+        <img :src="imageType==0?baseUrl+d.image:baseUrl+d.image" width=" 500">
+        <div v-bind:style="d.header1Style">{{alcoholName}}</div>
+        <div v-bind:style="d.header2Style">{{alcoholName}}</div>
+        <!-- <div v-bind:style="d.bodyStyle">{{info}}</div> -->
+    </div>
+    <p style="text-align: center;">
+        <button style=" width: 140px;color: white;font-size: 40px;text-align: center;background-color: rgb(0, 0, 255);margin: 0px 1px;text-indent: 8px;"
+                @click="ka_he()">卡盒
+        </button>
+        <button style=" width: 140px;color: white;font-size: 40px;text-align: center;background-color:#b10000;margin:0 1px;text-indent:8px;"
+                @click="tong_he()">桶盒
+        </button>
+        <button style=" width: 140px;color: white;font-size: 40px;text-align: center;background-color:#3bb100;margin:0 1px;text-indent:8px;"
+                @click="shu_he()">书盒
+        </button>
+    </p>
+    <br/>
+    <p style="text-align: center; ">
+        <span><button @click="changeIndex(-1)"
+                      style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">上一个</button></span>
+        <button style="background: #0062CC;color: white;position: relative;top:-25px;" @click="submitIt()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确定样式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <span><button @click="changeIndex(1)"
+                      style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">下一个</button></span>
+    </p>
+</div>
+<script>
+    vv = new Vue({ //渲染表格
+        el: "#app",
+        data: {
+            baseUrl: base_path,
+            selectIndex: 0,
+            selectIndex1: 0,
+            alcoholList: [], //数据集合
+            alcoholName: localStorage.alcoholName ? localStorage.alcoholName : "",
+            info: localStorage.info ? localStorage.info : "",
+            boxTypeId: 1,
+            imageType: 0,
+            alcoholListSon: [],
+        },
+        watch: {
+            "selectIndex": function (newVal, oldVal) {
+                var vm = this;
+                vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+
+            }
+        },
+        created() {
+            var vm = this;
+            $.post(base_path + "app/alcoholTemplate/findAll", {
+                alcoholName: localStorage.alcoholName,
+                boxTypeId: localStorage.boxTypeId,
+                materialId: localStorage.materialId,
+                styleId: localStorage.styleId,
+            }, function (data) {
+                if (data.code == 200) {
+                    vm.alcoholList = data.obj;
+                    for (var i = 0; i < vm.alcoholList.length; i++) {
+                        vm.alcoholList[i].header1Style = JSON.parse(vm.alcoholList[i].header1Style);
+                        vm.alcoholList[i].header2Style = JSON.parse(vm.alcoholList[i].header2Style);
+                        // vm.alcoholList[i].bodyStyle = JSON.parse(vm.alcoholList[i].bodyStyle);
+                        console.info(vm.alcoholList)
+                    }
+                }
+            });
+        },
+        methods: { //方法
+
+            submitIt: function () {
+                var vm = this;
+                localStorage.selectAlcoholIndex = vm.alcoholList[vm.selectIndex].id
+                // location.href = "bao_jia_xing_xi.html";
+                location.href = "test.html";
+            },
+
+            ka_he: function () {
+                localStorage.boxTypeId = 1;
+                location.reload();
+            },
+
+            tong_he: function () {
+                localStorage.boxTypeId = 2;
+                location.reload();
+            },
+
+            shu_he: function () {
+                localStorage.boxTypeId = 3;
+                location.reload();
+            },
+
+            changeIndex: function (out) {
+                var vm = this;
+                if (vm.selectIndex + out < 0) {
+                    alert("已经没有更多了");
+                    return;
+                }
+                if (vm.selectIndex + out >= vm.alcoholList.length) {
+                    alert("已经没有更多了");
+                    return;
+                }
+                vm.imageType = 0;
+                vm.selectIndex = vm.selectIndex + out;
+            },
+
+            changeIndex1: function (out) {
+                var vm = this;
+                vm.imageType = 1;
+                if (vm.selectIndex1 + out >= vm.alcoholList[vm.selectIndex].son.length) {
+                    vm.selectIndex1 = 0;
+                    return;
+                }
+                vm.selectIndex1 = vm.selectIndex1 + out;
+            }
+        }
+    });
+
+</script>
+</body>
+</html>

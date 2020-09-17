@@ -48,11 +48,11 @@ public interface WaterService {
     Object findAll(Integer page, String order, Integer size);
 
 
-    Object findById(Integer id);
+    Water findById(Integer id);
 
     void updateNotNull(Water water);
 
-    Object findAll();
+    List<Water> findAll();
 
     List<Water> findByPurposeIdAndLengthGreaterThan(Integer purposeId, int length);
 }

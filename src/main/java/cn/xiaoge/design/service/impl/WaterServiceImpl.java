@@ -50,8 +50,17 @@ public class WaterServiceImpl implements WaterService {
      */
     @Override
     public Water insert(Water water) {
-        this.waterRepository.save(water);
-        return water;
+        if (null != water.getId() && !"".equals(water.getId())) {
+            Optional<Water> byId = waterRepository.findById(water.getId());
+            Water water1 = byId.get();
+            if (null == water.getImage()) {
+                water.setImage(water1.getImage());
+            }
+            water.setHeaderStyle(water1.getHeaderStyle());
+            water.setBodyStyle(water1.getBodyStyle());
+        }
+        System.out.println("********" + water);
+        return waterRepository.save(water);
     }
 
     /**
@@ -62,8 +71,7 @@ public class WaterServiceImpl implements WaterService {
      */
     @Override
     public Water update(Water water) {
-        this.waterRepository.save(water);
-        return this.queryById(water.getId());
+        return waterRepository.save(water);
     }
 
     /**
@@ -96,8 +104,12 @@ public class WaterServiceImpl implements WaterService {
     }
 
     @Override
-    public Object findById(Integer id) {
-        return waterRepository.findById(id);
+    public Water findById(Integer id) {
+        Optional<Water> byId = waterRepository.findById(id);
+        if (byId.isPresent()) {
+            return byId.get();
+        }
+        return null;
     }
 
     @Override
@@ -117,13 +129,13 @@ public class WaterServiceImpl implements WaterService {
     }
 
     @Override
-    public Object findAll() {
+    public List<Water> findAll() {
         return waterRepository.findAll();
     }
 
     @Override
     public List<Water> findByPurposeIdAndLengthGreaterThan(Integer purposeId, int length) {
-        return waterRepository.findByPurposeIdAndLengthGreaterThan(purposeId, length);
+        return waterRepository.findByPurposeIdAndLength(purposeId, length);
     }
 }
 

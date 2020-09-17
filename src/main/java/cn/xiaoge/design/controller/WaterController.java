@@ -16,6 +16,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.io.File;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * @author 19070
@@ -34,10 +36,11 @@ public class WaterController {
 
     @PostMapping("add")
     @ApiOperation(value = "水模板添加")
-    public ReturnBean add(
-            @Size(max = 50) String name,
-            Integer length, MultipartFile file, Integer purposeId, Integer materialId, Integer boxTypeId) throws Exception {
+    public ReturnBean add(Integer id, @Size(max = 50) String name, Integer length, MultipartFile file, Integer purposeId) throws Exception {
         Water water = new Water();
+        if (null != id && !"".equals(id)) {
+            water.setId(id);
+        }
         water.setName(name);
         water.setLength(length);
         if (file != null) {
@@ -50,26 +53,6 @@ public class WaterController {
         }
         water.setPurposeId(purposeId);
         waterService.insert(water);
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
-    }
-
-    @ApiOperation(value = "水模板修改不为空的属性")
-    @PostMapping("update")
-    public ReturnBean update(Integer id, @Size(max = 50) String name, Integer length, MultipartFile file, Integer purposeId, Integer materialId, Integer boxTypeId) throws Exception {
-        Water water = new Water();
-        water.setId(id);
-        water.setName(name);
-        water.setLength(length);
-        if (file != null && file.getSize() != 0) {
-            String uuid8 = UUIDUtil.getUUID8();
-            String fileName = file.getOriginalFilename();
-            String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
-            File file1 = new File(filePath + uuid8 + type);
-            file.transferTo(file1);
-            water.setImage(uuid8 + type);
-        }
-        water.setPurposeId(purposeId);
-        waterService.update(water);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
