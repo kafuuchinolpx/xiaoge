@@ -29,6 +29,12 @@
     <form id="my_form" enctype="multipart/form-data" method="post">
         <table class="table table-bordered table-hover">
             <tr>
+                <td>分组ID</td>
+                <td>
+                    <input type="number" class="form-control" name="id" v-model="group_id" maxlength="50">
+                </td>
+            </tr>
+            <tr>
                 <td>分组名字</td>
                 <td>
                     <input type="text" class="form-control" name="name" v-model="name" maxlength="50">

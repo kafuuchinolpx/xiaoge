@@ -69,12 +69,11 @@
 </head>
 <body style="background: #000000;">
 <div id="app" class="mui-content mui-scroll-wrapper">
-    <p>{{alcoholListSon}}</p>
+    {{selectIndex1}},{{showType}}
     <div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-bottom:-4px;"></div>
-    <div class="alcoholList" v-for="(d,index) in alcoholList" v-if="index==selectIndex"
-         v-for="(d,index) in alcoholListSon" v-if="index1==selectIndex1"
+    <div class="alcoholList" v-for="(d,index) in alcoholList" v-if="showType==0?index==selectIndex:index==selectIndex1"
          @click="changeIndex1(1)">
-        <img :src="imageType==0?baseUrl+d.image:baseUrl+d.image" width=" 500">
+        <img :src="baseUrl+d.image" width=" 500">
         <div v-bind:style="d.header1Style">{{alcoholName}}</div>
         <div v-bind:style="d.header2Style">{{alcoholName}}</div>
         <!-- <div v-bind:style="d.bodyStyle">{{info}}</div> -->
@@ -105,18 +104,31 @@
         data: {
             baseUrl: base_path,
             selectIndex: 0,
-            selectIndex1: 0,
+            selectIndex1: -1,
             alcoholList: [], //数据集合
+            alcoholListCopy: [],
             alcoholName: localStorage.alcoholName ? localStorage.alcoholName : "",
             info: localStorage.info ? localStorage.info : "",
             boxTypeId: 1,
-            imageType: 0,
+            showType: 0,
             alcoholListSon: [],
         },
         watch: {
-            "selectIndex": function (newVal, oldVal) {
+            "showType": function (newVal, oldVal) {
                 var vm = this;
-                vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                if (newVal == 0) {
+                    vm.reload_();
+                    vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                }
+                if (newVal == 1) {
+                    for (var i = 0; i < vm.alcoholListSon.length; i++) {
+                        vm.alcoholListSon[i].header1Style = JSON.parse(vm.alcoholListSon[i].header1Style);
+                        vm.alcoholListSon[i].header2Style = JSON.parse(vm.alcoholListSon[i].header2Style);
+                    }
+                    vm.alcoholList = vm.alcoholListSon;
+                }
+            },
+            "selectIndex": function (newVal, oldVAl) {
 
             }
         },
@@ -130,16 +142,41 @@
             }, function (data) {
                 if (data.code == 200) {
                     vm.alcoholList = data.obj;
+                    vm.alcoholListCopy = vm.alcoholList;
                     for (var i = 0; i < vm.alcoholList.length; i++) {
                         vm.alcoholList[i].header1Style = JSON.parse(vm.alcoholList[i].header1Style);
                         vm.alcoholList[i].header2Style = JSON.parse(vm.alcoholList[i].header2Style);
                         // vm.alcoholList[i].bodyStyle = JSON.parse(vm.alcoholList[i].bodyStyle);
-                        console.info(vm.alcoholList)
+                    }
+                    if (vm.alcoholList[vm.selectIndex].son) {
+                        vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
                     }
                 }
             });
         },
         methods: { //方法
+
+            reload_: function () {
+
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/findAll", {
+                    alcoholName: localStorage.alcoholName,
+                    boxTypeId: localStorage.boxTypeId,
+                    materialId: localStorage.materialId,
+                    styleId: localStorage.styleId,
+                }, function (data) {
+                    if (data.code == 200) {
+                        vm.alcoholList = data.obj;
+                        for (var i = 0; i < vm.alcoholList.length; i++) {
+                            vm.alcoholList[i].header1Style = JSON.parse(vm.alcoholList[i].header1Style);
+                            vm.alcoholList[i].header2Style = JSON.parse(vm.alcoholList[i].header2Style);
+                            // vm.alcoholList[i].bodyStyle = JSON.parse(vm.alcoholList[i].bodyStyle);
+                        }
+                        vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                    }
+                });
+
+            },
 
             submitIt: function () {
                 var vm = this;
@@ -173,18 +210,25 @@
                     alert("已经没有更多了");
                     return;
                 }
-                vm.imageType = 0;
+                vm.showType = 0;
+                vm.selectIndex1 = 0;
+                vm.reload_();
                 vm.selectIndex = vm.selectIndex + out;
             },
-
             changeIndex1: function (out) {
                 var vm = this;
-                vm.imageType = 1;
-                if (vm.selectIndex1 + out >= vm.alcoholList[vm.selectIndex].son.length) {
-                    vm.selectIndex1 = 0;
-                    return;
+                if (vm.alcoholListCopy[vm.selectIndex].son.length) {
+                    if (vm.selectIndex1 + out >= vm.alcoholList[vm.selectIndex].length) {
+                        vm.selectIndex1 = -1;
+                        vm.showType = 0;
+                        return;
+                    }
+                    vm.showType = 1;
+                    vm.selectIndex1 = vm.selectIndex1 + out;
+                    if (vm.selectIndex1 < 0) {
+                        vm.selectIndex1 = 0;
+                    }
                 }
-                vm.selectIndex1 = vm.selectIndex1 + out;
             }
         }
     });
