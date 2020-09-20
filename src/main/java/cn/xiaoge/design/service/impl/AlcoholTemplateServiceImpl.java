@@ -138,15 +138,15 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     }
 
     @Override
-    public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, int length) {
-        List<AlcoholTemplate> byBoxTypeIdAndMaterialIdAndStyleIdAndLength = alcoholTemplateRepository.findAllByBoxTypeIdAndMaterialIdAndStyleIdAndGroupIdAndLength(boxTypeId, materialId, styleId, 0, length);
+    public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int length) {
+        List<AlcoholTemplate> byBoxTypeIdAndMaterialIdAndStyleIdAndLength = alcoholTemplateRepository.findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLength(boxTypeId, materialId, styleId, purposeId, 0, length);
         byBoxTypeIdAndMaterialIdAndStyleIdAndLength.forEach(o -> o.setSon(alcoholTemplateRepository.findByGroupIdAndLength(o.getId(), length)));
         return byBoxTypeIdAndMaterialIdAndStyleIdAndLength;
     }
 
     @Override
     public List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length) {
-        List<AlcoholTemplate> byBoxTypeIdAndLengthGreaterThan = alcoholTemplateRepository.findAllByBoxTypeIdAndGroupIdAndLengthGreaterThan(boxTypeId, 0, length);
+        List<AlcoholTemplate> byBoxTypeIdAndLengthGreaterThan = alcoholTemplateRepository.findAllByBoxTypeIdAndGroupIdAndLength(boxTypeId, 0, length);
         byBoxTypeIdAndLengthGreaterThan.forEach(o -> o.setSon(alcoholTemplateRepository.findByGroupIdAndLength(o.getId(), length)));
         return byBoxTypeIdAndLengthGreaterThan;
     }

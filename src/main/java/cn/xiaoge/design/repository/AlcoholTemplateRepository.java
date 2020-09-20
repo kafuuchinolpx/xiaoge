@@ -16,9 +16,9 @@ public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate
 
     List<AlcoholTemplate> findByGroupId(int i);
 
-    List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndGroupIdAndLength(Integer boxTypeId, Integer materialId, Integer styleId, int i, int length);
-
-    List<AlcoholTemplate> findAllByBoxTypeIdAndGroupIdAndLengthGreaterThan(Integer boxTypeId, int i, int length);
-
     List<AlcoholTemplate> findByGroupIdAndLength(Integer id, int length);
+
+    List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLength(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int i, int length);
+
+    List<AlcoholTemplate> findAllByBoxTypeIdAndGroupIdAndLength(Integer boxTypeId, int i, int length);
 }

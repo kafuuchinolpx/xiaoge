@@ -127,7 +127,6 @@
                 }
             },
             "selectIndex": function(newVal, oldVAl) {
-
             }
         },
         created() {
@@ -137,6 +136,7 @@
                 boxTypeId: localStorage.boxTypeId,
                 materialId: localStorage.materialId,
                 styleId: localStorage.styleId,
+                purposeId: localStorage.purposeId,
             }, function(data) {
                 if (data.code == 200) {
                     vm.alcoholList = data.obj;
@@ -155,13 +155,13 @@
         methods: { //方法
 
             reload_: function() {
-
                 var vm = this;
                 $.post(base_path + "app/alcoholTemplate/findAll", {
                     alcoholName: localStorage.alcoholName,
                     boxTypeId: localStorage.boxTypeId,
                     materialId: localStorage.materialId,
                     styleId: localStorage.styleId,
+                    purposeId: localStorage.purposeId,
                 }, function(data) {
                     if (data.code == 200) {
                         vm.alcoholList = data.obj;

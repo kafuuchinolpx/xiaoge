@@ -1,125 +1,130 @@
 <!doctype html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<title>白酒样式选择</title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="css/mui.css" rel="stylesheet" />
-		<script src="js/mui.js"></script>
-		<script src="js/pei_zhi.js"></script>
-		<script src="js/vue.js"></script>
-		<script src="js/jquery.min.js"></script>
-	</head>
-	<body style="background: #000000;text-align: center;">
-		<div id="app">
-			<div><img src="bmp/log1.jpg" width="100%"></div>
-			<br>
-			<br>
-			<br>
-			<p style="font-size: 20px;">产品名称</p>
-			<input v-model="alcoholName" style="width:80%;background-color: #aaa;border-radius: 5px;" />
-			<br><br>
-			<form action="wine_box_type" method="post">
+<head>
+    <meta charset="utf-8">
+    <title>白酒样式选择</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body style="background: #000000;text-align: center;">
+<div id="app">
+    <div><img src="bmp/log1.jpg" width="100%"></div>
+    <br>
+    <br>
+    <br>
+    <p style="font-size: 20px;">产品名称</p>
+    <input v-model="alcoholName" style="width:80%;background-color: #aaa;border-radius: 5px;"/>
+    <br><br>
+    <form action="wine_box_type" method="post">
 
 
-				<select v-model="materialId" style="width:90px;background-color:rgb(0,147,210);color:white;font-size:16px;text-align: center;margin:0 1px;text-indent:10px;">
-					<option value="0">材料</option>
-					<option :value="d.id" v-for="d in material">{{d.name}}</option>
-				</select>
+        <select v-model="materialId"
+                style="width:90px;background-color:rgb(0,147,210);color:white;font-size:16px;text-align: center;margin:0 1px;text-indent:10px;">
+            <option value="0">材料</option>
+            <option :value="d.id" v-for="d in material">{{d.name}}</option>
+        </select>
 
-				<select v-model="purposeId" style="width:90px;color:white;font-size:16px;text-align: center;background-color:red;margin:0 1px;text-indent:-2px;">
-					<option value="0">用途</option>
-					<option :value="d.id" v-for="d in purpose">{{d.name}}</option>
-				</select>
+        <select v-model="purposeId"
+                style="width:90px;color:white;font-size:16px;text-align: center;background-color:red;margin:0 1px;text-indent:-2px;">
+            <option value="0">用途</option>
+            <option :value="d.id" v-for="d in purpose">{{d.name}}</option>
+        </select>
 
-				<select v-model="styleId" style="width:90px;color:white;font-size:16px;text-align: center;background-color:green;margin:0 1px;text-indent:-2px;">
-					<option value="0">风格</option>
-					<option :value="d.id" v-for="d in style">{{d.name}}</option>
-				</select>
-			</form>
+        <select v-model="styleId"
+                style="width:90px;color:white;font-size:16px;text-align: center;background-color:green;margin:0 1px;text-indent:-2px;">
+            <option value="0">风格</option>
+            <option :value="d.id" v-for="d in style">{{d.name}}</option>
+        </select>
+    </form>
 
-			<br>
-			<p style="font-size: 20px;margin-top: 20px;">标签部分内容</p>
-			<textarea style="width: 80%;background-color: #aaa;" rows="7" v-model="info"></textarea>
-			<br>
-			<br>
-			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+    <br>
+    <p style="font-size: 20px;margin-top: 20px;">标签部分内容</p>
+    <textarea style="width: 80%;background-color: #aaa;" rows="7" v-model="info"></textarea>
+    <br>
+    <br>
+    <div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
 
-			<p style="position: relative;margin: 0 auto;text-align: center;top: -38px;color:white;font-size: 24px;" @click="sheng_cheng()">生成</p>
+    <p style="position: relative;margin: 0 auto;text-align: center;top: -38px;color:white;font-size: 24px;"
+       @click="sheng_cheng()">生成</p>
 
-		</div>
-		<script>
-			new Vue({
-				el: "#app",
-				watch: {
-					boxTypeId(val) {
-						localStorage.boxTypeId = val;
-					},
-					materialId(val) {
-						localStorage.materialId = val;
-					},
-					purposeId(val) {
-						localStorage.purposeId = val;
-					},
-					styleId(val) {
-						localStorage.styleId = val;
-					},
-					info(val) {
-						localStorage.info = val;
-					},
-					alcoholName(val) {
-						localStorage.alcoholName = val;
-					}
-				},
-				data: {
-					alcoholName: "",
-					boxTypeId: 1,
-					materialId: 0,
-					purposeId: 0,
-					styleId: 0,
-					boxType: [],
-					material: [],
-					purpose: [],
-					style: [],
-					info: "酒精度： %vol             净含量： ml\n香型：                         生产许可号：\n执行标准：\n生产厂家：\n厂址："
+</div>
+<script>
+    new Vue({
+        el: "#app",
+        watch: {
+            boxTypeId(val) {
+                localStorage.boxTypeId = val;
+            },
+            materialId(val) {
+                localStorage.materialId = val;
+            },
+            purposeId(val) {
+                localStorage.purposeId = val;
+            },
+            styleId(val) {
+                localStorage.styleId = val;
+            },
+            info(val) {
+                localStorage.info = val;
+            },
+            alcoholName(val) {
+                localStorage.alcoholName = val;
+            }
+        },
+        data: {
+            alcoholName: "",
+            boxTypeId: 1,
+            materialId: 0,
+            purposeId: 0,
+            styleId: 0,
+            boxType: [],
+            material: [],
+            purpose: [],
+            style: [],
+            info: "酒精度： %vol             净含量： ml\n香型：                         生产许可号：\n执行标准：\n生产厂家：\n厂址："
 
-				},
-				created() {
-					this.getData();
-				},
-				methods: {
-					getData() {
-						var vm = this;
-						$.post(base_path + "app/boxType/findAll", {
-							size: 1000
-						}, function(data) {
-							vm.boxType = data.obj.content;
-						})
-						var vm = this;
-						$.post(base_path + "app/material/findAll", {
-							size: 1000
-						}, function(data) {
-							vm.material = data.obj.content;
-						})
-						var vm = this;
-						$.post(base_path + "app/purpose/findAll", {
-							size: 1000
-						}, function(data) {
-							vm.purpose = data.obj.content;
-						})
-						var vm = this;
-						$.post(base_path + "app/style/findAll", {
-							size: 1000
-						}, function(data) {
-							vm.style = data.obj.content;
-						})
-					},
-					sheng_cheng() {
-						location.href = "yu_lan.html";
-					}
-				}
-			})
-		</script>
-	</body>
+        },
+        created() {
+            this.getData();
+        },
+        methods: {
+            getData() {
+                var vm = this;
+                $.post(base_path + "app/boxType/findAll", {
+                    size: 1000
+                }, function (data) {
+                    vm.boxType = data.obj.content;
+                })
+                var vm = this;
+                $.post(base_path + "app/material/findAll", {
+                    size: 1000
+                }, function (data) {
+                    vm.material = data.obj.content;
+                })
+                var vm = this;
+                $.post(base_path + "app/purpose/findAll", {
+                    size: 1000
+                }, function (data) {
+                    vm.purpose = data.obj.content;
+                })
+                var vm = this;
+                $.post(base_path + "app/style/findAll", {
+                    size: 1000
+                }, function (data) {
+                    vm.style = data.obj.content;
+                })
+            },
+            sheng_cheng() {
+                location.href = "yu_lan.html";
+            }
+        }
+    })
+</script>
+</body>
 
 </html>

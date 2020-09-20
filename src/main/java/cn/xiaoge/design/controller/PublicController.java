@@ -136,12 +136,12 @@ public class PublicController {
     @ApiOperation(value = "app根据boxtypeId")
     @PostMapping("app/alcoholTemplate/findAll")
     public ReturnBean findByIdWithBoxType(@RequestParam(defaultValue = "1") Integer boxTypeId, @RequestParam(defaultValue = "1") Integer materialId,
-                                          @RequestParam(defaultValue = "1") Integer styleId, String alcoholName) {
-        if (materialId == 0 && styleId == 0) {
+                                          @RequestParam(defaultValue = "1") Integer styleId, @RequestParam(defaultValue = "1") Integer purposeId, String alcoholName) {
+        if (materialId == 0 && styleId == 0 && purposeId == 0) {
             List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, alcoholName.length());
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
         } else {
-            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, purposeId, alcoholName.length());
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
         }
     }
@@ -157,6 +157,15 @@ public class PublicController {
     @PostMapping("app/alcoholTemplate/findById")
     public ReturnBean findById(@RequestParam Integer id) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findById(id));
+    }
+
+    @Autowired
+    QuotationInformationService quotationInformationService;
+
+    @ApiOperation(value = "报价查询全部")
+    @PostMapping("app/quotationInformation/findAll")
+    public ReturnBean quotationInformationFindAll() {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS,quotationInformationService.findAllApp());
     }
 
     @Autowired

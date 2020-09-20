@@ -3,6 +3,8 @@ package cn.xiaoge.design.service;
 import cn.xiaoge.design.entity.QuotationInformation;
 import cn.xiaoge.design.entity.vo.PageBean;
 
+import java.util.List;
+
 
 public interface QuotationInformationService {
 
@@ -46,4 +48,5 @@ public interface QuotationInformationService {
      */
     QuotationInformation findById(Integer id);
 
+    List<QuotationInformation> findAllApp();
 }

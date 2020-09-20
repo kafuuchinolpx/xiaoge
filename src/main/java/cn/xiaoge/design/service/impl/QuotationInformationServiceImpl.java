@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -75,6 +76,11 @@ public class QuotationInformationServiceImpl implements QuotationInformationServ
             return byId.get();
         }
         return null;
+    }
+
+    @Override
+    public List<QuotationInformation> findAllApp() {
+        return quotationInformationRepository.findAll();
     }
 
 
