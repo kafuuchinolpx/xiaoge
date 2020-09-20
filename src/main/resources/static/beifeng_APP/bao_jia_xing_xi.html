@@ -1,0 +1,201 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>质询报价信息</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="js/pei_zhi.js"></script>
+		<script src="js/vue.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/mui.js"></script>
+		<style>
+			body {
+            margin: 0;
+            padding: 0;
+        }
+
+        input {
+            border-radius: 5px;
+        }
+    </style>
+	</head>
+
+	<body style="background: #000;">
+		<div id="app">
+			<form>
+				<div style="background: white;"><img src="bmp/log2.jpg" width="100%" height="120px" style="margin-bottom:-4px;">
+				</div>
+				<div style="margin-left: 10px;margin-right: 10px;color: white;">
+					<p>盒型：<select style="width: 60%;float: right;background-color: #aaa;" v-model="boxtype_id">
+							<option value="21">卡盒</option>
+							<option value="60">书型盒</option>
+							<option value="45">上开盖</option>
+						</select></p>
+
+					<p>尺寸： <select style="width: 60%;float: right;background-color: #aaa;" v-model="size">
+							<option v-for="d in chi_cun" :value="d.va">{{d.name}}</option>
+						</select></p>
+
+					<p>材料： <select style="width: 60%;float: right;background-color: #aaa;" v-model="cai_liao">
+							<option value="1">金卡</option>
+							<option value="0.905">白卡</option>
+							<option value="0.901">牛卡</option>
+						</select></p>
+
+					<p>报价数量（件）: <select style="width:60%;float: right;background-color: #aaa;" v-model="shu_liang">
+							<option value="1">500件</option>
+							<option value="0.905">1000件</option>
+							<option value="0.903">3000件</option>
+							<option value="0.901">5000件</option>
+							<option value="0.9">10000件</option>
+						</select></p>
+					<p>注：每件包括6个酒盒、3个手袋、一个外箱、6套商标</p>
+					<p> 印后工艺:
+						<input type="checkbox" v-model="gong_yi" name="gong_yi" value="1.001">烫金
+						<input type="checkbox" v-model="gong_yi" name="gong_yi" value="1.002">深压纹
+						<input type="checkbox" v-model="gong_yi" name="gong_yi" value="1.003">丝印
+						<input type="checkbox" v-model="gong_yi" name="gong_yi" value="1.004">触感膜
+					</p>
+					<input name="id" v-model="shu_liang" hidden="hidden" />
+
+					<div style="width: 120px;height: 40px;background: rgb(255,0,0);margin: 16px auto 0 auto;border-radius: 5px;text-align: center;"></div>
+					<p style="height: 2px;position: relative;margin: 0 auto;text-align: center;top: -36px;color: #fff;font-size: 24px;"
+					 @click="ji_suan()">生成报价</p>
+					<p>报价结果: <input type="text" style="width:60%;float: right;background-color: #aaa;" v-model="jie_guo" disabled="disabled"></p>
+
+
+
+					<!-- <p style="color: #00ff00;">用户专用图片上传</p>
+
+    <input type="file" style="background: #666;width: 100%;background-color: #aaa;" name="logo" />
+    <p>收货地址：
+        <input type="text" style="width: 60%;float: right;background-color: #aaa;" v-model="yao_qiu.user_addr" />
+    </p>
+
+    <p>收件人：
+        <input type="text" style="width: 60%;float: right;background-color: #aaa;" v-model="yao_qiu.user_name" />
+    </p>
+
+    <p>电话：
+        <input type="text" style="width: 60%;float: right;background-color: #aaa;" v-model="yao_qiu.user_phone" />
+    </p>
+    <p>下单数量（件）：
+        <input type="number" style="width:60%;float: right;background-color: #aaa;" v-model="yao_qiu.category_quantity" />
+    </p> -->
+					<!-- <div style="width: 120px;height: 40px;background: rgb(255,0,0);margin: 16px auto 0 auto;border-radius: 5px;text-align: center;"></div>
+    <p style="height:2px;position: relative;margin: 0 auto;text-align: center;top: -36px;color: #fff;font-size: 24px;"
+     @click="que_ren_da_yang()">确认下单</p> -->
+
+				</div>
+			</form>
+		</div>
+		<script>
+			new Vue({
+				el: "#app",
+				data: {
+					chi_cun: [],
+					boxtype_id: 0,
+					size: 0,
+					cai_liao: 0,
+					gong_yi: [],
+					shu_liang: 0,
+					jie_guo: 0,
+					yao_qiu: {}
+				},
+				watch: {
+					boxtype_id: function(va) {
+						var vm = this;
+						if (va == '21' || va == '45') {
+							vm.chi_cun = [{
+								va: 1,
+								name: '90X90X235'
+							}, {
+								va: 1.045,
+								name: '100X100X240'
+							}, { 
+								va: 1.065,
+								name: '105X105X250'
+							}, {
+								va: 1.085,
+								name: '110X110X260'
+							}, {
+								va: 1.1,
+								name: '120X120X270'
+							}]
+						} else {
+							vm.chi_cun = [{
+								va: 1,
+								name: '140X290X110'
+							}, {
+								va: 1.02,
+								name: '160X300X110'
+							}, {
+								va: 1.05,
+								name: '170X300X120'
+							}]
+						}
+					}
+				},
+				// created() {
+				//     var vm = this;
+				//     $.post(base_path + "fengGeChaXun", {}, function (data) {
+				//         if (data.code == 200) {
+				//             vm.yang_shi = data.data;
+				//         }
+				//     })
+				// },
+				methods: { //方法 计算
+					ji_suan: function() {
+						var vm = this;
+						vm.jie_guo = vm.boxtype_id * vm.size * vm.cai_liao * vm.shu_liang * vm.gong_yi;
+					},
+
+					que_ren_da_yang: function() {
+						var vm = this;
+						var wen_zi_shou_ming = this.yao_qiu.te_shu;
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n酒盒规格:" + vm.yao_qiu.size);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n材料:" + vm.yao_qiu.textrue_id);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n盒型:" + vm.yao_qiu.boxtype_id);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n收样地址:" + vm.yao_qiu.user_addr);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n收件人:" + vm.yao_qiu.user_name);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n电话:" + vm.yao_qiu.user_phone);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n数量:" + vm.yao_qiu.category_quantity);
+						console.info(wen_zi_shou_ming)
+						$.post(base_path + "tianJia", {
+							dengLuHao: sessionStorage.den_lu_hao,
+							muBan: sessionStorage.mu_ban_bian_hao,
+							zhiFuZhuangKuang: '未支付',
+							wenZiShuoMing: wen_zi_shou_ming
+						}, function(shu_ju) {
+
+							if (shu_ju.code == 200) {
+								vm.yao_qiu.id = shu_ju.data;
+								var form = new FormData(document.getElementById("app"));
+								$.ajax({
+									url: base_path + "xiuGaiTuPian",
+									data: form,
+									type: 'POST',
+									processData: false,
+									contentType: false,
+									success: function(shu_ju) {
+										if (shu_ju.code == 200) {
+											alert("添加成功")
+											location.href = "yu_lan.html"
+
+										} else {
+											alert("添加错误"); //弹窗
+										}
+									}
+								})
+							}
+
+						})
+					}
+				}
+			});
+		</script>
+
+	</body>
+
+</html>

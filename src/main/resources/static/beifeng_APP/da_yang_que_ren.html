@@ -1,0 +1,128 @@
+<!doctype html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>打样确认</title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<script src="js/pei_zhi.js"></script>
+		<script src="js/vue.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/mui.js"></script>
+		<style>
+			body{margin: 0;padding: 0;}
+		</style>
+	</head>
+
+	<body style="background: #000;">
+		<form id="app">
+
+			<div style="background: white;"><img src="./bmp/微信图片_20200730104459.jpg" width="100%" style="margin-bottom:-4px;"></div>
+			<br>
+			<div style="margin-left: 10px;margin-right: 10px;color: white;">
+				<p style="height: ;">酒盒规格：<select style="width: 70%;float: right;background-color: #aaa;" v-model="yao_qiu.gui_ge">
+						<option value="9.3X9.3X23">9.3X9.3X23</option>
+						<option value="12X12X26">12X12X26</option>
+						<option value="11X11X24">11X11X24</option>
+					</select> </p>
+
+				<p>材料： <select style="width: 70%;float: right;background-color: #aaa;" v-model="yao_qiu.cai_liao">
+						<option value="金卡">金卡</option>
+						<option value="白卡">白卡</option>
+						<option value="特种纸">特种纸</option>
+						<option value="牛卡">牛卡</option>
+					</select></p>
+
+				<p>盒型： <select style="width: 70%;float: right;background-color: #aaa;" v-model="yao_qiu.he_xing">
+						<option value="卡盒">卡盒</option>
+						<option value="书型盒">书型盒</option>
+						<option value="上开盖">上开盖</option>
+						<option value="大礼盒">大礼盒</option>
+					</select></p>
+
+				<p> 特殊要求 <textarea style="width: 70%;float: right;background-color: #aaa;" rows="6" v-model="yao_qiu.te_shu"></textarea></p>
+				<br>
+				<br>
+				<input name="id" v-model="yao_qiu.id" hidden="hidden" />
+				<br>
+				<p>图片上传</p>
+
+				<input type="file" style="background: #666;width: 100%;background-color: #aaa;" name="logo" />
+				<p>收样地址
+					<input type="text" style="width: 70%;float: right;background-color: #aaa;" v-model="yao_qiu.shou_yang_di_zhi" />
+				</p>
+
+				<p>收件人
+					<input type="text" style="width: 70%;float: right;background-color: #aaa;" v-model="yao_qiu.shou_jian_ren" />
+				</p>
+
+				<p>电话
+					<input type="text" style="width: 70%;float: right;background-color: #aaa;" v-model="yao_qiu.dian_hua" />
+				</p>
+				<div style="width: 120px;height: 50px;background: rgb(255,0,0);margin: 80px auto 0 auto;border-radius: 5px;text-align: center;"></div>
+				<p style="position: relative;margin: 0 auto;text-align: center;top: -40px;color: #fff;font-size: 24px;" @click="que_ren_da_yang()">确认打样</p>
+
+			</div>
+		</form>
+		<script>
+			new Vue({ //渲染表格
+				el: "#app",
+				data: {
+					yao_qiu: {}
+				},
+				created() {
+					var vm = this;
+					$.post(base_path + "fengGeChaXun", {}, function(shu_ju) {
+						if (shu_ju.code == 200) {
+							vm.yang_shi = shu_ju.data;
+						}
+					})
+
+				},
+				methods: { //方法
+					//确认打样
+					que_ren_da_yang: function() {
+						var vm = this;
+						var wen_zi_shou_ming = this.yao_qiu.te_shu;
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n酒盒规格:" + this.yao_qiu.gui_ge);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n材料:" + this.yao_qiu.cai_liao);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n盒型:" + this.yao_qiu.he_xing);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n收样地址:" + this.yao_qiu.shou_yang_di_zhi);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n收件人:" + this.yao_qiu.shou_jian_ren);
+						wen_zi_shou_ming = wen_zi_shou_ming + ("\n电话:" + this.yao_qiu.dian_hua);
+						console.info(wen_zi_shou_ming)
+
+						$.post(base_path + "tianJia", {
+							dengLuHao: sessionStorage.den_lu_hao,
+							muBan: sessionStorage.mu_ban_bian_hao,
+							zhiFuZhuangKuang: '未支付',
+							wenZiShuoMing: wen_zi_shou_ming
+						}, function(shu_ju) {
+
+							if (shu_ju.code == 200) {
+								vm.yao_qiu.id = shu_ju.data;
+								var form = new FormData(document.getElementById("app"));
+								$.ajax({
+									url: base_path + "xiuGaiTuPian",
+									data: form,
+									type: 'POST',
+									processData: false,
+									contentType: false,
+									success: function(shu_ju) {
+										if (shu_ju.code == 200) {
+											alert("添加成功")
+											location.href = "yu_lan.html"
+
+										} else {
+											alert("添加错误"); //弹窗
+										}
+									}
+								})
+							}
+						})
+					}
+				}
+			});
+		</script>
+	</body>
+</html>

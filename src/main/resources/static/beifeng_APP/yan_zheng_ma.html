@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<title>手机验证码登录</title>
+		<link href="css/mui.min.css" rel="stylesheet" />
+		<link href="css/icons-extra.css" rel="stylesheet" />
+		<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
+		<script src="js/mui.min.js"></script>
+		<script src="js/pei_zhi.js"></script>
+		<script type="text/javascript" src="js/jquery.min.js"></script>
+		<style type="text/css">
+			.pwd_eye {
+				position: relative;
+			}
+
+			#eye {
+				width: 22px;
+				height: auto;
+				float: right;
+				position: absolute;
+				right: 45px;
+				top: 2px;
+			}
+		</style>
+	</head>
+	<!-- *********************************************************************************************** -->
+
+	<body style="background:black;">
+		<br>
+		<div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-bottom:-4px;"></div>
+		<br><br><br><br><br><br>
+
+		<form style="margin-left:30px;">
+			<span class="mui-icon-extra mui-icon-extra-phone" style="color: white;"></span>
+			<input style="width: 80%;height:30px;" type="tel" name="dengLuHao" placeholder="手机号" />
+			<br /><br />
+
+			<div class="pwd_eye">
+				<span class="mui-icon mui-icon-locked" style="color:white"></span>
+				<input style="width: 80%;height:30px;position: relative;" type="password" name="miMa" placeholder="验证码"/>
+				<p style="color:blue;height:25px;line-height: 25px;font-size:14px;position: absolute;margin-left:200px;top:3px;" onclick="huo_qu">点击获取验证码</p>
+			</div>
+			<br><br><br><br><br>
+			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+			<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color:white;font-size: 20px;" onclick="ti_jiao()">登录</p>
+			
+		</form>
+		<script>
+			
+			function ti_jiao() {
+				//发送请求并获取响应结果
+				$.post(base_path + "denLu", $("form").serialize(), function(shu_ju) {
+					if (shu_ju.code == 200) {
+						sessionStorage.token = shu_ju.data; //存数据
+						location.href = "shou_ye.html"; //跳转
+					} else {
+						alert("验证码错误"); //弹窗file:///D:/znsjapp/fonts/李旭科书法.ttf
+					}
+				})
+			}			
+		</script>
+	</body>
+	
+</html>
