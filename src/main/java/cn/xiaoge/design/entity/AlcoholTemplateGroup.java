@@ -17,7 +17,6 @@ import java.io.Serializable;
 public class AlcoholTemplateGroup implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(length = 10)
