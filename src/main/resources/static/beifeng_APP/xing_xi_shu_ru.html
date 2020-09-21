@@ -86,11 +86,30 @@
             material: [],
             purpose: [],
             style: [],
-            info: "酒精度： %vol             净含量： ml\n香型：                         生产许可号：\n执行标准：\n生产厂家：\n厂址："
+            info: "酒精度：53 %vol             净含量： ml\n香型：酱香型                         \n生产许可号：\n执行标准：\n生产厂家：\n厂址："
 
         },
         created() {
-            this.getData();
+            var vm = this;
+
+            if (localStorage.materialId) {
+                vm.materialId = Number(localStorage.materialId);
+            }
+            if (localStorage.purposeId) {
+                vm.purposeId = Number(localStorage.purposeId);
+            }
+            if (localStorage.styleId) {
+                vm.styleId = Number(localStorage.styleId);
+            }
+            if (localStorage.info) {
+                vm.info = localStorage.info;
+            }
+            if (localStorage.alcoholName) {
+                vm.alcoholName = localStorage.alcoholName;
+            }
+
+
+            vm.getData();
         },
         methods: {
             getData() {

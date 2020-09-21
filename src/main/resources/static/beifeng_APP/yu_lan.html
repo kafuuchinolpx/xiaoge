@@ -3,8 +3,8 @@
 <head>
     <meta charset="utf-8">
     <title>白酒预览</title>
-    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=0" />
-    <link href="css/mui.css" rel="stylesheet" />
+    <meta name="viewport" content="width=device-width, initial-scale=0.7, maximum-scale=0.7, user-scalable=0"/>
+    <link href="css/mui.css" rel="stylesheet"/>
     <script src="js/vue.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/mui.js"></script>
@@ -89,11 +89,13 @@
                 @click="shu_he()">书盒
         </button>
     </p>
-    <br />
+    <br/>
     <p style="text-align: center; ">
-        <span><button @click="changeIndex(-1)" style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">上一个</button></span>
+        <span><button @click="changeIndex(-1)"
+                      style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">上一个</button></span>
         <button style="background: #0062CC;color: white;position: relative;top:-25px;" @click="submitIt()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确定样式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
-        <span><button @click="changeIndex(1)" style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">下一个</button></span>
+        <span><button @click="changeIndex(1)"
+                      style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">下一个</button></span>
     </p>
 </div>
 <script>
@@ -113,7 +115,7 @@
             selectAlcoholIndex: 0,
         },
         watch: {
-            "showType": function(newVal, oldVal) {
+            "showType": function (newVal, oldVal) {
                 var vm = this;
                 if (newVal == 0) {
                     vm.reload_();
@@ -126,18 +128,24 @@
                     vm.alcoholList = vm.alcoholListSon;
                 }
             },
-            "selectIndex": function(newVal, oldVAl) {
+            "selectIndex": function (newVal, oldVAl) {
+                localStorage.selectIndex = newVal;
             }
         },
         created() {
             var vm = this;
+
+            if (localStorage.selectIndex) {
+                vm.selectIndex = localStorage.selectIndex;
+            }
+
             $.post(base_path + "app/alcoholTemplate/findAll", {
                 alcoholName: localStorage.alcoholName,
                 boxTypeId: localStorage.boxTypeId,
                 materialId: localStorage.materialId,
                 styleId: localStorage.styleId,
                 purposeId: localStorage.purposeId,
-            }, function(data) {
+            }, function (data) {
                 if (data.code == 200) {
                     vm.alcoholList = data.obj;
                     vm.alcoholListCopy = vm.alcoholList;
@@ -154,7 +162,7 @@
         },
         methods: { //方法
 
-            reload_: function() {
+            reload_: function () {
                 var vm = this;
                 $.post(base_path + "app/alcoholTemplate/findAll", {
                     alcoholName: localStorage.alcoholName,
@@ -162,7 +170,7 @@
                     materialId: localStorage.materialId,
                     styleId: localStorage.styleId,
                     purposeId: localStorage.purposeId,
-                }, function(data) {
+                }, function (data) {
                     if (data.code == 200) {
                         vm.alcoholList = data.obj;
                         for (var i = 0; i < vm.alcoholList.length; i++) {
@@ -176,44 +184,51 @@
 
             },
 
-            submitIt: function() {
+            submitIt: function () {
                 var vm = this;
                 localStorage.selectAlcoholIndex = vm.selectAlcoholIndex;
                 // location.href = "bao_jia_xing_xi.html";
                 location.href = "test.html";
             },
 
-            ka_he: function() {
+            ka_he: function () {
                 localStorage.boxTypeId = 1;
                 location.reload();
             },
 
-            tong_he: function() {
+            tong_he: function () {
                 localStorage.boxTypeId = 2;
                 location.reload();
             },
 
-            shu_he: function() {
+            shu_he: function () {
                 localStorage.boxTypeId = 3;
                 location.reload();
             },
 
-            changeIndex: function(out) {
+            changeIndex: function (out) {
                 var vm = this;
-                if (vm.selectIndex + out < 0) {
+                if (Number(vm.selectIndex) + out < 0) {
                     alert("已经没有更多了");
                     return;
                 }
-                if (vm.selectIndex + out >= vm.alcoholListCopy.length) {
+                if (Number(vm.selectIndex) + out >= vm.alcoholListCopy.length) {
                     alert("已经没有更多了");
                     return;
                 }
+                var i = vm.selectIndex;
+                var sum;
+                sum = Number(i) + out;
+                vm.selectIndex = sum;
+
                 vm.showType = 0;
                 vm.selectIndex1 = -1;
+
+
                 vm.reload_();
-                vm.selectIndex = vm.selectIndex + out;
+
             },
-            changeIndex1: function(out) {
+            changeIndex1: function (out) {
                 var vm = this;
                 if (vm.alcoholListCopy[vm.selectIndex].son.length) {
                     if (vm.selectIndex1 + out >= vm.alcoholListCopy[vm.selectIndex].son.length) {
