@@ -3,13 +3,14 @@
 <head>
     <meta charset="utf-8">
     <title>白酒下单确认信息</title>
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <script src="js/pei_zhi.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/jquery.min.js"></script>
     <script src="js/mui.js"></script>
     <style>
-        *{
+        * {
             padding: 0;
             margin: 0;
         }
@@ -19,30 +20,32 @@
 <body style="background:black">
 <div style="text-indent:10px;">
     <form id="app" style="width: 100%;">
-        <div style="background: white;"><img src="bmp/log2.jpg" width="100%" style="10px;margin-bottom:-4px;margin-left:-10px;"></div>
+        <div style="background: white;"><img src="bmp/log2.jpg" width="100%"
+                                             style="10px;margin-bottom:-4px;margin-left:-10px;"></div>
         <div style="background-color:DimGray;margin: 0px 0;">
-            <br />
-            <p style="background-color: #00BFFF; width: auto;">报价数量(件): <select style="width:60%;float: right;background-color: #ffffff;"
-                                                                                v-model="shu_liang">
-                <option value="1">500件</option>
-                <option value="0.905">1000件</option>
-                <option value="0.903">3000件</option>
-                <option value="0.901">5000件</option>
-                <option value="0.9">10000件</option>
+            <br/>
+            <p style="background-color: #00BFFF; width: auto;">报价数量(件): <select
+                    style="width:60%;float: right;background-color: #ffffff;"
+                    v-model="shu_liang">
+                <option value="0">请选择</option>
+                <option :value=quotationInformationObj[14].price>500件</option>
+                <option :value=quotationInformationObj[15].price>1000件</option>
+                <option :value=quotationInformationObj[16].price>3000件</option>
+                <option :value=quotationInformationObj[17].price>5000件</option>
+                <option :value=quotationInformationObj[18].price>10000件</option>
             </select></p>
-            <br />
+            <br/>
             <!-- <p id="borders">用途: <input v-model="yong_tu"></p>
         <p><span style="color:red;font-size:22px;">注</span>：每件包括6个酒盒、3个手袋、一个外箱、6套商标</p> -->
             <div style="margin-top: 10px;">
 
                 <p style="color:white;position: relative;margin-top:-20px;">商标报价(套)：
-                    <input v-model="shang_biao_bao_jia" style="position: absolute;left:50%;" disabled="disabled" /></p>
+                    <input v-model="shang_biao_bao_jia" style="position: absolute;left:50%;" disabled="disabled"/></p>
                 <p style="color:white;position: relative;margin-top:10px;">酒盒报价(个)：
-                    <input v-model="jiu_he_bao_jia" style="position: absolute;left:50%;" disabled="disabled" /></p>
-
+                    <input v-model="jiu_he_bao_jia" style="position: absolute;left:50%;" disabled="disabled"/></p>
 
                 <p style="color:white;position: relative;margin-top:15px;padding: 0px 0px 20px 0px;">全套报价(件)：
-                    <input v-model="quan_tao_bao_jia" style="position: absolute;left:50%;" disabled="disabled" /></p>
+                    <input v-model="quan_tao_bao_jia" style="position: absolute;left:50%;" disabled="disabled"/></p>
             </div>
         </div>
 
@@ -56,14 +59,14 @@
                 </select>
             </p>
             <p style="color:white;position: relative;">下单数量(件)：
-                <input type="text" v-model="user.count" style="border-radius:10px;position: absolute;left:50%;" /></p>
+                <input type="text" v-model="user.count" style="border-radius:10px;position: absolute;left:50%;"/></p>
             <p style="color:white;margin-top:25px;position: relative;">收件人：
-                <input type="text" v-model="user.userName" style="border-radius:10px;position: absolute;left:50%;" /></p>
+                <input type="text" v-model="user.userName" style="border-radius:10px;position: absolute;left:50%;"/></p>
             <p style="color:white;margin-top:30px;position: relative;">电话：
-                <input type="text" v-model="user.telephone" style="border-radius:10px;position: absolute;left:50%;" />
+                <input type="text" v-model="user.telephone" style="border-radius:10px;position: absolute;left:50%;"/>
             </p>
             <p style="color:white;margin-top:20px;position: relative;">收货地址：
-                <input type="text" v-model="user.address" style="border-radius:10px;position: absolute;left:50%;" />
+                <input type="text" v-model="user.address" style="border-radius:10px;position: absolute;left:50%;"/>
             </p>
             <br><br>
             <div style="position:relative;width: 100px;height: 40px;line-height:40px;text-align: center;background:red;border-radius:5px;left: 40%;">
@@ -82,27 +85,59 @@
             jiu_he_bao_jia: 0,
             quan_tao_bao_jia: 0,
             shu_liang: 0,
-            cai_liao: localStorage.materialId,
-            he_xing: localStorage.boxTypeId,
+            cai_liao: 0,
+            he_xing: 0,
+
+            quotationInformationObj: [],
         },
         watch: {
-            shu_liang: function() {
+
+            shu_liang: function () {
                 var vm = this;
+                if (Number(localStorage.materialId) == 5) {
+                    vm.cai_liao = vm.quotationInformationObj[12].price;
+                }
+                if (Number(localStorage.materialId) == 1) {
+                    vm.cai_liao = vm.quotationInformationObj[23].price;
+                }
+                if (Number(localStorage.materialId) == 2) {
+                    vm.cai_liao = vm.quotationInformationObj[24].price;
+                }
+                if (Number(localStorage.materialId) == 3) {
+                    vm.cai_liao = vm.quotationInformationObj[25].price;
+                }
+                if (Number(localStorage.materialId) == 4) {
+                    vm.cai_liao = vm.quotationInformationObj[26].price;
+                }
+                if (Number(localStorage.boxTypeId) == 1) {
+                    vm.he_xing = vm.quotationInformationObj[0].price;
+                }
+                if (Number(localStorage.boxTypeId) == 2) {
+                    vm.he_xing = vm.quotationInformationObj[1].price;
+                }
+                if (Number(localStorage.boxTypeId) == 3) {
+                    vm.he_xing = vm.quotationInformationObj[7].price;
+                }
                 vm.shang_biao_bao_jia = vm.cai_liao * vm.shu_liang;
                 vm.jiu_he_bao_jia = vm.cai_liao * vm.shu_liang * vm.he_xing;
                 vm.quan_tao_bao_jia = vm.cai_liao * vm.shu_liang * vm.he_xing;
-            }
-
+            },
         },
         created() {
             var vm = this;
             $.post(base_path + "app/alcoholTemplate/findById", {
                 id: localStorage.selectAlcoholIndex
-            }, function(data) {
+            }, function (data) {
                 if (data.code == 200) {
                     vm.obj = data.obj;
                 }
-            })
+            });
+            $.post(base_path + "/app/quotationInformation/findAll", {}, function (data) {
+                if (data.ok) {
+                    vm.quotationInformationObj = data.obj;
+                    return;
+                }
+            });
         },
         methods: { //方法 计算
             submitIt() {
@@ -113,7 +148,7 @@
                     boxName: localStorage.alcoholName,
                     info: JSON.stringify(vm.user),
                     wineParameters: localStorage.info
-                }, function(data) {
+                }, function (data) {
                     if (data.code == 200) {
                         alert("下单成功，稍后会有工作人员与你联系！")
                         location.href = "shou_ye.html";
