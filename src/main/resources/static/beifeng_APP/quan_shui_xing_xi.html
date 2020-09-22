@@ -1,173 +1,187 @@
 <!doctype html>
 <html>
 
-	<head>
-		<meta charset="utf-8">
-		<title>选择泉水类型</title>
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<link href="css/mui.css" rel="stylesheet" />
-		<script src="js/mui.js"></script>
-		<script src="js/pei_zhi.js"></script>
-		<script src="js/jquery.min.js"></script>
-		<script src="js/vue.js"></script>
+<head>
+    <meta charset="utf-8">
+    <title>选择泉水类型</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/vue.js"></script>
 
-		<style>
-			*{
-				padding: 0;
-				margin: 0;
-			}
-			
-			input{
-				width:30px;
-				height:15px;
-				/* margin:5px 5px ; */
-				text-align: center;
-			}
-			
-		</style>
-	</head>
-	<body style="background: #000000;text-align: center;">
-		<div id="app">
-			<img src="bmp/log1.jpg" width="100%" style="margin-left:px;">
-			<br>
-			<br>
-			<br>
-			<form>
-				<p style="font-size:22px;color:white;text-shadow:2px 3px 8px deepskyblue;font-weight:600;letter-spacing:5px;">泉水名称</p>
-				<input style="width: 80%;background-color: #aaa;border-radius:8px;height:30px;" v-model="water_name" id="water_name"
-				 value="" type="text" />
-				<br>
-				<!-- <p style="font-size:16px;"> <span style="font-size:20px;">运用场景</span></br></br>
-			<input type="radio" v-model="chang_jing" name="chang_jing" value="1.001">品牌推广&nbsp;
-			&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" value="1.002">企业宣传&nbsp;
-			<input type="radio" v-model="chang_jing" name="chang_jing" value="1.004">升学宴
-			<br>
-			<input type="radio" v-model="chang_jing" name="chang_jing" value="1.004">结婚宴&nbsp;
-			&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" value="1.003">祝寿宴&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="radio" v-model="chang_jing" name="chang_jing" value="1.001">满月酒
-			<br>
-			<input type="radio" v-model="chang_jing" name="chang_jing" value="1.002">谢恩情
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" value="1.003">庆友情&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			<input type="radio" v-model="chang_jing" name="chang_jing" value="1.001">乔迁禧
-			</p> -->
-				<span style="font-size:20px;color: white;">运用场景</span></br></br>
-				<div style="color: white;margin-left:-20px;color: gray;font-size:16px;">
-					<input type="radio" v-model="chang_jing" name="chang_jing" :value="1">&nbsp;品牌推广
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
 
-					&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="2">&nbsp;商企宣传&nbsp;&nbsp;
+        input {
+            width: 30px;
+            height: 15px;
+            /* margin:5px 5px ; */
+            text-align: center;
+        }
 
-					&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="4">&nbsp;结婚宴
-				</div>
-				<div style="color: white;position: relative;left:-10px;padding:10px 20px;color: gray;font-size:16px;">
-					<input type="radio" v-model="chang_jing" name="chang_jing" :value="3">&nbsp;升学宴&nbsp;
+    </style>
+</head>
+<body style="background: #000000;text-align: center;">
+<div id="app">
+    <img src="bmp/log1.jpg" width="100%" style="margin-left:px;">
+    <br>
+    <br>
+    <br>
+    <form>
+        <p style="font-size:22px;color:white;text-shadow:2px 3px 8px deepskyblue;font-weight:600;letter-spacing:5px;">
+            泉水名称</p>
+        <input style="width: 80%;background-color: #aaa;border-radius:8px;height:30px;" v-model="water_name"
+               id="water_name"
+               value="" type="text"/>
+        <br>
+        <!-- <p style="font-size:16px;"> <span style="font-size:20px;">运用场景</span></br></br>
+    <input type="radio" v-model="chang_jing" name="chang_jing" value="1.001">品牌推广&nbsp;
+    &nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" value="1.002">企业宣传&nbsp;
+    <input type="radio" v-model="chang_jing" name="chang_jing" value="1.004">升学宴
+    <br>
+    <input type="radio" v-model="chang_jing" name="chang_jing" value="1.004">结婚宴&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" value="1.003">祝寿宴&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" v-model="chang_jing" name="chang_jing" value="1.001">满月酒
+    <br>
+    <input type="radio" v-model="chang_jing" name="chang_jing" value="1.002">谢恩情
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" value="1.003">庆友情&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <input type="radio" v-model="chang_jing" name="chang_jing" value="1.001">乔迁禧
+    </p> -->
+        <span style="font-size:20px;color: white;">运用场景</span></br></br>
+        <div style="color: white;margin-left:-20px;color: gray;font-size:16px;">
+            <input type="radio" v-model="chang_jing" name="chang_jing" :value="1">&nbsp;品牌推广
 
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="5">&nbsp;祝寿宴&nbsp;&nbsp;
+            &nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="2">&nbsp;商企宣传&nbsp;&nbsp;
 
-					&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="7">&nbsp;谢恩情
-				</div>
-				<div style="color: white;position: relative;left:-10px;color: gray;font-size:16px;">
-					<input type="radio" v-model="chang_jing" name="chang_jing" :value="8">&nbsp;满月酒&nbsp;
+            &nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="4">&nbsp;结婚宴
+        </div>
+        <div style="color: white;position: relative;left:-10px;padding:10px 20px;color: gray;font-size:16px;">
+            <input type="radio" v-model="chang_jing" name="chang_jing" :value="3">&nbsp;升学宴&nbsp;
 
-					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="6">&nbsp;庆友情&nbsp;&nbsp;
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="5">&nbsp;祝寿宴&nbsp;&nbsp;
 
-					&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="9">&nbsp;乔迁禧
-				</div>
-				
-				<br>
-				<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
-				<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #000000;font-size: 24px;" onclick="sheng_cheng()">生成</p>
-				<br />
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="7">&nbsp;谢恩情
+        </div>
+        <div style="color: white;position: relative;left:-10px;color: gray;font-size:16px;">
+            <input type="radio" v-model="chang_jing" name="chang_jing" :value="8">&nbsp;满月酒&nbsp;
 
-			</form>
-			<br>
-			<p style="font-size: 20px;color: #ff007f;"> 小鸽订制水，广告新媒体</p>
-		</div>
-		<script>
-			new Vue({ //渲染表格
-				el: "#app",
-				data: {
-					water_name: "",
-					chang_jing: 0,
-					su_liang: 0,
-				},
-				watch: {
-					water_name(val) {
-						localStorage.water_name = val;
-					},
-					chang_jing(val) {
-						localStorage.chang_jing = val;
-					},
-					su_liang(val) {
-						localStorage.su_liang = val;
-					}
-				},
-				created() {
-					var vm = this;
-					$.post(base_path + "app/water/fengGeChaXun", {}, function(shu_ju) {
-						if (shu_ju.code == 200) {
-							vm.yang_shi = shu_ju.data;
-						}
-					})
-				},
-				methods: { //方法 计算
-					sheng_cheng() {
-						location.href = "yu_lan.html";
-					}
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="6">&nbsp;庆友情&nbsp;&nbsp;
 
-				}
-			});
+            &nbsp;&nbsp;&nbsp;&nbsp;<input type="radio" v-model="chang_jing" name="chang_jing" :value="9">&nbsp;乔迁禧
+        </div>
 
-			$.post(base_path + "water_name", {
-				token: sessionStorage.token
-			}, function(shu_ju) {
-				if (shu_ju.code != 200) {
-					location.href = "index.html";
-				} else {
-					sessionStorage.den_lu_hao = shu_ju.data.dengLuHao;
-				}
-			})
+        <br>
+        <div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+        <p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #000000;font-size: 24px;"
+           onclick="sheng_cheng()">生成</p>
+        <br/>
 
-			function sheng_cheng() {
-				$.post(base_path + "tianJiaFangKe", {
-					dengLuHao: sessionStorage.den_lu_hao,
-					chanPinMingCheng: $("#water_name").val(),
-				}, function(shu_ju) {
+    </form>
+    <br>
+    <p style="font-size: 20px;color: #ff007f;"> 小鸽订制水，广告新媒体</p>
+</div>
+<script>
+    new Vue({ //渲染表格
+        el: "#app",
+        data: {
+            water_name: "",
+            chang_jing: 0,
+            su_liang: 0,
+        },
+        watch: {
+            water_name(val) {
+                localStorage.water_name = val;
+            },
+            chang_jing(val) {
+                localStorage.chang_jing = val;
+            },
+            su_liang(val) {
+                localStorage.su_liang = val;
+            }
+        },
+        created() {
+            var vm = this;
 
-				})
-				sessionStorage.water_name = $("#water_name").val();
-				location.href = "quan_shui_yu_lan.html";
-			}
-			/**************************************************************************************************************** */
-			$.ajax({
-				type: "POST",
-				url: "http:47.104.179.247/water_type",
-				dataType: "json",
-				data: {
-					"water_name": $("#water_name").val(),
-					"amount": $("#amount").val()
-				},
-				success: function(data) {
+            if (localStorage.chang_jing) {
+                vm.chang_jing = Number(localStorage.chang_jing);
+            }
+            if (localStorage.water_name) {
+                vm.water_name = localStorage.water_name;
+            }
 
-				}
-			})
 
-			// function sheng_cheng() {
-			// 	var name = document.getElementById('water_name').value;
-			// 	var radio = document.getElementsByName('chang_jing');
-			// 	var selectvalue = null;
-			// 	selectvalue为radio中选中的值
-			// 	var amount = document.getElementById('amount').value;
-			// 	for (var i = 0; i < radio.length; i++) {
-			// 		if (radio[i].checked == true) {
-			// 			selectvalue = radio[i];
-			// 			console.log(radio[i].value);
-			// 			break;
-			// 		}
-			// 	}
-			// 	console.log(amount);
-			// 	console.log(name);
-			// }
-		</script>
-	</body>
+            $.post(base_path + "app/water/fengGeChaXun", {}, function (shu_ju) {
+                if (shu_ju.code == 200) {
+                    vm.yang_shi = shu_ju.data;
+                }
+            })
+        },
+        methods: { //方法 计算
+            sheng_cheng() {
+                location.href = "yu_lan.html";
+            }
+
+        }
+    });
+
+    $.post(base_path + "water_name", {
+        token: sessionStorage.token
+    }, function (shu_ju) {
+        if (shu_ju.code != 200) {
+            location.href = "index.html";
+        } else {
+            sessionStorage.den_lu_hao = shu_ju.data.dengLuHao;
+        }
+    })
+
+    function sheng_cheng() {
+        $.post(base_path + "tianJiaFangKe", {
+            dengLuHao: sessionStorage.den_lu_hao,
+            chanPinMingCheng: $("#water_name").val(),
+        }, function (shu_ju) {
+
+        })
+        sessionStorage.water_name = $("#water_name").val();
+        location.href = "quan_shui_yu_lan.html";
+    }
+
+    /**************************************************************************************************************** */
+    $.ajax({
+        type: "POST",
+        url: base_path + "/water_type",
+        dataType: "json",
+        data: {
+            "water_name": $("#water_name").val(),
+            "amount": $("#amount").val()
+        },
+        success: function (data) {
+
+        }
+    })
+
+    // function sheng_cheng() {
+    // 	var name = document.getElementById('water_name').value;
+    // 	var radio = document.getElementsByName('chang_jing');
+    // 	var selectvalue = null;
+    // 	selectvalue为radio中选中的值
+    // 	var amount = document.getElementById('amount').value;
+    // 	for (var i = 0; i < radio.length; i++) {
+    // 		if (radio[i].checked == true) {
+    // 			selectvalue = radio[i];
+    // 			console.log(radio[i].value);
+    // 			break;
+    // 		}
+    // 	}
+    // 	console.log(amount);
+    // 	console.log(name);
+    // }
+</script>
+</body>
 
 </html>
