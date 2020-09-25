@@ -33,6 +33,8 @@ public class Water implements Serializable {
     @Column(length = 50)
     private String image;
 
+    private String remark;
+
     private Integer length;
 
     //模板名称

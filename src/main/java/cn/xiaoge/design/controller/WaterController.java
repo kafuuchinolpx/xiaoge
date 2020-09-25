@@ -75,7 +75,7 @@ public class WaterController {
 
     @ApiOperation(value = "水模板修改不为空的属性")
     @PostMapping("updateStyle")
-    public ReturnBean updateStyle(Integer id, String headerStyle, String bodyStyle) throws Exception {
+    public ReturnBean updateStyle(Integer id, String header2Text, String headerStyle, String bodyStyle) throws Exception {
         Water water = new Water();
         water.setId(id);
         if (!StringUtils.isEmpty(headerStyle)) {
@@ -83,6 +83,9 @@ public class WaterController {
         }
         if (!StringUtils.isEmpty(bodyStyle)) {
             water.setBodyStyle(bodyStyle);
+        }
+        if (!StringUtils.isEmpty(header2Text)) {
+            water.setRemark(header2Text);
         }
         waterService.updateNotNull(water);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);

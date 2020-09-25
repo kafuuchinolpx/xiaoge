@@ -122,7 +122,7 @@
     <div class="img_back">
         <img class="image" v-if="obj.image" :src="'/design/'+obj.image" width="500px">
         <p class="back_color" v-bind:style="headerStyle">{{header2Text}}</p>
-<!--        <p class="back_color" v-bind:style="bodyStyle">{{bodyText}}</p>-->
+        <!--        <p class="back_color" v-bind:style="bodyStyle">{{bodyText}}</p>-->
     </div>
     <div style="width: 630px;height: 1000px;margin-left: 520px;overflow: hidden;margin-top: 10px;text-align: center">
         <div class="header2Class">
@@ -163,45 +163,45 @@
             <br>
             <span class="btn btn-primary btn-block" @click="saveHeaderStyle()">保存标题样式</span>
         </div>
-<!--        <div class="bodyClass">-->
-<!--            <h2>水盒样式</h2>-->
-<!--            <p>文本</p>-->
-<!--            <input class="form-control" v-model="bodyText" type="text">-->
-<!--            <p>颜色</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.color" type="color">-->
-<!--            <p>上边距</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.top">-->
-<!--            <p>左边距</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.left">-->
-<!--            <p>字体大小</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.fontSize">-->
-<!--            <p>字体</p>-->
-<!--            <select class="form-control" v-model="bodyStyle.fontFamily">-->
-<!--                <option>阿里汉仪智能黑体</option>-->
-<!--                <option>变体美术字</option>-->
-<!--                <option>方正滕占敏竹刻简</option>-->
-<!--                <option>方正字迹-吕建德行楷简体</option>-->
-<!--                <option>个性印章</option>-->
-<!--                <option>汉仪家国宋W</option>-->
-<!--                <option>黄庭坚书法字体</option>-->
-<!--                <option>李旭科书法</option>-->
-<!--                <option>招牌字体</option>-->
-<!--                <option>正行楷简体</option>-->
-<!--            </select>-->
-<!--            <p>文字方向</p>-->
-<!--            <select class="form-control" v-model="bodyStyle.writingMode">-->
-<!--                <option value="tb">从上到下</option>-->
-<!--                <option value="unset">从左向右</option>-->
-<!--            </select>-->
-<!--            <p>X轴旋转</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.transform">-->
-<!--            <p>宽度</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.width">-->
-<!--            <p>高度</p>-->
-<!--            <input class="form-control" v-model="bodyStyle.height">-->
-<!--            <br>-->
-<!--            <span class="btn btn-primary btn-block" @click="saveBodyStyle()">保存内容样式</span>-->
-<!--        </div>-->
+        <!--        <div class="bodyClass">-->
+        <!--            <h2>水盒样式</h2>-->
+        <!--            <p>文本</p>-->
+        <!--            <input class="form-control" v-model="bodyText" type="text">-->
+        <!--            <p>颜色</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.color" type="color">-->
+        <!--            <p>上边距</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.top">-->
+        <!--            <p>左边距</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.left">-->
+        <!--            <p>字体大小</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.fontSize">-->
+        <!--            <p>字体</p>-->
+        <!--            <select class="form-control" v-model="bodyStyle.fontFamily">-->
+        <!--                <option>阿里汉仪智能黑体</option>-->
+        <!--                <option>变体美术字</option>-->
+        <!--                <option>方正滕占敏竹刻简</option>-->
+        <!--                <option>方正字迹-吕建德行楷简体</option>-->
+        <!--                <option>个性印章</option>-->
+        <!--                <option>汉仪家国宋W</option>-->
+        <!--                <option>黄庭坚书法字体</option>-->
+        <!--                <option>李旭科书法</option>-->
+        <!--                <option>招牌字体</option>-->
+        <!--                <option>正行楷简体</option>-->
+        <!--            </select>-->
+        <!--            <p>文字方向</p>-->
+        <!--            <select class="form-control" v-model="bodyStyle.writingMode">-->
+        <!--                <option value="tb">从上到下</option>-->
+        <!--                <option value="unset">从左向右</option>-->
+        <!--            </select>-->
+        <!--            <p>X轴旋转</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.transform">-->
+        <!--            <p>宽度</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.width">-->
+        <!--            <p>高度</p>-->
+        <!--            <input class="form-control" v-model="bodyStyle.height">-->
+        <!--            <br>-->
+        <!--            <span class="btn btn-primary btn-block" @click="saveBodyStyle()">保存内容样式</span>-->
+        <!--        </div>-->
     </div>
     <div>
     </div>
@@ -254,7 +254,10 @@
                         if (data.obj.headerStyle) {
                             vm.headerStyle = JSON.parse(data.obj.headerStyle);
                         }
-                       
+                        if (data.obj.remark) {
+                            vm.header2Text = data.obj.remark
+                        }
+
                         return;
                     }
                     if (data.code == 401) {
@@ -270,24 +273,11 @@
                 var index = parent.layer.getFrameIndex(window.name);
                 parent.layer.close(index);
             },
-            saveBodyStyle() {
-                var vm = this;
-                $.post("/design/water/updateStyle", {
-                    id: vm.id,
-                    bodyStyle: JSON.stringify(vm.bodyStyle)
-                }, function (data) {
-                    if (data.ok) {
-                        vm.obj = data.obj;
-                        layer.msg(data.msg)
-                        return;
-                    }
-                    layer.alert(data.msg + ":" + data.obj);
-                });
-            },
             saveHeaderStyle() {
                 var vm = this;
                 $.post("/design/water/updateStyle", {
                     id: vm.id,
+                    header2Text: vm.header2Text,
                     headerStyle: JSON.stringify(vm.headerStyle)
                 }, function (data) {
                     if (data.ok) {

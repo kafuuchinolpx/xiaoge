@@ -123,7 +123,9 @@ public class WaterServiceImpl implements WaterService {
             if (water.getBodyStyle() != null) {
                 obj.setBodyStyle(water.getBodyStyle());
             }
-            System.out.println("*****************************" + obj);
+            if (water.getRemark() != null) {
+                obj.setRemark(water.getRemark());
+            }
             waterRepository.save(obj);
         }
     }
