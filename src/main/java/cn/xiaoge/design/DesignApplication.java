@@ -8,17 +8,21 @@ import org.springframework.session.data.redis.config.annotation.web.http.EnableR
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 
+/**
+ * @author 19070
+ */
 @SpringBootApplication
 //session24*60秒过期
 @EnableRedisHttpSession(maxInactiveIntervalInSeconds = 3600 * 24)
 @EnableSwagger2
 public class DesignApplication extends SpringBootServletInitializer {
 
-    public static void main(String[] args) { SpringApplication.run(DesignApplication.class, args); }
+    public static void main(String[] args) {
+        SpringApplication.run(DesignApplication.class, args);
+    }
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(DesignApplication.class);
     }
-
 }

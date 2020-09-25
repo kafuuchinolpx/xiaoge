@@ -165,7 +165,7 @@ public class PublicController {
     @ApiOperation(value = "报价查询全部")
     @PostMapping("app/quotationInformation/findAll")
     public ReturnBean quotationInformationFindAll() {
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS,quotationInformationService.findAllApp());
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, quotationInformationService.findAllApp());
     }
 
     @Autowired
@@ -209,6 +209,29 @@ public class PublicController {
             order.setFile2(uuid8 + type);
         }
         orderService.add(order);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+    @Autowired
+    WaterBuyInfoService waterBuyInfoService;
+
+    @PostMapping("app/waterBuyInfo/add")
+    @ApiOperation(value = "水订单添加")
+    public ReturnBean addWaterBuyInfo(Integer userId, @RequestParam(defaultValue = "'未支付'") String payStatus, String info,
+                                      String selectWaterIndex, String waterName, MultipartFile file) throws Exception {
+        WaterBuyInfo waterBuyInfo = new WaterBuyInfo();
+        waterBuyInfo.setUserId(userId);
+        waterBuyInfo.setPayStatus(payStatus);
+        waterBuyInfo.setInfo(info + "waterId:" + selectWaterIndex + "name:" + waterName);
+        if (file != null && !file.isEmpty()) {
+            String uuid8 = UUIDUtil.getUUID8();
+            String fileName = file.getOriginalFilename();
+            String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
+            File file1 = new File(filePath + uuid8 + type);
+            file.transferTo(file1);
+            waterBuyInfo.setFile(uuid8 + type);
+        }
+        waterBuyInfoService.add(waterBuyInfo);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 

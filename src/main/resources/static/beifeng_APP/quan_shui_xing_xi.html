@@ -130,15 +130,15 @@
         }
     });
 
-    $.post(base_path + "water_name", {
-        token: sessionStorage.token
-    }, function (shu_ju) {
-        if (shu_ju.code != 200) {
-            location.href = "index.html";
-        } else {
-            sessionStorage.den_lu_hao = shu_ju.data.dengLuHao;
-        }
-    })
+    // $.post(base_path + "water_name", {
+    //     token: sessionStorage.token
+    // }, function (shu_ju) {
+    //     if (shu_ju.code != 200) {
+    //         location.href = "index.html";
+    //     } else {
+    //         sessionStorage.den_lu_hao = shu_ju.data.dengLuHao;
+    //     }
+    // })
 
     function sheng_cheng() {
         $.post(base_path + "tianJiaFangKe", {
@@ -152,18 +152,18 @@
     }
 
     /**************************************************************************************************************** */
-    $.ajax({
-        type: "POST",
-        url: base_path + "/water_type",
-        dataType: "json",
-        data: {
-            "water_name": $("#water_name").val(),
-            "amount": $("#amount").val()
-        },
-        success: function (data) {
-
-        }
-    })
+    // $.ajax({
+    //     type: "POST",
+    //     url: base_path + "/water_type",
+    //     dataType: "json",
+    //     data: {
+    //         "water_name": $("#water_name").val(),
+    //         "amount": $("#amount").val()
+    //     },
+    //     success: function (data) {
+    //
+    //     }
+    // })
 
     // function sheng_cheng() {
     // 	var name = document.getElementById('water_name').value;
