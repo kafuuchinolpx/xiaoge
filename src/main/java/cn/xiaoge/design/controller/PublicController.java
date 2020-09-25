@@ -218,11 +218,12 @@ public class PublicController {
     @PostMapping("app/waterBuyInfo/add")
     @ApiOperation(value = "水订单添加")
     public ReturnBean addWaterBuyInfo(Integer userId, @RequestParam(defaultValue = "'未支付'") String payStatus, String info,
-                                      String selectWaterIndex, String waterName, MultipartFile file) throws Exception {
+                                      String selectWaterIndex, String waterName, MultipartFile file, String remark) throws Exception {
         WaterBuyInfo waterBuyInfo = new WaterBuyInfo();
         waterBuyInfo.setUserId(userId);
         waterBuyInfo.setPayStatus(payStatus);
         waterBuyInfo.setInfo(info + "waterId:" + selectWaterIndex + "name:" + waterName);
+        waterBuyInfo.setRemark(remark);
         if (file != null && !file.isEmpty()) {
             String uuid8 = UUIDUtil.getUUID8();
             String fileName = file.getOriginalFilename();

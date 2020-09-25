@@ -116,6 +116,7 @@
                     <td @click="order_by('userId',orderType?'asc':'desc')">应用用户 <i class="fa fa-sort"></i></td>
                     <td @click="order_by('payStatus',orderType?'asc':'desc')">支付状态<i class="fa fa-sort"></i></td>
                     <td @click="order_by('info',orderType?'asc':'desc')">详细信息<i class="fa fa-sort"></i></td>
+                    <td @click="order_by('remark',orderType?'asc':'desc')">备注<i class="fa fa-sort"></i></td>
                     <td @click="order_by('file',orderType?'asc':'desc')">商标<i class="fa fa-sort"></i></td>
                     <td width="110px" @click="order_by('createTime',orderType?'asc':'desc')" class="hidden-xs">创建时间<i
                             class="fa fa-sort"></i></td>
@@ -135,6 +136,7 @@
                     <td><span v-for="i in appUser_list" v-if="i.id==d.userId">{{i.name}}</span></td>
                     <td>{{d.payStatus}}</td>
                     <td>{{d.info}}</td>
+                    <td>{{d.remark}}</td>
                     <td><img :src="d.file" height="40px"/></td>
                     <td class="hidden-xs"> {{d.createTime}}</td>
                     <td class="hidden-xs"> {{d.updateTime}}</td>

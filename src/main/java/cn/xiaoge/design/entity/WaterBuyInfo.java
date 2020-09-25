@@ -5,6 +5,7 @@ import lombok.Data;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
@@ -19,13 +20,15 @@ public class WaterBuyInfo implements Serializable {
     private Integer id;
 
     //文件
-    @Column(length = 11)
+    @Column(length = 20)
     private String file;
 
     //详细信息
     @Type(type = "text")
-    @Column(length = 11)
     private String info;
+
+    //备注
+    private String remark;
 
     //用户
     private Integer userId;

@@ -61,6 +61,8 @@
             </p>
             <p> 单位:（件），每件24瓶</p>
             <!-- <p style="position: relative;">报价结果：<input type="text" v-model="order_amount"></p> -->
+            <p style="font-size: 20px;margin-top: 20px;margin-left: 45%">备注:</p>
+            <textarea style="width: 80%;background-color: #aaa;margin-left: 10%" rows="7" v-model="remark"></textarea>
         </div>
     </form>
     <br><br>
@@ -72,7 +74,8 @@
     new Vue({ //渲染表格
         el: "#app",
         data: {
-            user: {}
+            user: {},
+            remark: "",
         },
         watch: {},
         created() {
@@ -89,6 +92,7 @@
                 formData.append("info", JSON.stringify(vm.user));
                 formData.append("selectWaterIndex", localStorage.selectWaterIndex);
                 formData.append("waterName", localStorage.water_name);
+                formData.append("remark", vm.remark);
                 $.ajax({
                     url: base_path + "app/waterBuyInfo/add",
                     type: "post",
