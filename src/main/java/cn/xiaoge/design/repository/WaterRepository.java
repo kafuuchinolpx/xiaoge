@@ -8,7 +8,9 @@ import java.util.List;
 
 
 public interface WaterRepository extends JpaRepository<Water, Integer> {
-    List<Water> findByPurposeIdAndLengthGreaterThan(Integer purposeId, int length);
 
     List<Water> findByPurposeIdAndLength(Integer purposeId, int length);
+
+    List<Water> findByPurposeId(Integer purposeId);
+
 }

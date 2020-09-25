@@ -137,7 +137,11 @@ public class WaterServiceImpl implements WaterService {
 
     @Override
     public List<Water> findByPurposeIdAndLengthGreaterThan(Integer purposeId, int length) {
-        return waterRepository.findByPurposeIdAndLength(purposeId, length);
+        if (purposeId == 1 || purposeId == 2) {
+            return waterRepository.findByPurposeIdAndLength(purposeId, length);
+        } else {
+            return waterRepository.findByPurposeId(purposeId);
+        }
     }
 }
 

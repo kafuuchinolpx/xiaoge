@@ -60,9 +60,7 @@ import javax.validation.constraints.Size;
             purposeService.updateNotNull(purpose);
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
         }
-
         return ReturnBean.of(ReturnBean.AnswerCode.PARAMETER_ERROR,"id和ids必须传一个");
-
     }
 
 
@@ -92,8 +90,6 @@ import javax.validation.constraints.Size;
             @Max(value=10000) @RequestParam(defaultValue = "15") Integer size) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, purposeService.findAll(page,searchKey,order,size));
     }
-
-
 
 
     @ApiOperation(value = "用途根据id查询单个")
