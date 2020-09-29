@@ -125,6 +125,16 @@ public class AlcoholTemplateController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
+    @PostMapping("recycleBin")
+    @ApiOperation(value = "后台验证回收站密码")
+    public ReturnBean recycleBin(String account) {
+        if (account.equals("xgbzkj123123")) {
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+        } else {
+            return ReturnBean.of(ReturnBean.AnswerCode.PARAMETER_ERROR);
+        }
+    }
+
     @ApiOperation(value = "酒模板分页查询全部")
     @PostMapping("findAll")
     public ReturnBean findAll(@RequestParam(defaultValue = "1") Integer page, String order, @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
