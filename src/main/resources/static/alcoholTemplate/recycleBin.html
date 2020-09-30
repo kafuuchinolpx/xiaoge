@@ -15,72 +15,46 @@
 <body>
 <div id="recycleBin">
 
-    <thead>
-    <tr>
-        <td width="30px" class="notOut hidden-xs">
-            <input type="checkbox" @click="select_all"/>
-        </td>
-        <td @click="order_by('id',orderType?'asc':'desc')">编号<i class="fa fa-sort"></i></td>
-        </td>
-        <td @click="order_by('name',orderType?'asc':'desc')">模板名称<i class="fa fa-sort"></i></td>
-        <td @click="order_by('length',orderType?'asc':'desc')">最大长度<i class="fa fa-sort"></i></td>
-        <td @click="order_by('group_List',orderType?'asc':'desc')">分组<i class="fa fa-sort"></i></td>
-        <td @click="order_by('image',orderType?'asc':'desc')">图片<i class="fa fa-sort"></i></td>
-        <td @click="order_by('purposeId',orderType?'asc':'desc')">用途 <i class="fa fa-sort"></i></td>
-        <td @click="order_by('styleId',orderType?'asc':'desc')">风格 <i class="fa fa-sort"></i></td>
-        <td @click="order_by('materialId',orderType?'asc':'desc')">材料 <i class="fa fa-sort"></i></td>
-        <td @click="order_by('boxTypeId',orderType?'asc':'desc')">盒型 <i class="fa fa-sort"></i></td>
-        <td width="110px" @click="order_by('createTime',orderType?'asc':'desc')" class="hidden-xs">创建时间<i
-                class="fa fa-sort"></i></td>
-        <td width="110px" @click="order_by('updateTime',orderType?'asc':'desc')" class="hidden-xs">修改时间<i
-                class="fa fa-sort"></i></td>
-        <td class="notOut text-right" style="min-width: 160px;">编辑</td>
-    </tr>
-    </thead>
-    <tbody>
-    <tr v-for="(d,index) in page_data.content">
-        <td class="notOut hidden-xs">
-            <input type="checkbox" :value="d.id" v-model="delete_id_list">
-        </td>
-        <td>{{d.id}}</td>
-        <td>{{d.name}}</td>
-        <td>{{d.length}}</td>
-        <td><span v-for="i in group_List" v-if="i.id==d.groupId">{{i.name}}</span></td>
-        <td><img :src="d.image" height="40px"></td>
-        <td><span v-for="i in purpose_list" v-if="i.id==d.purposeId">{{i.name}}</span></td>
-        <td><span v-for="i in style_list" v-if="i.id==d.styleId">{{i.name}}</span></td>
-        <td><span v-for="i in material_list" v-if="i.id==d.materialId">{{i.name}}</span></td>
-        <td><span v-for="i in boxType_list" v-if="i.id==d.boxTypeId">{{i.name}}</span></td>
-        <td class="hidden-xs"> {{d.createTime}}</td>
-        <td class="hidden-xs"> {{d.updateTime}}</td>
-        <td class="notOut text-right">
-                        <span style="cursor: pointer">
-                            <span class="btn btn-info btn-sm" @click="show_it(d.id)">详情</span>
-                            <span class="btn btn-info btn-sm" @click="edit_Info(d.id)">配置</span>
-                            <span class="btn btn-warning btn-sm" @click="edit_it(d.id)">编辑</span>
-                            <span class="btn btn-danger btn-sm" @click="delete_it(d.id)">删除</span>
-                        </span>
-        </td>
-    </tr>
-    </tbody>
-    </table>
+    <div class="layui-layer layui-layer-page  layer-anim-05" id="layui-layer1" type="page" times="1" showtime="0"
+         contype="string" style="z-index: 19891015; width: 80%; height: 606px; top: 164.5px; left: 126.5px;">
+        <div class="layui-layer-title" style="cursor: move;">回收站</div>
+        <div id="" class="layui-layer-content" style="height: 564px;">
+            <div class="re-head">
+                <button style="float: right" class="btn btn-default btn-sm" onclick="CloseRecycleBin();">清空回收站</button>
+            </div>
+            <div class="re-con">
+                <div class="re-con-con">
+                    <div style="margin: 15px;" class="divtable">
+                        <table width="100%" class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>文件名</th>
+                                <th>原位置</th>
+                                <th>大小</th>
+                                <th width="150">删除时间</th>
+                                <th style="text-align: right;" width="110">操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="RecycleBody" class="list-list"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <span class="layui-layer-setwin"><a class="layui-layer-ico layui-layer-close layui-layer-close2"
+                                            href="javascript:;"></a></span><span class="layui-layer-resize"></span>
+    </div>
 
 
 </div>
 <script>
     new Vue({
         el: "recycleBin",
-        data: {
-
-        },
-        watch: {
-
-        },
+        data: {},
+        watch: {},
         created: function () {
         },
-        methods: {
-
-        }
+        methods: {}
     })
 </script>
 
