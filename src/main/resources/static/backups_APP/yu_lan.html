@@ -79,13 +79,12 @@
 <div id="app" class="mui-content mui-scroll-wrapper">
     <div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-bottom:-4px;"></div>
     <div class="alcoholList" v-for="(d,index) in alcoholList" v-if="showType==0?index==selectIndex:index==selectIndex1"
-         @click="changeIndex(1)">
+         @click="changeIndex1(1)">
         <input v-model="selectAlcoholIndex=d.id" hidden="hidden"></input>
         <img :src="baseUrl+d.image" width=" 500">
         <div v-bind:style="d.header1Style">{{alcoholName}}</div>
         <div v-bind:style="d.header2Style">{{alcoholName}}</div>
-        <img class="jiaoCheng" :src="'jiaocheng/'+tutorialsImage+'.png'"
-             @click="tutorialsVerification()">
+        <img class="jiaoCheng" :src="'jiaocheng/1.png'">
         <!-- <div v-bind:style="d.bodyStyle">{{info}}</div>  tutorialsImage-->
     </div>
     <p style="text-align: center;">
@@ -153,10 +152,6 @@
             if (localStorage.selectIndex) {
                 vm.selectIndex = localStorage.selectIndex;
             }
-            if (localStorage.tutorialsImage) {
-                vm.tutorialsImage = localStorage.tutorialsImage;
-            }
-
             $.post(base_path + "app/alcoholTemplate/findAll", {
                 alcoholName: localStorage.alcoholName,
                 boxTypeId: localStorage.boxTypeId,
@@ -172,8 +167,10 @@
                         vm.alcoholList[i].header2Style = JSON.parse(vm.alcoholList[i].header2Style);
                         // vm.alcoholList[i].bodyStyle = JSON.parse(vm.alcoholList[i].bodyStyle);
                     }
-                    if (vm.alcoholList[vm.selectIndex].son) {
-                        vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                    if (vm.alcoholList[vm.selectIndex]) {
+                        if (vm.alcoholList[vm.selectIndex].son) {
+                            vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                        }
                     }
                 }
             });
@@ -199,48 +196,37 @@
                         vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
                     }
                 });
-
-            },
+            }
+            ,
 
             submitIt: function () {
                 var vm = this;
-                if (null == localStorage.tutorials) {
-                    return;
-                }
                 localStorage.selectAlcoholIndex = vm.selectAlcoholIndex;
                 // location.href = "bao_jia_xing_xi.html";
                 location.href = "test.html";
-            },
+            }
+            ,
 
             ka_he: function () {
-                if (null == localStorage.tutorials) {
-                    return;
-                }
                 localStorage.boxTypeId = 1;
                 location.reload();
-            },
+            }
+            ,
 
             tong_he: function () {
-                if (null == localStorage.tutorials) {
-                    return;
-                }
                 localStorage.boxTypeId = 2;
                 location.reload();
-            },
+            }
+            ,
 
             shu_he: function () {
-                if (null == localStorage.tutorials) {
-                    return;
-                }
                 localStorage.boxTypeId = 3;
                 location.reload();
-            },
+            }
+            ,
 
             changeIndex: function (out) {
                 var vm = this;
-                if (null == localStorage.tutorials) {
-                    return;
-                }
                 if (Number(vm.selectIndex) + out < 0) {
                     alert("已经没有更多了");
                     return;
@@ -261,11 +247,8 @@
                 vm.reload_();
 
             },
-            changeIndex: function (out) {
+            changeIndex1: function (out) {
                 var vm = this;
-                if (null == localStorage.tutorials) {
-                    return;
-                }
                 if (vm.alcoholListCopy[vm.selectIndex].son.length) {
                     if (vm.selectIndex1 + out >= vm.alcoholListCopy[vm.selectIndex].son.length) {
                         vm.selectIndex1 = -1;
@@ -279,22 +262,24 @@
                         vm.selectIndex1 = 0;
                     }
                 }
-            },
-            tutorialsVerification: function () {
-                var vm = this;
-                if (vm.tutorialsImage >= 6) {
-                    if (localStorage.tutorials) {
-                        return;
-                    } else {
-                        localStorage.tutorials = 1;
-                        vm.skipTutorials = 1;
-                        return;
-                    }
-                }
-                vm.tutorialsImage++;
             }
+            ,
+            // tutorialsVerification: function () {
+            //     var vm = this;
+            //     if (vm.tutorialsImage >= 1) {
+            //         if (localStorage.tutorials) {
+            //             return;
+            //         } else {
+            //             localStorage.tutorials = 1;
+            //             vm.skipTutorials = 1;
+            //             return;
+            //         }
+            //     }
+            //     vm.tutorialsImage++;
+            // }
         }
-    });
+    })
+    ;
 </script>
 </body>
 </html>
