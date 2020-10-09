@@ -3,8 +3,8 @@ package cn.xiaoge.design.entity.vo;
 import lombok.Data;
 
 /**
-* 返回前端对象
-*/
+ * 返回前端对象
+ */
 @Data
 public class ReturnBean {
     private Integer code;
@@ -12,7 +12,7 @@ public class ReturnBean {
     private Object obj;
     private Boolean ok;
 
-    private ReturnBean(Integer code,String msg, Object data, boolean ok) {
+    private ReturnBean(Integer code, String msg, Object data, boolean ok) {
         this.code = code;
         this.msg = msg;
         this.obj = data;
@@ -20,18 +20,18 @@ public class ReturnBean {
     }
 
     public static ReturnBean of(AnswerCode answerCode, Object obj) {
-        return new ReturnBean(answerCode.code,answerCode.msg,obj, answerCode.code==200);
+        return new ReturnBean(answerCode.code, answerCode.msg, obj, answerCode.code == 200);
     }
 
     public static ReturnBean of(AnswerCode answerCode) {
-        return new ReturnBean(answerCode.code,answerCode.msg, null, answerCode.code==200);
+        return new ReturnBean(answerCode.code, answerCode.msg, null, answerCode.code == 200);
     }
 
     private ReturnBean() {
     }
 
     public enum AnswerCode {
-
+        //SUCCESS 成功
         SUCCESS("操作成功", 200),
         UNKNOWN_ERROR("未知错误", 500),
         PARAMETER_ERROR("参数错误", 400),

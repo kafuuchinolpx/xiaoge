@@ -28,7 +28,6 @@ public class FirstInterceptor implements HandlerInterceptor {
 //            response.setContentType("application/json;charset=UTF-8");
 //            response.getWriter().write(JSON.toJSONString(ReturnBean.of(ReturnBean.AnswerCode.NOT_LOGIN)));
 //            return false;
-//        }
         return true;
 
     }

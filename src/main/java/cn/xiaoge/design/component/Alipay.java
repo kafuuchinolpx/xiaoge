@@ -35,7 +35,7 @@ public class Alipay {
         String signType = AlipayProperties.getSignType();
         String returnUrl = AlipayProperties.getReturnUrl();
         String notifyUrl = AlipayProperties.getNotifyUrl();
-        String token = AlipayProperties.getApp_auth_token();
+        String token = AlipayProperties.getAppAuthToken();
 
         AlipayClient alipayClient = new DefaultAlipayClient(serverUrl, appId, privateKey, format, charset, alipayPublicKey, signType);
         // 2、设置请求参数

@@ -16,8 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.io.File;
-import java.util.List;
-import java.util.Optional;
 
 /**
  * @author 19070
@@ -44,7 +42,7 @@ public class WaterController {
         water.setName(name);
         water.setLength(length);
         if (file != null) {
-            String uuid8 = UUIDUtil.getUUID8();
+            String uuid8 = UUIDUtil.getuuid8();
             String fileName = file.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file1 = new File(filePath + uuid8 + type);

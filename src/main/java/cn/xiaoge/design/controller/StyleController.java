@@ -21,7 +21,7 @@ import javax.validation.constraints.Size;
 public class StyleController {
 
     @Autowired
-    private StyleService StyleService;
+    private StyleService styleService;
 
     @PostMapping("add")
     @ApiOperation(value = "风格添加")
@@ -29,7 +29,7 @@ public class StyleController {
         Style style = new Style();
         style.setName(name);
         style.setRemark(remark);
-        StyleService.add(style);
+        styleService.add(style);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
@@ -43,7 +43,7 @@ public class StyleController {
                 style.setId(Integer.parseInt(s));
                 style.setName(name);
                 style.setRemark(remark);
-                StyleService.updateNotNull(style);
+                styleService.updateNotNull(style);
             }
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
         }
@@ -52,7 +52,7 @@ public class StyleController {
             style.setId(id);
             style.setName(name);
             style.setRemark(remark);
-            StyleService.updateNotNull(style);
+            styleService.updateNotNull(style);
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
         }
 
@@ -66,13 +66,13 @@ public class StyleController {
     public ReturnBean delete(Integer id, String ids) {
         //单个删除
         if (id != null) {
-            StyleService.deleteById(id);
+            styleService.deleteById(id);
         }
         //批量删除
         if (!StringUtils.isEmpty(ids)) {
             String[] split = ids.split(",");
             for (String s : split) {
-                StyleService.deleteById(Integer.parseInt(s));
+                styleService.deleteById(Integer.parseInt(s));
             }
         }
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
@@ -82,14 +82,14 @@ public class StyleController {
     @PostMapping("findAll")
     public ReturnBean findAll(@RequestParam(defaultValue = "1") Integer page, String searchKey, String order,
                               @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, StyleService.findAll(page, searchKey, order, size));
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, styleService.findAll(page, searchKey, order, size));
     }
 
 
     @ApiOperation(value = "风格根据id查询单个")
     @PostMapping("findById")
     public ReturnBean findById(@RequestParam Integer id) {
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, StyleService.findById(id));
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, styleService.findById(id));
     }
 
 

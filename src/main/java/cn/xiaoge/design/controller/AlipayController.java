@@ -33,9 +33,9 @@ public class AlipayController {
     @PostMapping(value = "alipay")
     public String alipay(String outTradeNo, String subject, String totalAmount, String body) throws AlipayApiException {
         AlipayBean alipayBean = new AlipayBean();
-        alipayBean.setOut_trade_no(outTradeNo);
+        alipayBean.setOutTradeNo(outTradeNo);
         alipayBean.setSubject(subject);
-        alipayBean.setTotal_amount(totalAmount);
+        alipayBean.setTotalAmount(totalAmount);
         alipayBean.setBody(body);
         return payService.aliPay(alipayBean);
     }

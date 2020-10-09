@@ -7,10 +7,8 @@ import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.Calendar;
@@ -21,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 @Component
 public class CacheAspect {
 
-    private final static String projectName="design";
+    private final static String PROJECT_NAME ="design";
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -46,14 +44,14 @@ public class CacheAspect {
         if (myCacheEvict != null) {
             boolean allEntries = myCacheEvict.allEntries();
             if (allEntries) {
-                String key = projectName + "_" + declaringType.getSimpleName() + "_*";
+                String key = PROJECT_NAME + "_" + declaringType.getSimpleName() + "_*";
                 Set deleteKeys = redisTemplate.keys(key);
                 for (Object deleteKey : deleteKeys) {
                     redisTemplate.delete(deleteKey);
                 }
                 String[] classNames = myCacheEvict.classNames();
                 for (String className : classNames) {
-                    Set keys = redisTemplate.keys(projectName + "_" + className + "_*");
+                    Set keys = redisTemplate.keys(PROJECT_NAME + "_" + className + "_*");
                     for (Object deleteKey : keys) {
                         redisTemplate.delete(deleteKey);
                     }
@@ -61,7 +59,7 @@ public class CacheAspect {
             } else {
                 String[] keys = myCacheEvict.methodNames();
                 for (String s : keys) {
-                    String key = projectName + "_" + declaringType.getSimpleName() + "_" + s + "*";
+                    String key = PROJECT_NAME + "_" + declaringType.getSimpleName() + "_" + s + "*";
                     Set deleteKeys = redisTemplate.keys(key);
                     for (Object deleteKey : deleteKeys) {
                         redisTemplate.delete(deleteKey);
@@ -85,7 +83,7 @@ public class CacheAspect {
                 stringBuffer.append("_" + parameters[i].getName() + args[i]);
             }
             //键生成 项目名_类名_方法名_参数名+参数_参数名+参数
-            String key = projectName + "_" + declaringType.getSimpleName() + "_" + methodSignature.getName() + stringBuffer;
+            String key = PROJECT_NAME + "_" + declaringType.getSimpleName() + "_" + methodSignature.getName() + stringBuffer;
             Object cacheData = redisTemplate.opsForValue().get(key);
             if (cacheData == null) {
                 Object proceed = pjp.proceed();

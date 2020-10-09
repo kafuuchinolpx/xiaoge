@@ -3,7 +3,6 @@ package cn.xiaoge.design.controller;
 import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.service.AlcoholTemplateService;
 import cn.xiaoge.design.entity.vo.ReturnBean;
-import cn.xiaoge.design.util.StringUtil;
 import cn.xiaoge.design.util.UUIDUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.io.File;
-import java.util.UUID;
 
 @RestController
 @CrossOrigin
@@ -41,7 +39,7 @@ public class AlcoholTemplateController {
         alcoholTemplate.setLength(length);
 
         if (file != null) {
-            String uuid8 = UUIDUtil.getUUID8();
+            String uuid8 = UUIDUtil.getuuid8();
             String fileName = file.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file1 = new File(filePath + uuid8 + type);
@@ -71,7 +69,7 @@ public class AlcoholTemplateController {
         alcoholTemplate.setName(name);
         alcoholTemplate.setLength(length);
         if (file != null) {
-            String uuid8 = UUIDUtil.getUUID8();
+            String uuid8 = UUIDUtil.getuuid8();
             String fileName = file.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file1 = new File(filePath + uuid8 + type);
@@ -128,7 +126,7 @@ public class AlcoholTemplateController {
     @PostMapping("recycleBin")
     @ApiOperation(value = "后台验证回收站密码")
     public ReturnBean recycleBin(String account) {
-        if (account.equals("xgbzkj123123")) {
+        if ("xgbzkj123123".equals(account)) {
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
         } else {
             return ReturnBean.of(ReturnBean.AnswerCode.PARAMETER_ERROR);

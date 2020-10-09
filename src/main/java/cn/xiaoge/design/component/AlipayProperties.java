@@ -27,8 +27,8 @@ public class AlipayProperties {
     public static final String CHARSET = "charset";
     public static final String GATEWAY_URL = "gatewayUrl";
     public static final String LOG_PATH = "logPath";
-    public static final String app_auth_token = "appAuthToken";
-    public static final String version = "version";
+    public static final String APP_AUTH_TOKEN = "appAuthToken";
+    public static final String VERSION = "version";
 
     /**
      * 保存加载配置参数
@@ -103,11 +103,11 @@ public class AlipayProperties {
         return propertiesMap.get(LOG_PATH);
     }
 
-    public static String getApp_auth_token() {
-        return propertiesMap.get(app_auth_token);
+    public static String getAppAuthToken() {
+        return propertiesMap.get(APP_AUTH_TOKEN);
     }
 
     public static String getVersion() {
-        return propertiesMap.get(version);
+        return propertiesMap.get(VERSION);
     }
 }

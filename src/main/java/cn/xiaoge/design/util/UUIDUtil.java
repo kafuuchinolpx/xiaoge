@@ -11,7 +11,7 @@ public class UUIDUtil {
     * 获取32位的UUID
     * @return UUID字符串
     */
-    public static String getUUID32() {
+    public static String getuuid32() {
         return UUID.randomUUID().toString().replace("-", "");
     }
 
@@ -19,7 +19,7 @@ public class UUIDUtil {
     * 获取36位的UUID
     * @return UUID字符串
     */
-    public static String getUUID36() {
+    public static String getuuid36() {
         return UUID.randomUUID().toString();
     }
 
@@ -33,9 +33,9 @@ public class UUIDUtil {
     * 获取8位的UUID
     * @return UUID字符串
     */
-    public static String getUUID8() {
+    public static String getuuid8() {
         StringBuffer stringBuffer = new StringBuffer();
-        String uuid = getUUID32();
+        String uuid = getuuid32();
         for (int i = 0; i < 8; i++) {
             String str = uuid.substring(i * 4, i * 4 + 4);
             // 16进制为基解析
@@ -50,9 +50,9 @@ public class UUIDUtil {
     * 获取16位的UUID
     * @return UUID字符串
     */
-    public static String getUUID16() {
+    public static String getuuid16() {
         StringBuffer stringBuffer = new StringBuffer();
-        String uuid = getUUID32();
+        String uuid = getuuid32();
         for (int i = 0; i < 16; i++) {
             String str = uuid.substring(i * 2, i * 2 + 2);
             // 16进制为基解析
@@ -67,12 +67,12 @@ public class UUIDUtil {
     * 获取48位的UUID
     * @return UUID字符串
     */
-    public static String getUUID48() {
-        return Base64.getEncoder().encodeToString(getUUID36().getBytes());
+    public static String getuuid48() {
+        return Base64.getEncoder().encodeToString(getuuid36().getBytes());
     }
 
     public static void main(String[] args) {
-        System.out.println(getUUID8());
+        System.out.println(getuuid8());
     }
 
 }

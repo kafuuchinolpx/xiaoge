@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Max;
-import javax.validation.constraints.Size;
 import java.io.File;
 import java.util.List;
 
@@ -193,7 +192,7 @@ public class PublicController {
         order.setInfo(info + "boxId:" + boxId + "name:" + boxName);
         order.setWineParameters(wineParameters);
         if (file1 != null && !file1.isEmpty()) {
-            String uuid8 = UUIDUtil.getUUID8();
+            String uuid8 = UUIDUtil.getuuid8();
             String fileName = file1.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file = new File(filePath + uuid8 + type);
@@ -201,7 +200,7 @@ public class PublicController {
             order.setFile1(uuid8 + type);
         }
         if (file2 != null && !file2.isEmpty()) {
-            String uuid8 = UUIDUtil.getUUID8();
+            String uuid8 = UUIDUtil.getuuid8();
             String fileName = file2.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file = new File(filePath + uuid8 + type);
@@ -225,7 +224,7 @@ public class PublicController {
         waterBuyInfo.setInfo(info + "waterId:" + selectWaterIndex + "name:" + waterName);
         waterBuyInfo.setRemark(remark);
         if (file != null && !file.isEmpty()) {
-            String uuid8 = UUIDUtil.getUUID8();
+            String uuid8 = UUIDUtil.getuuid8();
             String fileName = file.getOriginalFilename();
             String type = fileName.indexOf(".") != -1 ? fileName.substring(fileName.lastIndexOf(".")) : null;
             File file1 = new File(filePath + uuid8 + type);
