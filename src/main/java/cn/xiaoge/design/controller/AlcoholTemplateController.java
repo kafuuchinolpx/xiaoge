@@ -123,6 +123,23 @@ public class AlcoholTemplateController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
+    @PostMapping("recycleDelete")
+    @ApiOperation(value = "酒模板回收站根据id删除")
+    public ReturnBean recycleDelete(Integer id, String ids) {
+        //单个删除
+        if (id != null) {
+            alcoholTemplateService.deleteById(id);
+        }
+        //批量删除
+        if (!StringUtils.isEmpty(ids)) {
+            String[] split = ids.split(",");
+            for (String s : split) {
+                alcoholTemplateService.deleteById(Integer.parseInt(s));
+            }
+        }
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
     @PostMapping("recycleBin")
     @ApiOperation(value = "后台验证回收站密码")
     public ReturnBean recycleBin(String account) {
@@ -133,12 +150,18 @@ public class AlcoholTemplateController {
         }
     }
 
+    @ApiOperation(value = "回收站查询")
+    @PostMapping("findAllByDelete")
+    public ReturnBean findAllByDelete() {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findAll());
+    }
+
+
     @ApiOperation(value = "酒模板分页查询全部")
     @PostMapping("findAll")
     public ReturnBean findAll(@RequestParam(defaultValue = "1") Integer page, String order, @Max(value = 10000) @RequestParam(defaultValue = "15") Integer size) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findAll(page, order, size));
     }
-
 
     @ApiOperation(value = "酒模板根据id查询单个")
     @PostMapping("findByIdWithPurpose")

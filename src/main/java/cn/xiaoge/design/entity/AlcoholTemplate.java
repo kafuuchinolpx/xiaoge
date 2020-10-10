@@ -69,6 +69,8 @@ public class AlcoholTemplate implements Serializable {
     @Transient
     private BoxType boxType;
 
+    private Integer delete;
+
     //标题样式
     @Type(type = "text")
     private String header1Style;
@@ -78,6 +80,10 @@ public class AlcoholTemplate implements Serializable {
     //标题样式
     @Type(type = "text")
     private String bodyStyle;
+
+    @CreationTimestamp
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
+    private Date deleteTime;
 
     //创建时间
     @CreationTimestamp

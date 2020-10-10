@@ -41,6 +41,12 @@ public interface AlcoholTemplateService {
     PageBean<AlcoholTemplate> findAll(Integer page,String order,Integer size);
 
     /**
+     * 分页查询
+     * @return 分页信息
+     */
+    List<AlcoholTemplate> findAll();
+
+    /**
     * 查询级联的对象
     * @param id 主键
     * @return 对象
