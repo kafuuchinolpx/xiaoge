@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.io.File;
+import java.util.Date;
 
 @RestController
 @CrossOrigin
@@ -111,13 +112,42 @@ public class AlcoholTemplateController {
     public ReturnBean delete(Integer id, String ids) {
         //单个删除
         if (id != null) {
-            alcoholTemplateService.deleteById(id);
+            AlcoholTemplate byId = alcoholTemplateService.findById(id);
+            byId.setDeleteState(0);
+            byId.setDeleteTime(new Date());
+            alcoholTemplateService.add(byId);
         }
         //批量删除
         if (!StringUtils.isEmpty(ids)) {
             String[] split = ids.split(",");
             for (String s : split) {
-                alcoholTemplateService.deleteById(Integer.parseInt(s));
+                AlcoholTemplate byId = alcoholTemplateService.findById(Integer.parseInt(s));
+                byId.setDeleteState(0);
+                byId.setDeleteTime(new Date());
+                alcoholTemplateService.add(byId);
+            }
+        }
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+    @PostMapping("recycleReduction")
+    @ApiOperation(value = "回收站根据id还原")
+    public ReturnBean recycleReduction(Integer id, String ids) {
+        //单个删除
+        if (id != null) {
+            AlcoholTemplate byId = alcoholTemplateService.findById(id);
+            byId.setDeleteState(1);
+            byId.setDeleteTime(new Date());
+            alcoholTemplateService.add(byId);
+        }
+        //批量删除
+        if (!StringUtils.isEmpty(ids)) {
+            String[] split = ids.split(",");
+            for (String s : split) {
+                AlcoholTemplate byId = alcoholTemplateService.findById(Integer.parseInt(s));
+                byId.setDeleteState(1);
+                byId.setDeleteTime(new Date());
+                alcoholTemplateService.add(byId);
             }
         }
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);

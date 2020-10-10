@@ -16,47 +16,44 @@
 <body>
 
 
-    <div id="recycleBin">
-        <div class="layui-layer-title" style="cursor: move;">回收站</div>
-        <div id="" class="layui-layer-content" style="height: 564px;">
-            <div class="re-head">
-                <button style="float: right" class="btn btn-default btn-sm" onclick="CloseRecycleBin();">清空回收站</button>
-            </div>
-            <div class="re-con">
-                <div class="re-con-con">
-                    <div style="margin: 15px;" class="divtable">
-                        <table width="100%" class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>编号</th>
-                                <th>名字</th>
-                                <th>图片</th>
-                                <th width="150">删除时间</th>
-                                <th style="text-align: right;">操作</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr v-for="r in recycleList">
-                                <th>{{r.id}}</th>
-                                <th>{{r.name}}</th>
-                                <th>
-                                    <img :src="'/design/'+r.image" height="40px">
-                                </th>
-                                <th>{{r.deleteTime}}</th>
-                                <th class="notOut text-right">
+<div id="recycleBin">
+    <div class="layui-layer-title" style="cursor: move;">回收站</div>
+    <div id="" class="layui-layer-content" style="height: 564px;">
+        <div class="re-con">
+            <div class="re-con-con">
+                <div style="margin: 15px;" class="divtable">
+                    <table width="100%" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>编号</th>
+                            <th>名字</th>
+                            <th>图片</th>
+                            <th width="150">删除时间</th>
+                            <th style="text-align: right;">操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr v-for="r in recycleList">
+                            <th>{{r.id}}</th>
+                            <th>{{r.name}}</th>
+                            <th>
+                                <img :src="'/design/'+r.image" height="40px">
+                            </th>
+                            <th>{{r.deleteTime}}</th>
+                            <th class="notOut text-right">
                                     <span style="cursor: pointer">
                                         <span class="btn btn-info btn-sm" @click="show_it(r.id)">详情</span>
                                         <span class="btn btn-success btn-sm" @click="reduction_it(r.id)">还原</span>
                                         <span class="btn btn-danger btn-sm" @click="delete_it(r.id)">完全删除</span>
                                     </span>
-                                </th>
-                            </tr>
-                            </tbody>
-                            <tbody id="RecycleBody" class="list-list"></tbody>
-                        </table>
-                    </div>
+                            </th>
+                        </tr>
+                        </tbody>
+                        <tbody id="RecycleBody" class="list-list"></tbody>
+                    </table>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 <script>
@@ -68,29 +65,34 @@
         watch: {},
         created: function () {
             var vm = this;
-            $.post("/design/alcoholTemplate/findAllByDelete", {}, function (data) {
-                if (data.ok) {
-                    vm.recycleList = data.obj;
-                    return;
-                }
-                layer.alert(data.msg + ":" + data.obj);
-            });
+            vm.load();
         },
         methods: {
+            load: function () {
+                var vm = this;
+                $.post("/design/alcoholTemplate/findAllByDelete", {}, function (data) {
+                    if (data.ok) {
+                        vm.recycleList = data.obj;
+                        return;
+                    }
+                    layer.alert(data.msg + ":" + data.obj);
+                });
+            },
             reduction_it: function (id) {
-                if (document.body.clientWidth < 768) {
-                    location.href = '/design/alcoholTemplate/show.html?id=' + id;
-                } else {
-                    layer.open({
-                        type: 2,
-                        title: '酒模板',
-                        shade: false,
-                        offset: '100px',
-                        maxmin: true, //开启最大化最小化按钮
-                        area: ['800px', '600px'],
-                        content: '/design/alcoholTemplate/show.html?id=' + id,
-                    });
-                }
+                var vm = this;
+                layer.confirm('您确定要还原吗？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.post("/design/alcoholTemplate/recycleReduction", {id: id}, function (data) {
+                        if (data.ok) {
+                            vm.load();
+                            layer.alert(data.msg);
+                        } else {
+                            layer.alert(data.msg + ":" + data.obj);
+                        }
+
+                    })
+                });
             },
             show_it: function (id) {
                 if (document.body.clientWidth < 768) {

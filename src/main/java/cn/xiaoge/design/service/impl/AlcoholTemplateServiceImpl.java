@@ -68,7 +68,7 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
 
     @Override
     public List<AlcoholTemplate> findAll() {
-        return alcoholTemplateRepository.findAllByDelete(0);
+        return alcoholTemplateRepository.findAllByDeleteState(0);
     }
 
 

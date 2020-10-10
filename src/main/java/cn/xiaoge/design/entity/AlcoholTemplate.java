@@ -69,7 +69,7 @@ public class AlcoholTemplate implements Serializable {
     @Transient
     private BoxType boxType;
 
-    private Integer delete;
+    private Integer deleteState;
 
     //标题样式
     @Type(type = "text")
