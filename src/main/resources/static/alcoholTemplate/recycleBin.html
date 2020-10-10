@@ -115,7 +115,7 @@
                 }, function () {
                     $.post("/design/alcoholTemplate/recycleDelete", {id: id}, function (data) {
                         if (data.ok) {
-                            vm.reload_data();
+                            vm.load();
                             layer.alert(data.msg);
                         } else {
                             layer.alert(data.msg + ":" + data.obj);
