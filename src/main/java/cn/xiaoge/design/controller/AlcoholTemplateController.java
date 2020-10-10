@@ -56,6 +56,7 @@ public class AlcoholTemplateController {
         alcoholTemplate.setBoxTypeId(boxTypeId);
         alcoholTemplate.setHeader1Style(header1style);
         alcoholTemplate.setHeader2Style(header2style);
+        alcoholTemplate.setDeleteState(1);
         alcoholTemplateService.add(alcoholTemplate);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }

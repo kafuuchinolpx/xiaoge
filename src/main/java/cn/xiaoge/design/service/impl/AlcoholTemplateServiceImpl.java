@@ -63,14 +63,13 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         } else {
             pageable = PageRequest.of(page - 1, size);
         }
-        return PageBean.of(alcoholTemplateRepository.findAll(pageable), order, "");
+        return PageBean.of(alcoholTemplateRepository.findAllByDeleteState(pageable,1), order, "");
     }
 
     @Override
     public List<AlcoholTemplate> findAll() {
         return alcoholTemplateRepository.findAllByDeleteState(0);
     }
-
 
     @Autowired
     private PurposeRepository purposeRepository;
