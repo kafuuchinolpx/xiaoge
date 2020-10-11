@@ -20,11 +20,11 @@ public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate
 
     List<AlcoholTemplate> findByGroupIdAndLength(Integer id, int length);
 
-    List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLength(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int i, int length);
-
-    List<AlcoholTemplate> findAllByBoxTypeIdAndGroupIdAndLength(Integer boxTypeId, int i, int length);
-
     List<AlcoholTemplate> findAllByDeleteState(int i);
 
     Page<AlcoholTemplate> findAllByDeleteState(Pageable var1, int i);
+
+    List<AlcoholTemplate> findAllByBoxTypeIdAndGroupIdAndLengthAndDeleteState(Integer boxTypeId, int i, int length, int i1);
+
+    List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLengthAndDeleteState(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int i, int length, int i1);
 }

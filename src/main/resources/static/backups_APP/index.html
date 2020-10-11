@@ -70,6 +70,9 @@
 	
 			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(218,37,29);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
 			<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #fff;font-size: 20px;" onclick="regist()">注册</p>
+
+			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(218,37,29);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+			<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #fff;font-size: 20px;" onclick="repair()">修复</p>
 	
 			<script>
 				mui.init();
@@ -116,9 +119,23 @@
 						})
 	
 					});
-	
-	
 				});
+
+				 function repair() {
+					var vm = this;
+					layer.confirm('您确定要修复吗？', {
+						btn: ['确定', '取消'] //按钮
+					}, function () {
+						$.post("/design/alcoholTemplate/", {id: id}, function (data) {
+							if (data.ok) {
+								vm.reload_data();
+								layer.alert(data.msg);
+							} else {
+								layer.alert(data.msg + ":" + data.obj);
+							}
+						})
+					});
+				}
 	
 				function login() {
 					$.ajax({
