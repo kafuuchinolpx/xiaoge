@@ -149,10 +149,6 @@
         },
         created() {
             var vm = this;
-
-            if (localStorage.selectIndex) {
-                vm.selectIndex = localStorage.selectIndex;
-            }
             $.post(base_path + "app/alcoholTemplate/findAll", {
                 alcoholName: localStorage.alcoholName,
                 boxTypeId: localStorage.boxTypeId,
@@ -175,6 +171,13 @@
                     }
                 }
             });
+            if (localStorage.selectIndex) {
+                if (localStorage.selectIndex > alcoholListCopy.length) {
+                    vm.selectIndex = 0;
+                    return;
+                }
+                vm.selectIndex = localStorage.selectIndex;
+            }
         },
         methods: { //方法
 
