@@ -169,15 +169,16 @@
                             vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
                         }
                     }
+                    if (localStorage.selectIndex) {
+                        if (localStorage.selectIndex > vm.alcoholListCopy.length) {
+                            vm.selectIndex = 0;
+                            return;
+                        }
+                        vm.selectIndex = localStorage.selectIndex;
+                    }
                 }
-            });
-            if (localStorage.selectIndex) {
-                if (localStorage.selectIndex > alcoholListCopy.length) {
-                    vm.selectIndex = 0;
-                    return;
-                }
-                vm.selectIndex = localStorage.selectIndex;
-            }
+            })
+
         },
         methods: { //方法
 
