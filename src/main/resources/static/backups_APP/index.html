@@ -1,198 +1,204 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
-		<title>登陆注册</title>
-		<link href="css/mui.min.css" rel="stylesheet" />
-		<link href="css/icons-extra.css" rel="stylesheet" />
-		<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css" />
-		<script src="js/mui.min.js"></script>
-		<script src="js/pei_zhi.js"></script>
-		<script type="text/javascript" src="js/jquery.min.js"></script>
-		<style type="text/css">
-			.pwd_eye {
-				position: relative;
-				text-align: center;
-				text-indent: -15px;
-			}
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <title>登陆注册</title>
+    <link href="css/mui.min.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet"/>
+    <link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css"/>
+    <script src="js/mui.min.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script src="js/layer.js"></script>
+    <style type="text/css">
+        .pwd_eye {
+            position: relative;
+            text-align: center;
+            text-indent: -15px;
+        }
 
-			#eye {
-				width: 22px;
-				height: auto;
-				float: right;
-				position: absolute;
-				right: 45px;
-				top: 2px;
-			}
+        #eye {
+            width: 22px;
+            height: auto;
+            float: right;
+            position: absolute;
+            right: 45px;
+            top: 2px;
+        }
 
-			input {
-				font-size: 16px;
-			}
+        input {
+            font-size: 16px;
+        }
 
-			.wrong {
-				color: red;
-			}
+        .wrong {
+            color: red;
+        }
 
-			.right {
-				color: deepskyblue;
-			}
-		</style>
-	</head>
+        .right {
+            color: deepskyblue;
+        }
+    </style>
+</head>
 
-	<body style="background:black;">
-			<br>
-			<div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-top:5px;margin-bottom:-4px;"></div>
-			<br><br><br><br><br>
-	
-			<form style="margin-left:30px;">
-				<div style="position: relative;text-align:center;text-indent:-15px;">
-					<span class="mui-icon-extra mui-icon-extra-phone" style="color: white;"></span>
-					<input style="width: 80%;height:30px;position: relative;" type="number" id="telephone" placeholder="手机号" value="" />
-					<br>
-					<br>
-					<p class="message" style="position:absolute;top:35px;margin-left:15%;">请输入11位手机号</p>
-				</div>
-				<div class="pwd_eye">
-					<span class="mui-icon mui-icon-locked" style="color:white"></span>
-					<input style="width: 80%;height:30px;position:relative;" type="password" id="password" placeholder="密码" value="" />
-					<img src="bmp/a7bd9544885b2a6d0cc046fb4abb2cb8.jpg" id="eye" style="position: absolute;right:11%;">
-					<!-- <img src="bmp/6ee02535705e23d8808825cd6138c3d1.jpg" id="eye"> -->
-					<p style="color:deepskyblue;position: absolute;left:15%;font-size:16px;top:32px;">忘记密码？</p>
-					<p style="color:deepskyblue;position: absolute;right:10%;font-size:16px;top:32px;" onclick="yan_zheng_ma()">手机验证码登录</p>
-				</div>
-			</form>
-	
-			<br><br><br><br>
-			<!-- 登录，注册按钮 -->
-			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
-			<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color:white;font-size: 20px;" onclick="login()">登录</p>
-	
-			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(218,37,29);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
-			<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #fff;font-size: 20px;" onclick="regist()">注册</p>
+<body style="background:black;">
+<br>
+<div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-top:5px;margin-bottom:-4px;"></div>
+<br><br><br><br><br>
 
-			<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(218,37,29);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
-			<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #fff;font-size: 20px;" onclick="repair()">修复</p>
-	
-			<script>
-				mui.init();
-				mui.plusReady(function() {
-					plus.runtime.getProperty(plus.runtime.appid, function(inf) {
-						var app_version = inf.version;
-						mui.ajax("http://47.104.179.247/design/appVersion/findById?id=1", {
-							type: "POST",
-							data: {
-								id: 1
-							},
-							success: function(data) {
-								console.info(JSON.stringify(data));
-								if (data.code == 200) {
-	
-									if (data.obj.versionName != app_version) {
-										
-										//H5  更新
-										plus.nativeUI.showWaiting("正在下载更新文件...");
-										plus.downloader.createDownload("http://47.104.179.247/design.wgt", {
-											filename: "_doc/update/"
-										}, function(d, status) {
-											if (status == 200) {
-												plus.runtime.install(d.filename, {}, function() {
-													plus.nativeUI.closeWaiting();
-													plus.runtime.restart();
-												}, function(e) {
-													plus.nativeUI.closeWaiting();
-													plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
-												});
-												console.log("更新成功");
-											} else {
-												console.log("下载wgt失败！");
-												plus.nativeUI.alert("下载更新失败！");
-											}
-											plus.nativeUI.closeWaiting();
-										}).start();
-									}
-								}
-							},
-							error: function(e) {
-								plus.nativeUI.alert("网络请求错误！info");
-							}
-						})
-	
-					});
-				});
+<form style="margin-left:30px;">
+    <div style="position: relative;text-align:center;text-indent:-15px;">
+        <span class="mui-icon-extra mui-icon-extra-phone" style="color: white;"></span>
+        <input style="width: 80%;height:30px;position: relative;" type="number" id="telephone" placeholder="手机号"
+               value=""/>
+        <br>
+        <br>
+        <p class="message" style="position:absolute;top:35px;margin-left:15%;">请输入11位手机号</p>
+    </div>
+    <div class="pwd_eye">
+        <span class="mui-icon mui-icon-locked" style="color:white"></span>
+        <input style="width: 80%;height:30px;position:relative;" type="password" id="password" placeholder="密码"
+               value=""/>
+        <img src="bmp/a7bd9544885b2a6d0cc046fb4abb2cb8.jpg" id="eye" style="position: absolute;right:11%;">
+        <!-- <img src="bmp/6ee02535705e23d8808825cd6138c3d1.jpg" id="eye"> -->
+        <p style="color:deepskyblue;position: absolute;left:15%;font-size:16px;top:32px;">忘记密码？</p>
+        <p style="color:deepskyblue;position: absolute;right:10%;font-size:16px;top:32px;" onclick="yan_zheng_ma()">
+            手机验证码登录</p>
+    </div>
+</form>
 
-				 function repair() {
-					var vm = this;
-					layer.confirm('您确定要修复吗？', {
-						btn: ['确定', '取消'] //按钮
-					}, function () {
-						$.post("/design/alcoholTemplate/", {id: id}, function (data) {
-							if (data.ok) {
-								vm.reload_data();
-								layer.alert(data.msg);
-							} else {
-								layer.alert(data.msg + ":" + data.obj);
-							}
-						})
-					});
-				}
-	
-				function login() {
-					$.ajax({
-						type: "POST",
-						url: base_path + "/app/login",
-						data: {
-							telephone: $("#telephone").val(),
-							password: $("#password").val()
-						},
-						success: function(data) {
-							if (data.code == 200) {
-								localStorage.userInfo = JSON.stringify(data.obj);
-								location.href = "shou_ye.html";
-							} else {
-								mui.alert("您输入有误");
-							}
-						}
-					})
-				}
-				// 跳转注册页面
-				function regist() {
-					location.href = "zhu_che.html"
-				}
-	
-				// 跳转到手机验证码登录
-				function yan_zheng_ma() {
-					location.href = "yan_zheng_ma.html";
-				}
-				// 密码的隐藏与显示
-				var eye = document.getElementById('eye');
-				var pwd = document.getElementById('pwd');
-	
-				var flag = 0;
-				eye.onclick = function() {
-					if (flag == 0) {
-						pwd.type = 'text';
-						flag = 1;
-						eye.src = 'bmp/a7bd9544885b2a6d0cc046fb4abb2cb8.jpg';
-					} else {
-						pwd.type = 'password';
-						flag = 0;
-						eye.src = 'bmp/6ee02535705e23d8808825cd6138c3d1.jpg';
-					}
-				}
-	
-				// 判断手机号
-				var phone = document.getElementById('phone');
-				var message = document.querySelector('.message');
-	
-				phone.onblur = function() {
-					if (this.value.length = 11 ) {
-						message.className = 'message wrong';
-						message.innerHTML = '请重新输入11位手机号码';
-					} else {
-						location.href = "shou_ye.html";
-					}
-				}
-			</script>
-		</body>
+<br><br><br><br>
+<!-- 登录，注册按钮 -->
+<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0,147,210);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color:white;font-size: 20px;"
+   onclick="login()">登录</p>
+
+<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(218,37,29);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #fff;font-size: 20px;"
+   onclick="regist()">注册</p>
+
+<div style="width: 50px;height: 50px;transform:rotate(45deg);background: rgb(0, 162, 0);margin: 0 auto;border-radius: 5px;line-height: 50px;text-align: center;"></div>
+<p style="position: relative;margin: 0 auto;text-align: center;top: -34px;color: #fff;font-size: 20px;"
+   onclick="repair()">修复</p>
+
+<script>
+    mui.init();
+    mui.plusReady(function () {
+        plus.runtime.getProperty(plus.runtime.appid, function (inf) {
+            var app_version = inf.version;
+            mui.ajax("http://47.104.179.247/design/appVersion/findById?id=1", {
+                type: "POST",
+                data: {
+                    id: 1
+                },
+                success: function (data) {
+                    console.info(JSON.stringify(data));
+                    if (data.code == 200) {
+
+                        if (data.obj.versionName != app_version) {
+
+                            //H5  更新
+                            plus.nativeUI.showWaiting("正在下载更新文件...");
+                            plus.downloader.createDownload("http://47.104.179.247/design.wgt", {
+                                filename: "_doc/update/"
+                            }, function (d, status) {
+                                if (status == 200) {
+                                    plus.runtime.install(d.filename, {}, function () {
+                                        plus.nativeUI.closeWaiting();
+                                        plus.runtime.restart();
+                                    }, function (e) {
+                                        plus.nativeUI.closeWaiting();
+                                        plus.nativeUI.alert("安装更新文件失败[" + e.code + "]：" + e.message);
+                                    });
+                                    console.log("更新成功");
+                                } else {
+                                    console.log("下载wgt失败！");
+                                    plus.nativeUI.alert("下载更新失败！");
+                                }
+                                plus.nativeUI.closeWaiting();
+                            }).start();
+                        }
+                    }
+                },
+                error: function (e) {
+                    plus.nativeUI.alert("网络请求错误！info");
+                }
+            })
+
+        });
+    });
+    function repair() {
+        var vm = this;
+        layer.confirm('您确定要修复吗？', {
+                btn: ['确定', '取消'], //按钮
+                content: '注意，修复会清空您的访问和填入的所有信息.'
+            },
+            function () {
+                localStorage.clear()
+                layer.msg('已修复', {icon: 1})
+            },)
+
+    }
+
+    function login() {
+        $.ajax({
+            type: "POST",
+            url: base_path + "/app/login",
+            data: {
+                telephone: $("#telephone").val(),
+                password: $("#password").val()
+            },
+            success: function (data) {
+                if (data.code == 200) {
+                    localStorage.userInfo = JSON.stringify(data.obj);
+                    location.href = "shou_ye.html";
+                } else {
+                    mui.alert("您输入有误");
+                }
+            }
+        })
+    }
+
+    // 跳转注册页面
+    function regist() {
+        location.href = "zhu_che.html"
+    }
+
+    // 跳转到手机验证码登录
+    function yan_zheng_ma() {
+        location.href = "yan_zheng_ma.html";
+    }
+
+    // 密码的隐藏与显示
+    var eye = document.getElementById('eye');
+    var pwd = document.getElementById('pwd');
+
+    var flag = 0;
+    eye.onclick = function () {
+        if (flag == 0) {
+            pwd.type = 'text';
+            flag = 1;
+            eye.src = 'bmp/a7bd9544885b2a6d0cc046fb4abb2cb8.jpg';
+        } else {
+            pwd.type = 'password';
+            flag = 0;
+            eye.src = 'bmp/6ee02535705e23d8808825cd6138c3d1.jpg';
+        }
+    }
+
+    // 判断手机号
+    var phone = document.getElementById('phone');
+    var message = document.querySelector('.message');
+
+    phone.onblur = function () {
+        if (this.value.length = 11) {
+            message.className = 'message wrong';
+            message.innerHTML = '请重新输入11位手机号码';
+        } else {
+            location.href = "shou_ye.html";
+        }
+    }
+</script>
+</body>
 </html>

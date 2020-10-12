@@ -109,6 +109,13 @@
     </p>
 </div>
 <script>
+    // 禁止截屏
+    // 监听plusready事件
+    document.addEventListener("plusready", function () {
+        var activity = plus.android.runtimeMainActivity();
+        plus.android.invoke(plus.android.invoke(activity, "getWindow"), "addFlags", 0x00002000);
+    }, false);
+
     vv = new Vue({ //渲染表格
         el: "#app",
         data: {
@@ -268,6 +275,7 @@
                     }
                 }
             }
+
             ,
             // tutorialsVerification: function () {
             //     var vm = this;
