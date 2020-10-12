@@ -132,7 +132,7 @@
         var vm = this;
         layer.confirm('您确定要修复吗？', {
                 btn: ['确定', '取消'], //按钮
-                content: '注意，修复会清空您的访问和填入的所有信息.'
+                content: '注意，修复会清空您的访问和填入的所有信息.\n如发现无法显示或者显示不正常可尝试点击该按钮修复.'
             },
             function () {
                 localStorage.clear()
