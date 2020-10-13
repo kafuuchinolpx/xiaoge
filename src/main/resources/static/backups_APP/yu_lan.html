@@ -156,6 +156,9 @@
         },
         created() {
             var vm = this;
+            if (null == localStorage.boxTypeId) {
+                localStorage.boxTypeId = 1;
+            }
             $.post(base_path + "app/alcoholTemplate/findAll", {
                 alcoholName: localStorage.alcoholName,
                 boxTypeId: localStorage.boxTypeId,
