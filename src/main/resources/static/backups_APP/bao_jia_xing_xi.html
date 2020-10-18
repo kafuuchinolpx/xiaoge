@@ -62,7 +62,7 @@
             <div style="width: 120px;height: 40px;background: rgb(255,0,0);margin: 16px auto 0 auto;border-radius: 5px;text-align: center;"></div>
             <p style="height: 2px;position: relative;margin: 0 auto;text-align: center;top: -36px;color: #fff;font-size: 24px;"
                @click="ji_suan()">生成报价</p>
-            <p>报价结果: <input type="text" style="width:60%;float: right;background-color: #aaa;" v-model="jie_guo"
+            <p>报价结果: <input type="number" min="0" max="100" step="0.01" style="width:60%;float: right;background-color: #aaa;" v-model="jie_guo"
                             disabled="disabled"></p>
 
 
