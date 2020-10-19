@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>泉水订单确认个人信息</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/mui.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+        }
+
+        p {
+            margin: 25px auto;
+        }
+
+        .styles {
+            position: relative;
+        }
+
+        .styles input {
+            position: absolute;
+            width: 60%;
+            left: 125px;
+            border-radius: 3px;
+            background-color: darkgray;
+        }
+
+    </style>
+</head>
+<body style="background: #000;">
+<div style="background: white;"><img src="bmp/log1.jpg" width="100%"></div>
+
+<div style="margin-left: 10px;margin-right: 10px;color: white;" id="app">
+    <form id="my_form" enctype="multipart/form-data" method="post">
+        <p style="color: #00ff00;">用户专用泉水图片上传 </p>
+
+        <input type="file" style="background: #666;width:100%;background-color:#aaa;" id="file"
+               name="file"/>
+        <br>
+        <div class="styles">
+            <p style="position: relative;">收货地址：
+                <input type="text" v-model="user.address"/>
+            </p>
+
+            <p style="position: relative;">收件人：
+                <input type="text" v-model="user.userName"/>
+            </p>
+
+            <p style="position: relative;">电话：
+                <input type="number" v-model="user.telephone"/>
+            </p>
+
+            <p style="position: relative;">下单数量(件)：
+                <input type="number" v-model="user.count"/>
+            </p>
+            <p> 单位:（件），每件24瓶</p>
+            <!-- <p style="position: relative;">报价结果：<input type="text" v-model="order_amount"></p> -->
+            <p style="font-size: 20px;margin-top: 20px;margin-left: 45%">备注:</p>
+            <textarea style="width: 80%;background-color: #aaa;margin-left: 10%" rows="7" v-model="remark"></textarea>
+        </div>
+    </form>
+    <br><br>
+    <div style="width: 120px;height: 40px;background: rgb(255,0,0);margin: 16px auto 0 auto;border-radius: 5px;text-align: center;"></div>
+    <p style="height:2px;position: relative;margin: 0 auto;text-align: center;top: -36px;color: #fff;font-size: 24px;"
+       @click="submitIt()">确认下单</p>
+</div>
+<script>
+    new Vue({ //渲染表格
+        el: "#app",
+        data: {
+            user: {},
+            remark: "",
+        },
+        watch: {},
+        created() {
+
+        },
+        methods: { //方法 计算
+            submitIt() {
+                var vm = this;
+                var formData = new FormData();
+                var inputDOM = document.getElementById("file");
+                var file = inputDOM.files[0];
+                formData.append("file", file);
+                formData.append("userId", JSON.parse(localStorage.userInfo).id);
+                formData.append("info", JSON.stringify(vm.user));
+                formData.append("selectWaterIndex", localStorage.selectWaterIndex);
+                formData.append("waterName", localStorage.water_name);
+                formData.append("remark", vm.remark);
+                $.ajax({
+                    url: base_path + "app/waterBuyInfo/add",
+                    type: "post",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    async: false,
+                    success: function (data) {
+                        if (data.code == 200) {
+                            alert("下单成功，稍后会有工作人员与你联系！")
+                            location.href = "shou_ye.html";
+                        }
+                    }
+                })
+            }
+        }
+    })
+
+
+</script>
+</body>
+</html>

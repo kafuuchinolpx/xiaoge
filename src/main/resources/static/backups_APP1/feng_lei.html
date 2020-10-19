@@ -1,0 +1,54 @@
+<!-- <!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+		<link href="css/mui.css" rel="stylesheet" />
+		<script src="js/vue.js"></script>
+		<script src="js/jquery.min.js"></script>
+		<script src="js/mui.js"></script>
+		<script src="js/pei_zhi.js"></script>
+	</head>
+
+	<body style="background: #000000;text-align: center;">
+		<div id="app">
+			<div style="background: white;"><img src="bmp/logo.png" width="80%" style="margin-left: 26px;margin-top: 10px;margin-bottom: 10px;"></div>
+			<br>
+			<div v-for="d in yang_shi">
+				<div style="width: 100px;height: 100px;transform:rotate(-45deg);background: rgb(218,37,29);margin: -18px auto 0 auto;border-radius: 20px 100px 20px 100px;line-height: 100px;text-align: center;"></div>
+				<p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #fff;font-size: 24px;" @click="shen_cheng(d.mingCheng)">{{d.mingCheng}}</p>
+			</div>
+		</div>
+
+		<script>
+			new Vue({ //渲染表格
+				el: "#app",
+				data: {
+					yang_shi: [] //数据集合
+				},
+				created() {
+					var vm = this;
+					$.post(base_path + "fengGeChaXun", {}, function(shu_ju) {
+						if (shu_ju.code == 200) {
+							vm.yang_shi = shu_ju.data;
+						}
+					})
+				},
+				methods: { //方法
+					//打开详情的方法
+					shen_cheng: function(yang_shi_ming) {
+						//在缓存里面存数据
+						sessionStorage.yang_shi_ming = yang_shi_ming;
+						//弹窗
+						location.href = "yu_lan.html"
+					}
+
+				}
+			});
+		</script>
+
+	</body>
+
+</html>
+ -->
