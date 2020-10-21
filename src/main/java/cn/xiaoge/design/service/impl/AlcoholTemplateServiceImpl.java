@@ -63,7 +63,7 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         } else {
             pageable = PageRequest.of(page - 1, size);
         }
-        return PageBean.of(alcoholTemplateRepository.findAllByDeleteState(pageable,1), order, "");
+        return PageBean.of(alcoholTemplateRepository.findAllByDeleteState(pageable, 1), order, "");
     }
 
     @Override
@@ -74,6 +74,14 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     @Override
     public List<AlcoholTemplate> findAllNotBox() {
         return alcoholTemplateRepository.findAllByDeleteState(1);
+    }
+
+    @Override
+    public List<AlcoholTemplate> findAllNotBoxAndMaterialId(Integer materialId) {
+        if (materialId == 0) {
+            return alcoholTemplateRepository.findAllByDeleteState(1);
+        }
+        return alcoholTemplateRepository.findAllByDeleteStateAndMaterialId(1, materialId);
     }
 
     @Autowired
@@ -148,14 +156,14 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
 
     @Override
     public List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int length) {
-        List<AlcoholTemplate> byBoxTypeIdAndMaterialIdAndStyleIdAndLength = alcoholTemplateRepository.findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLengthAndDeleteState(boxTypeId, materialId, styleId, purposeId, 0, length,1);
+        List<AlcoholTemplate> byBoxTypeIdAndMaterialIdAndStyleIdAndLength = alcoholTemplateRepository.findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLengthAndDeleteState(boxTypeId, materialId, styleId, purposeId, 0, length, 1);
         byBoxTypeIdAndMaterialIdAndStyleIdAndLength.forEach(o -> o.setSon(alcoholTemplateRepository.findByGroupIdAndLength(o.getId(), length)));
         return byBoxTypeIdAndMaterialIdAndStyleIdAndLength;
     }
 
     @Override
     public List<AlcoholTemplate> findByBoxTypeIdAndLengthGreaterThan(Integer boxTypeId, int length) {
-        List<AlcoholTemplate> byBoxTypeIdAndLengthGreaterThan = alcoholTemplateRepository.findAllByBoxTypeIdAndGroupIdAndLengthAndDeleteState(boxTypeId, 0, length,1);
+        List<AlcoholTemplate> byBoxTypeIdAndLengthGreaterThan = alcoholTemplateRepository.findAllByBoxTypeIdAndGroupIdAndLengthAndDeleteState(boxTypeId, 0, length, 1);
         byBoxTypeIdAndLengthGreaterThan.forEach(o -> o.setSon(alcoholTemplateRepository.findByGroupIdAndLength(o.getId(), length)));
         return byBoxTypeIdAndLengthGreaterThan;
     }

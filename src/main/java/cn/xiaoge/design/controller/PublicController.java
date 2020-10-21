@@ -145,12 +145,6 @@ public class PublicController {
         }
     }
 
-    @ApiOperation(value = "app查询所有")
-    @PostMapping("app/alcoholTemplate/getAll")
-    public ReturnBean getAll() {
-        List<AlcoholTemplate> list = alcoholTemplateService.findAllNotBox();
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
-    }
 
     @ApiOperation(value = "app根据waterPurpose")
     @PostMapping("app/water/findAll")
@@ -255,5 +249,19 @@ public class PublicController {
     @PostMapping("app/AlcoholTemplateController/findallByApp")
     public ReturnBean findAllByApp() {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findAllApp());
+    }
+
+    @ApiOperation(value = "app查询所有")
+    @PostMapping("app/alcoholTemplate/getAll")
+    public ReturnBean getAll() {
+        List<AlcoholTemplate> list = alcoholTemplateService.findAllNotBox();
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+    }
+
+    @ApiOperation(value = "app根据材料查询所有")
+    @PostMapping("app/alcoholTemplate/findAllByMaterialId")
+    public ReturnBean findAllByMaterialId(Integer materialId) {
+        List<AlcoholTemplate> list = alcoholTemplateService.findAllNotBoxAndMaterialId(materialId);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
 }

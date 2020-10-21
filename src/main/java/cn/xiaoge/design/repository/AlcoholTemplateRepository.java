@@ -27,4 +27,6 @@ public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate
     List<AlcoholTemplate> findAllByBoxTypeIdAndGroupIdAndLengthAndDeleteState(Integer boxTypeId, int i, int length, int i1);
 
     List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLengthAndDeleteState(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int i, int length, int i1);
+
+    List<AlcoholTemplate> findAllByDeleteStateAndMaterialId(int i, Integer materialId);
 }

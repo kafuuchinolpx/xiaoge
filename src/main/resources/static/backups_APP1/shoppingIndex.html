@@ -30,9 +30,9 @@
 
         .xuanze {
             margin: auto;
-            width: 115px;
+            width: 120px;
             left: 275px;
-            top: 15px;
+            top: 7px;
             text-align: center;
             position: absolute;
             z-index: 2;
@@ -43,13 +43,23 @@
 <div id="app">
     <div class="fixed"><img src="bmp/277175920900915799.png" width="100%"
                             style="margin-bottom:-5px;">
-        <div class="tuijian" @click="tuijian()">首页推荐</div>
-        <div class="xuanze" @click="xuanze()">材料选择</div>
+        <div class="tuijian" @click="tuijian()"
+             :style="colorType==0?'font-size: 22px;color: red':'font-size: 22px;background-color: #ffffff;color:black;margin: auto'">
+            首页推荐
+        </div>
+        <div class="xuanze">
+            <select :style="colorType==1?'font-size: 22px;color: red':'font-size: 22px;background-color: #ffffff;color:black;margin: auto'"
+                    v-model="materialId">
+                <option value="-1">材料选择</option>
+                <option value="0">查看全部</option>
+                <option :value="m.id" v-for="m in material">{{m.name}}</option>
+            </select>
+        </div>
     </div>
     <br/><br/>
     <div>
         <ul class="mui-table-view mui-grid-view">
-            <li class="mui-table-view-cell mui-media mui-col-xs-6" v-for="a in alcoholList">
+            <li class="mui-table-view-cell mui-media mui-col-xs-6" v-for="a in alcoholList" @click="xuanze(a.id)">
                 <img class="mui-media-object" :src="baseUrl+a.image">
             </li>
         </ul>
@@ -58,13 +68,25 @@
 </div>
 <script>
     new Vue({
-        el: "#app",
+        el: " #app",
         data: {
             baseUrl: base_path,
+            colorType: 0,
             alcoholList: [],
             selectIndex: 0,
+            material: [],
+            materialId: -1,
         },
-        watch: {},
+        watch: {
+            materialId(val) {
+                if (val != -1) {
+                    var vm = this;
+                    vm.colorType = 1;
+                    localStorage.materialId = val;
+                    vm.getAllById();
+                }
+            },
+        },
         created() {
             var vm = this;
             if (null == localStorage.boxTypeId) {
@@ -75,13 +97,32 @@
                     vm.alcoholList = data.obj;
                 }
             })
+            var vm = this;
+            $.post(base_path + "app/material/findAll", {
+                size: 1000
+            }, function (data) {
+                vm.material = data.obj.content;
+            })
         },
         methods: {
             tuijian: function () {
+                var vm = this;
+                vm.colorType = 0;
+                vm.materialId = -1;
                 console.info("1")
             },
-            xuanze: function () {
-                console.info("2")
+            xuanze: function (id) {
+                console.info("TestData" + id)
+            },
+            getAllById: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/findAllByMaterialId", {
+                    materialId: localStorage.materialId,
+                }, function (data) {
+                    if (data.code == 200) {
+                        vm.alcoholList = data.obj;
+                    }
+                });
             }
         }
     })
