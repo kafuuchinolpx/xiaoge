@@ -47,6 +47,12 @@ public interface AlcoholTemplateService {
     List<AlcoholTemplate> findAll();
 
     /**
+     * 分页查询
+     * @return 分页信息
+     */
+    List<AlcoholTemplate> findAllNotBox();
+
+    /**
     * 查询级联的对象
     * @param id 主键
     * @return 对象

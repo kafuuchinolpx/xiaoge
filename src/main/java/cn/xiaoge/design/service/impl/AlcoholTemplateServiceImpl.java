@@ -71,6 +71,11 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         return alcoholTemplateRepository.findAllByDeleteState(0);
     }
 
+    @Override
+    public List<AlcoholTemplate> findAllNotBox() {
+        return alcoholTemplateRepository.findAllByDeleteState(1);
+    }
+
     @Autowired
     private PurposeRepository purposeRepository;
 

@@ -116,7 +116,7 @@
         plus.android.invoke(plus.android.invoke(activity, "getWindow"), "addFlags", 0x00002000);
     }, false);
 
-    vv = new Vue({ //渲染表格
+    new Vue({ //渲染表格
         el: "#app",
         data: {
             baseUrl: base_path,
@@ -188,10 +188,8 @@
                     }
                 }
             })
-
         },
         methods: { //方法
-
             reload_: function () {
                 var vm = this;
                 $.post(base_path + "app/alcoholTemplate/findAll", {

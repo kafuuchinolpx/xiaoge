@@ -145,6 +145,13 @@ public class PublicController {
         }
     }
 
+    @ApiOperation(value = "app查询所有")
+    @PostMapping("app/alcoholTemplate/getAll")
+    public ReturnBean getAll() {
+        List<AlcoholTemplate> list = alcoholTemplateService.findAllNotBox();
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+    }
+
     @ApiOperation(value = "app根据waterPurpose")
     @PostMapping("app/water/findAll")
     public ReturnBean findByIdWithPurpose(@RequestParam(defaultValue = "1") Integer purposeId, String waterName) {

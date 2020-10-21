@@ -8,6 +8,8 @@
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <link href="css/mui.css" rel="stylesheet"/>
     <script src="js/mui.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
     <style>
         .shurukuang {
             margin: -5px auto;
@@ -25,11 +27,14 @@
 <body style="background: #000000;">
 <img src="bmp/log1.jpg" width="100%" style="margin-top: 10px;"/>
 <br/>
-<center class="shurukuang">
-    <p style="font-size: 20px;">产品名称</p>
-    <input v-model="alcoholName" class="juzhong" style="width:80%;background-color: #aaa;border-radius: 5px;" type="text"/>
-    <p>请在上面输入需要设计的产品名称</p>
-</center>
+<div id="app">
+    <center class="shurukuang">
+        <p style="font-size: 20px;">产品名称</p>
+        <input v-model="alcoholName" class="juzhong" style="width:80%;background-color: #aaa;border-radius: 5px;"
+               type="text"/>
+        <p>请在上面输入需要设计的产品名称</p>
+    </center>
+</div>
 <div style="width: 100px;height: 100px;transform:rotate(45deg);background: rgb(0, 85, 255);margin: 100px auto 0 auto;border-radius: 5px;line-height: 100px;text-align: center;"></div>
 <p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #FFFFFF;font-size: 24px;"
    onclick="zhi_neng_shi_ji()">酒盒设计</p>
@@ -40,8 +45,25 @@
 <p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #ffffff;font-size: 24px;"
    onclick="quan_shui_ding_zhi()">泉水定制</p>
 <script>
+    new Vue({
+        el: "#app",
+        data: {alcoholName: ""},
+        watch: {
+            alcoholName(val) {
+                localStorage.alcoholName = val;
+            }
+        },
+        created() {
+            var vm = this;
+            if (localStorage.alcoholName) {
+                vm.alcoholName = localStorage.alcoholName;
+            }
+        },
+        methods: {}
+    })
+
     function zhi_neng_shi_ji() {
-        location.href = "xing_xi_shu_ru.html";
+        location.href = "shoppingIndex.html";
     }
 
     function din_dan_xun_jia() {
