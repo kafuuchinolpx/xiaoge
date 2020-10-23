@@ -20,9 +20,9 @@
 
         .tuijian {
             margin: auto;
-            width: 115px;
-            left: 170px;
-            top: 15px;
+            width: 30%;
+            left: 40%;
+            top: 30%;
             text-align: center;
             position: absolute;
             z-index: 2;
@@ -30,9 +30,9 @@
 
         .xuanze {
             margin: auto;
-            width: 120px;
-            left: 275px;
-            top: 7px;
+            width: 30%;
+            left: 70%;
+            top: 13%;
             text-align: center;
             position: absolute;
             z-index: 2;
@@ -89,9 +89,6 @@
         },
         created() {
             var vm = this;
-            if (null == localStorage.boxTypeId) {
-                localStorage.boxTypeId = 1;
-            }
             $.post(base_path + "app/alcoholTemplate/getAll", {}, function (data) {
                 if (data.code == 200) {
                     vm.alcoholList = data.obj;
@@ -112,7 +109,9 @@
                 console.info("1")
             },
             xuanze: function (id) {
-                console.info("TestData" + id)
+                localStorage.selectIndex = id;
+                console.info("TestDataId=" + id)
+                location.href = "alcoholTemplateShow.html";
             },
             getAllById: function () {
                 var vm = this;

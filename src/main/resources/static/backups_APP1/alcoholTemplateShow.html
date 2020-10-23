@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta>
+    <title>酒详细</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <style>
+        .under {
+            margin: auto;
+            width: auto;
+            top: 90%;
+            text-align: center;
+            position: absolute;
+            z-index: 2;
+        }
+
+        .shiRo {
+            position: fixed;
+            width: 525%;
+            background: rgb(255, 255, 255);
+            line-height: 100px;
+        }
+
+    </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">商品详细</h1>
+</header>
+<div id="app">
+    <br/><br/>
+    <div>
+        <img style="width: 100%;height: 100%;" :src="baseUrl+alcoholTemplateInfo.image">
+    </div>
+
+    <div style="text-align: center;">
+        <textarea style="width: 80%;background-color: #f1f1f1;" rows="7" v-model="info"></textarea>
+    </div>
+
+    <br/><br/><br/>
+
+    <div class="under">
+        <div class="shiRo">
+            <div style="margin: 0px auto; text-align: center; top: -34px;  color: rgb(255, 255, 255);font-size: 20px;">
+                1
+                <div style="color: black">加入购物车</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            baseUrl: base_path,
+            alcoholTemplateInfo: {},
+            info: "酒精度：53 %vol             净含量： ml\n香型：酱香型                         \n生产许可号：\n执行标准：\n生产厂家：\n厂址："
+        },
+        watch: {},
+        created() {
+            var vm = this;
+            vm.findById()
+            console.info(vm.alcoholTemplateInfo)
+        },
+        methods: {
+            findById: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/findById", {
+                    id: localStorage.selectIndex,
+                }, function (data) {
+                    if (data.code == 200) {
+                        vm.alcoholTemplateInfo = data.obj;
+                    }
+                });
+            }
+        }
+    })
+</script>
+</body>
+</html>
