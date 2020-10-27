@@ -4,6 +4,7 @@ import cn.xiaoge.design.entity.AlcoholTemplate;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import cn.xiaoge.design.entity.AlcoholTemplateGroup;
 import cn.xiaoge.design.entity.vo.PageBean;
@@ -29,4 +30,6 @@ public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate
     List<AlcoholTemplate> findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLengthAndDeleteState(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int i, int length, int i1);
 
     List<AlcoholTemplate> findAllByDeleteStateAndMaterialId(int i, Integer materialId);
+
+    AlcoholTemplate findAllById(Integer id);
 }

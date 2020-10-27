@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -173,5 +174,14 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
         List<AlcoholTemplate> alcoholTemplates = alcoholTemplateRepository.findAllByGroupId(0);
         alcoholTemplates.forEach(o -> o.setSon(alcoholTemplateRepository.findByGroupId(o.getId())));
         return alcoholTemplates;
+    }
+
+    @Override
+    public List<AlcoholTemplate> findByIdAndSon(Integer id) {
+        List<AlcoholTemplate> alcoholTemplate = new ArrayList();
+        alcoholTemplate.add(alcoholTemplateRepository.findAllById(id));
+        List<AlcoholTemplate> byGroupId = alcoholTemplateRepository.findByGroupId(id);
+        byGroupId.forEach(o -> alcoholTemplate.add(o));
+        return alcoholTemplate;
     }
 }

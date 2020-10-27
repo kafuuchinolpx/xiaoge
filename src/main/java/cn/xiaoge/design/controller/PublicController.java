@@ -153,10 +153,10 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
 
-    @ApiOperation(value = "酒模板根据id查询单个")
-    @PostMapping("app/alcoholTemplate/findById")
-    public ReturnBean findById(@RequestParam Integer id) {
-        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findById(id));
+    @ApiOperation(value = "酒模板根据id查询单个并且查出子类")
+    @PostMapping("app/alcoholTemplate/findByIdAndSon")
+    public ReturnBean findByIdAndSon(@RequestParam Integer id) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findByIdAndSon(id));
     }
 
     @Autowired

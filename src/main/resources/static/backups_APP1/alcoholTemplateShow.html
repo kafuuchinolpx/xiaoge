@@ -11,6 +11,68 @@
     <script src="js/vue.js"></script>
     <script src="js/jquery.min.js"></script>
     <style>
+        @font-face {
+            font-family: 阿里汉仪智能黑体;
+            src: local("阿里汉仪智能黑体"),
+            url("fonts/alihanyizhinengheiti.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 方正字迹-吕建德行楷简体;
+            src: local("方正字迹-吕建德行楷简体"),
+            url("fonts/fangzhengziji.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 汉仪家国宋W;
+            src: local("汉仪家国宋W"),
+            url("fonts/hanyijiaguosong.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 个性印章;
+            src: local("个性印章"),
+            url("fonts/gexingyinzhang.ttf") format("truetype");
+        }
+
+
+        @font-face {
+            font-family: 李旭科书法;
+            src: local("李旭科书法"),
+            url("fonts/lixukeshufa.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 招牌字体;
+            src: local("招牌字体"),
+            url("fonts/zhaopaiziti.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 正行楷简体;
+            src: local("正行楷简体"),
+            url("fonts/zhengxingkaijianti.ttf") format("truetype");
+        }
+
+        .alcoholList {
+            margin: 5px auto;
+            width: 500px;
+            position: relative;
+            text-align: center;
+        }
+
+        .alcoholList div {
+            text-align: left;
+            line-height: 1.5;
+        }
+
+        .shuiYin {
+            margin: -670px auto;
+            width: 600px;
+            left: -175px;
+            text-align: center;
+            position: absolute;
+        }
 
         .shiRo {
             position: fixed;
@@ -32,11 +94,13 @@
         .shoucang {
             margin: auto;
             width: 30%;
-            left: 10%;
+            height: 30%;
+            left: 12%;
             top: 35%;
             text-align: center;
             position: absolute;
             z-index: 2;
+            font-size: 150%;
         }
 
         .xiadan {
@@ -48,7 +112,29 @@
             text-align: center;
             position: absolute;
             z-index: 2;
+            font-size: 150%;
+        }
 
+        .shoucangbg {
+            margin: auto;
+            width: 40%;
+            height: 60%;
+            left: 7%;
+            top: 20%;
+            text-align: center;
+            position: absolute;
+            z-index: 2;
+        }
+
+        .xiadanbg {
+            margin: auto;
+            width: 40%;
+            height: 60%;
+            left: 55%;
+            top: 20%;
+            text-align: center;
+            position: absolute;
+            z-index: 2;
         }
     </style>
 </head>
@@ -61,10 +147,12 @@
 <div id="app">
     <br/><br/>
     <div>
-        <img style="width: 100%;height: 100%;" :src="baseUrl+alcoholTemplateInfo.image">
-    </div>
-    <div style="text-align: center;">
-        <textarea style="width: 80%;background-color: #f1f1f1;" rows="7" v-model="info"></textarea>
+        <img style="width: 100%;height: 100%;" :src="baseUrl+a.image" @click="qiehuan()"
+             v-for="(a,selectIndex) in alcoholTemplateInfo">
+        <img src="bmp/ye.png" style="position: absolute;height: 4%;width: 16%;top: 74.4%;left: 81%;">
+        <div class="current-slide" style="position: absolute;top: 75%; left: 85%;">{{selectIndex}} /
+            {{alcoholTemplateInfo.length}}
+        </div>
     </div>
 
     <br/><br/><br/>
@@ -72,8 +160,10 @@
         <div class="under">
             <div style=" font-size: 20px;"></div>
         </div>
-        <div class="shoucang" style="color: #f1f1f1;background: #00BFFF" @click="shoucang()">加入收藏</div>
-        <div class="xiadan" style="color: #f1f1f1;background: red" @click="xiadan()">立即下单</div>
+        <img class="shoucangbg" src="bmp/shoucang.png" @click="shoucang()">
+        <img class="xiadanbg" src="bmp/xiadan.png" @click="xiadan()">
+        <div class="shoucang" style="color: #f1f1f1" @click="shoucang()">加入收藏</div>
+        <div class="xiadan" style="color: #f1f1f1" @click="xiadan()">立即下单</div>
     </div>
 </div>
 
@@ -82,8 +172,8 @@
         el: "#app",
         data: {
             baseUrl: base_path,
-            alcoholTemplateInfo: {},
-            info: "酒精度：53 %vol             净含量： ml\n香型：酱香型                         \n生产许可号：\n执行标准：\n生产厂家：\n厂址："
+            alcoholTemplateInfo: [],
+            selectIndex: 1,
         },
         watch: {},
         created() {
@@ -94,13 +184,17 @@
         methods: {
             findById: function () {
                 var vm = this;
-                $.post(base_path + "app/alcoholTemplate/findById", {
+                $.post(base_path + "app/alcoholTemplate/findByIdAndSon", {
                     id: localStorage.selectIndex,
                 }, function (data) {
                     if (data.code == 200) {
                         vm.alcoholTemplateInfo = data.obj;
                     }
                 });
+            },
+            qiehuan: function () {
+                var vm = this;
+                console.info("图片被点击")
             },
             xiadan: function () {
                 var vm = this;

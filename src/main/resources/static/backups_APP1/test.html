@@ -68,6 +68,10 @@
             <p style="color:white;margin-top:20px;position: relative;">收货地址：
                 <input type="text" v-model="user.address" style="border-radius:10px;position: absolute;left:50%;"/>
             </p>
+            <br/>
+            <div style="text-align: center;">
+                <textarea style="width: 80%;background-color: #f1f1f1;" rows="7" v-model="info"></textarea>
+            </div>
             <br><br>
             <div style="position:relative;width: 100px;height: 40px;line-height:40px;text-align: center;background:red;border-radius:5px;left: 40%;">
                 <p style="text-align: center;" @click="submitIt()">确认下单</p>
@@ -87,8 +91,8 @@
             shu_liang: 0,
             cai_liao: 0,
             he_xing: 0,
-
             quotationInformationObj: [],
+            info: "酒精度：53 %vol             净含量： ml\n香型：酱香型                         \n生产许可号：\n执行标准：\n生产厂家：\n厂址：",
         },
         watch: {
 

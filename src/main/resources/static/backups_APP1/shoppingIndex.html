@@ -20,9 +20,9 @@
 
         .tuijian {
             margin: auto;
-            width: 30%;
+            width: 22%;
             left: 40%;
-            top: 30%;
+            top: 29%;
             text-align: center;
             position: absolute;
             z-index: 2;
@@ -30,9 +30,19 @@
 
         .xuanze {
             margin: auto;
-            width: 100%;
-            left: 350%;
-            top: 100%;
+            width: 18%;
+            left: 61.5%;
+            top: 32%;
+            text-align: center;
+            position: absolute;
+            z-index: 2;
+        }
+
+        .jiuhe {
+            margin: auto;
+            width: 18%;
+            left: 80%;
+            top: 28%;
             text-align: center;
             position: absolute;
             z-index: 2;
@@ -44,16 +54,19 @@
     <div class="fixed"><img src="bmp/277175920900915799.png" width="100%"
                             style="margin-bottom:-5px;">
         <div class="tuijian" @click="tuijian()"
-             :style="colorType==0?'font-size: 22px;color: red':'font-size: 22px;background-color: #ffffff;color:black;margin: auto'">
+             :style="colorType==0?'font-size: 18px;color: red':'font-size: 18px;background-color: #ffffff;color:black;margin: auto'">
             首页推荐
         </div>
-        <div class="xuanze">
-            <select :style="colorType==1?'font-size: 22px;color: red':'font-size: 22px;background-color: #ffffff;color:black;margin: auto'"
-                    v-model="materialId">
-                <option value="-1">材料选择</option>
-                <option value="0">查看全部</option>
-                <option :value="m.id" v-for="m in material">{{m.name}}</option>
-            </select>
+        <select class="xuanze"
+                :style="colorType==1?'font-size: 18px;color: red;padding: inherit':'font-size: 18px;background-color: #ffffff;color:black;margin: auto;padding: inherit'"
+                v-model="materialId">
+            <option value="-1">材料选择</option>
+            <option value="0">查看全部</option>
+            <option :value="m.id" v-for="m in material">{{m.name}}</option>
+        </select>
+        <div class="jiuhe" @click="jiu_he()"
+             :style="colorType==2?'font-size: 18px;background-color: #ffffff;color:red;margin: auto':'font-size: 18px;background-color: #ffffff;color:black;margin: auto'">
+            酒盒打印
         </div>
     </div>
     <br/><br/>
@@ -112,6 +125,11 @@
                 localStorage.selectIndex = id;
                 console.info("TestDataId=" + id)
                 location.href = "alcoholTemplateShow.html";
+            },
+            jiu_he: function () {
+                var vm = this;
+                vm.colorType = 2;
+                console.info("酒盒打印触发")
             },
             getAllById: function () {
                 var vm = this;
