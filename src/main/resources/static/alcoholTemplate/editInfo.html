@@ -122,7 +122,6 @@
 
 <div id="show_alcoholTemplate_app" class="container-fluid" v-cloak>
     <div class="img_back">
-
         <img class="image" v-if="obj.image" :src="'/design/'+obj.image" width="500px">
         <p class="back_color" v-bind:style="header1Style">{{headerText}}</p>
         <p class="back_color" v-bind:style="header2Style">{{headerText}}</p>
@@ -134,7 +133,6 @@
 
             <p>文本</p>
             <input class="form-control" v-model="headerText" type="text">
-
             <p>颜色</p>
             <input class="form-control" v-model="header1Style.color" type="color">
             <p>上边距</p>
