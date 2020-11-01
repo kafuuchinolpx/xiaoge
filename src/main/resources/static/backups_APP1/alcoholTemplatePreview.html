@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta>
+    <title>酒详细</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+    <style>
+        @font-face {
+            font-family: 阿里汉仪智能黑体;
+            src: local("阿里汉仪智能黑体"),
+            url("fonts/alihanyizhinengheiti.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 方正字迹-吕建德行楷简体;
+            src: local("方正字迹-吕建德行楷简体"),
+            url("fonts/fangzhengziji.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 汉仪家国宋W;
+            src: local("汉仪家国宋W"),
+            url("fonts/hanyijiaguosong.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 个性印章;
+            src: local("个性印章"),
+            url("fonts/gexingyinzhang.ttf") format("truetype");
+        }
+
+
+        @font-face {
+            font-family: 李旭科书法;
+            src: local("李旭科书法"),
+            url("fonts/lixukeshufa.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 招牌字体;
+            src: local("招牌字体"),
+            url("fonts/zhaopaiziti.ttf") format("truetype");
+        }
+
+        @font-face {
+            font-family: 正行楷简体;
+            src: local("正行楷简体"),
+            url("fonts/zhengxingkaijianti.ttf") format("truetype");
+        }
+        .alcoholList div {
+            text-align: left;
+            line-height: 1.4;
+        }
+        .alcoholList {
+            margin: 5px auto;
+            width: 500px;
+            position: relative;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">商品详细</h1>
+</header>
+<div id="app">
+    <div class="alcoholList" @click="qiehuan()">
+        <img :src="baseUrl+alcoholTemplateInfo.image" width=" 500">
+        <div v-bind:style="alcoholTemplateInfo.header1Style">{{alcoholName}}</div>
+        <div v-bind:style="alcoholTemplateInfo.header2Style">{{alcoholName}}</div>
+        <!-- <div v-bind:style="d.bodyStyle">{{info}}</div>  tutorialsImage-->
+    </div>
+</div>
+
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            baseUrl: base_path,
+            alcoholTemplateInfo: [],
+            alcoholName: "",
+            selectAlcoholId: 0,
+        },
+        watch: {},
+        created() {
+            var vm = this;
+            vm.alcoholName = localStorage.alcoholName;
+            vm.findById();
+        },
+        methods: {
+            findById: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/findByIdInfo", {
+                    id: localStorage.selectAlcoholId,
+                }, function (data) {
+                    if (data.code == 200) {
+                        vm.alcoholTemplateInfo = data.obj;
+                        vm.alcoholTemplateInfo.header1Style = JSON.parse(vm.alcoholTemplateInfo.header1Style)
+                        vm.alcoholTemplateInfo.header2Style = JSON.parse(vm.alcoholTemplateInfo.header2Style)
+                    }
+                });
+            },
+            qiehuan: function () {
+            },
+            xiadan: function () {
+                var vm = this;
+            },
+            shoucang: function () {
+                var vm = this;
+            }
+        },
+
+    })
+</script>
+</body>
+</html>

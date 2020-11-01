@@ -159,6 +159,12 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findByIdAndSon(id));
     }
 
+    @ApiOperation(value = "酒模板根据id查询单个")
+    @PostMapping("app/alcoholTemplate/findByIdInfo")
+    public ReturnBean findById(@RequestParam Integer id) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findById(id));
+    }
+
     @Autowired
     QuotationInformationService quotationInformationService;
 

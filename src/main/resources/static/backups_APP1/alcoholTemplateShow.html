@@ -146,22 +146,27 @@
 </header>
 <div id="app">
     <br/><br/>
+
+    <!--        <div class="alcoholList" v-for="(d,index) in alcoholTemplateInfo" v-if="selectIndex-1==index"-->
+    <!--         @click="qiehuan()">-->
+    <!--        <input v-model="selectAlcoholIndex=d.id" hidden="hidden"></input>-->
+    <!--        <img :src="baseUrl+d.image" width=" 500">-->
+    <!--        <div v-bind:style="d.header1Style">{{alcoholName}}</div>-->
+    <!--        <div v-bind:style="d.header2Style">{{alcoholName}}</div>-->
+    <!--        &lt;!&ndash; <div v-bind:style="d.bodyStyle">{{info}}</div>  tutorialsImage&ndash;&gt;-->
+    <!--    </div>-->
+
     <div>
         <img style="width: 100%;height: 100%;" :src="baseUrl+a.image" @click="qiehuan()"
-             v-for="(a,index) in alcoholTemplateInfo" v-if="selectIndex-1==index">
-        <div v-bind:style="a.header1Style" v-for="(a,index) in alcoholTemplateInfo" style="z-index: 3"
-             v-if="selectIndex-1==index">
-            {{alcoholName}}
-        </div>
-        <div v-bind:style="a.header2Style" v-for="(a,index) in alcoholTemplateInfo" style="z-index: 3"
-             v-if="selectIndex-1==index">
-            {{alcoholName}}
-        </div>
+             v-for="(a,index) in alcoholTemplateInfo" v-if="selectIndex-1==index" v-model="selectAlcoholId=a.id">
         <img src="bmp/ye.png"
              style="position: absolute;height: 4%;width: 16%;top: 74.4%;left: 81%;">
         <div class="current-slide" style="position: absolute;top: 75%; left: 85%;">{{selectIndex}} /
             {{alcoholTemplateInfo.length}}
         </div>
+    </div>
+    <br/>
+    <div style="margin: auto;background: blue;color: white;height: 10%;width: 9%;" @click="yulan()">点击预览
     </div>
     <br/><br/><br/>
     <div class="shiRo">
@@ -183,8 +188,13 @@
             alcoholTemplateInfo: [],
             selectIndex: 1,
             alcoholName: "",
+            selectAlcoholId: 0,
         },
-        watch: {},
+        watch: {
+            selectAlcoholId(val) {
+                localStorage.selectAlcoholId = val;
+            },
+        },
         created() {
             var vm = this;
             vm.findById()
@@ -222,6 +232,10 @@
             shoucang: function () {
                 var vm = this;
                 console.info("收藏按钮被触发")
+            },
+            yulan: function () {
+                var vm = this;
+                location.href = "alcoholTemplatePreview.html"
             }
         }
     })
