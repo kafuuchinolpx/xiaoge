@@ -131,6 +131,25 @@ public class AlcoholTemplateController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
+
+    @PostMapping("recommend")
+    @ApiOperation(value = "添加或取消推荐")
+    public ReturnBean recommend(Integer id) {
+        System.out.println(id);
+        AlcoholTemplate byId = alcoholTemplateService.findById(id);
+        if (byId.getRecommend() == 0) {
+            byId.setRecommend(1);
+            alcoholTemplateService.add(byId);
+        } else if (byId.getRecommend() == 1) {
+            byId.setRecommend(0);
+            alcoholTemplateService.add(byId);
+        } else {
+            return ReturnBean.of(ReturnBean.AnswerCode.PARAMETER_ERROR);
+        }
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+
     @PostMapping("recycleReduction")
     @ApiOperation(value = "回收站根据id还原")
     public ReturnBean recycleReduction(Integer id, String ids) {

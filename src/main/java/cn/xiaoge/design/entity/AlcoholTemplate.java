@@ -30,6 +30,9 @@ public class AlcoholTemplate implements Serializable {
     @Column(length = 10)
     private String remark;
 
+    @Column(length = 1)
+    private Integer recommend;
+
     //长度
     private Integer length;
 

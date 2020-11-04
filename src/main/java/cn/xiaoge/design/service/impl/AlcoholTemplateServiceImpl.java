@@ -78,6 +78,11 @@ public class AlcoholTemplateServiceImpl implements AlcoholTemplateService {
     }
 
     @Override
+    public List<AlcoholTemplate> getAllByRecommend() {
+        return alcoholTemplateRepository.getAllByRecommend(1);
+    }
+
+    @Override
     public List<AlcoholTemplate> findAllNotBoxAndMaterialId(Integer materialId) {
         if (materialId == 0) {
             return alcoholTemplateRepository.findAllByDeleteState(1);

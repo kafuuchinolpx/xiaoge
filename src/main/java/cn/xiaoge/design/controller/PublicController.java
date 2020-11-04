@@ -264,6 +264,13 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
 
+    @ApiOperation(value = "app查询所有")
+    @PostMapping("app/alcoholTemplate/getAllByTuijian")
+    public ReturnBean getAllByRecommend() {
+        List<AlcoholTemplate> list = alcoholTemplateService.getAllByRecommend();
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+    }
+
     @ApiOperation(value = "app根据材料查询所有")
     @PostMapping("app/alcoholTemplate/findAllByMaterialId")
     public ReturnBean findAllByMaterialId(Integer materialId) {

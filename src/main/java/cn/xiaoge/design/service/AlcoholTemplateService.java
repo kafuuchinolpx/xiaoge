@@ -56,6 +56,13 @@ public interface AlcoholTemplateService {
     /**
      * 分页查询
      *
+     * @return 分页信息
+     */
+    List<AlcoholTemplate> getAllByRecommend();
+
+    /**
+     * 分页查询
+     *
      * @param materialId 传入材料id
      * @return 分页信息
      */

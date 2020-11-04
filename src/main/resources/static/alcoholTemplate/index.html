@@ -157,6 +157,8 @@
                     <td class="hidden-xs"> {{d.updateTime}}</td>
                     <td class="notOut text-right">
                         <span style="cursor: pointer">
+                              <span :class="d.recommend==1?'btn btn-danger btn-sm':'btn btn-success btn-sm'"
+                                    @click="tuijian(d.id)">{{d.recommend==1?"取消推荐":"推荐"}}</span>
                             <span class="btn btn-info btn-sm" @click="show_it(d.id)">详情</span>
                             <span class="btn btn-info btn-sm" @click="edit_Info(d.id)">配置</span>
                             <span class="btn btn-warning btn-sm" @click="edit_it(d.id)">编辑</span>
@@ -396,6 +398,19 @@
                     })
                 });
             },
+            //推荐
+
+            tuijian: function (id) {
+                var vm = this;
+                $.post("/design/alcoholTemplate/recommend", {id: id}, function (data) {
+                    if (data.ok) {
+                        vm.reload_data();
+                    } else {
+                        layer.alert(data.msg + ":" + data.obj);
+                    }
+                });
+            },
+
             //回收站
             recycle_bin() {
                 let vm = this;

@@ -32,4 +32,6 @@ public interface AlcoholTemplateRepository extends JpaRepository<AlcoholTemplate
     List<AlcoholTemplate> findAllByDeleteStateAndMaterialId(int i, Integer materialId);
 
     AlcoholTemplate findAllById(Integer id);
+
+    List<AlcoholTemplate> getAllByRecommend(int i);
 }
