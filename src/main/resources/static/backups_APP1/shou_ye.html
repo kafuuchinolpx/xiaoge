@@ -7,6 +7,7 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <link href="css/mui.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="js/mui.js"></script>
     <script src="js/vue.js"></script>
     <script src="js/jquery.min.js"></script>
@@ -28,6 +29,8 @@
 <img src="bmp/log1.jpg" width="100%" style="margin-top: 10px;"/>
 <br/>
 <div id="app">
+    <div class="glyphicon glyphicon-user" style="position: absolute;left: 90%; top: 2%;color: white;text-align: center">
+        <br>用户</br></div>
     <div class="shurukuang" style="text-align: center;">
         <p style="font-size: 20px;">产品名称</p>
         <input v-model="alcoholName" class="juzhong" style="width:80%;background-color: #aaa;border-radius: 5px;"
@@ -36,13 +39,13 @@
     </div>
 </div>
 <div style="width: 100px;height: 100px;transform:rotate(45deg);background: rgb(0, 85, 255);margin: 100px auto 0 auto;border-radius: 5px;line-height: 100px;text-align: center;"></div>
-<p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #FFFFFF;font-size: 24px;"
+<p style="position: relative;margin: 0 auto;text-align: center;top: -65px;color: #FFFFFF;font-size: 24px;"
    onclick="zhi_neng_shi_ji()">酒盒设计</p>
 <div style="width: 100px;height: 100px;transform:rotate(45deg);background: rgb(218,37,29);margin: 20px auto 0 auto;border-radius: 5px;line-height: 100px;text-align: center;"></div>
-<p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #fff;font-size: 24px;"
+<p style="position: relative;margin: 0 auto;text-align: center;top: -65px;color: #fff;font-size: 24px;"
    onclick="din_dan_xun_jia()">酒瓶订制</p>
 <div style="width: 100px;height: 100px;transform:rotate(45deg);background: rgb(0, 170, 0);margin: 20px auto 0 auto;border-radius: 5px;line-height: 100px;text-align: center;"></div>
-<p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #ffffff;font-size: 24px;"
+<p style="position: relative;margin: 0 auto;text-align: center;top: -65px;color: #ffffff;font-size: 24px;"
    onclick="quan_shui_ding_zhi()">泉水订制</p>
 <script>
     new Vue({
