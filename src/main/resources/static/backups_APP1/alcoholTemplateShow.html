@@ -156,13 +156,14 @@
                 var vm = this;
                 if (vm.selectIndex >= vm.alcoholTemplateInfo.length) {
                     vm.selectIndex = 1;
-                    return;
+                    return;+
                 }
                 vm.selectIndex = Number(vm.selectIndex) + Number(1);
                 console.info("图片被点击")
             },
             xiadan: function () {
                 var vm = this;
+                location.href = "test.html"
                 console.info("下单按钮被触发")
             },
             shoucang: function () {

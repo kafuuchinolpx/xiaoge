@@ -29,7 +29,8 @@
 <img src="bmp/log1.jpg" width="100%" style="margin-top: 10px;"/>
 <br/>
 <div id="app">
-    <div class="glyphicon glyphicon-user" style="position: absolute;left: 90%; top: 2%;color: white;text-align: center">
+    <div class="glyphicon glyphicon-user" style="position: absolute;left: 90%; top: 2%;color: white;text-align: center"
+         @click="user_info()">
         <br>用户</br></div>
     <div class="shurukuang" style="text-align: center;">
         <p style="font-size: 20px;">产品名称</p>
@@ -62,7 +63,11 @@
                 vm.alcoholName = localStorage.alcoholName;
             }
         },
-        methods: {}
+        methods: {
+            user_info() {
+                location.href = "AppUserShow.html";
+            }
+        }
     })
 
     function zhi_neng_shi_ji() {
@@ -76,6 +81,8 @@
     function quan_shui_ding_zhi() {
         location.href = "quan_shui_xing_xi.html";
     }
+
+
 </script>
 </body>
 
