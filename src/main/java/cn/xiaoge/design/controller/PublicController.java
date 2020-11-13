@@ -5,6 +5,8 @@ import cn.xiaoge.design.entity.vo.ReturnBean;
 import cn.xiaoge.design.service.*;
 import cn.xiaoge.design.util.UUIDUtil;
 import cn.xiaoge.design.util.VerifyUtil;
+import com.alibaba.fastjson.JSONArray;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +20,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.constraints.Max;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -157,6 +161,16 @@ public class PublicController {
     @PostMapping("app/alcoholTemplate/findByIdAndSon")
     public ReturnBean findByIdAndSon(@RequestParam Integer id) {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findByIdAndSon(id));
+    }
+
+    @ApiOperation(value = "用户添加收藏")
+    @PostMapping("app/alcoholTemplate/addCollection")
+    public ReturnBean addCollection(@RequestParam Integer userId, @RequestParam String collection) {
+
+        AppUser appUser = userService.findById(userId);
+        appUser.setCollection(collection);
+        userService.add(appUser);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
     @ApiOperation(value = "酒模板根据id查询单个")

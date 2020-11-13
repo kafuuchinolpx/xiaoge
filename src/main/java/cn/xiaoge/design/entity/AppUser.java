@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.hibernate.annotations.*;
+
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -37,6 +38,9 @@ public class AppUser implements Serializable {
     //微信号
     @Column(length = 11)
     private String wxCode;
+
+    //收藏
+    private String collection;
 
     //地址
     @Type(type = "text")

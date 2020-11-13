@@ -127,6 +127,7 @@
             })
         });
     });
+
     function repair() {
         var vm = this;
         layer.confirm('您确定要修复吗？', {
@@ -150,6 +151,10 @@
             success: function (data) {
                 if (data.code == 200) {
                     localStorage.userInfo = JSON.stringify(data.obj);
+                    localStorage.userId = data.obj.id;
+                    if (data.obj.collection) {
+                        localStorage.alcoholTemplateCollection = data.obj.collection;
+                    }
                     location.href = "shou_ye.html";
                 } else {
                     mui.alert("您输入有误");
