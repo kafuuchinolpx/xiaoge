@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>添加地址</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">添加地址</h1>
+</header>
+<br/><br/><br/>
+
+<div id="app">
+    <form>
+        <div class="form-group">
+            <label for="exampleInputEmail1">电话号码</label>
+            <input type="number" class="form-control" id="exampleInputEmail1" v-model="phone" placeholder="请输入您的电话号码">
+        </div>
+        <div class="form-group">
+            <label>收货地址</label>
+            <textarea type="text" class="form-control" rows="3" v-model="address" placeholder="您的收货地址"></textarea>
+        </div>
+        <br/><br/><br/><br/>
+        <div style="text-align: center">
+            <button type="button"
+                    style="text-align: center; display: inline-block;padding: 6px 12px;margin-bottom: 0;font-size: 14px;font-weight: 400;line-height: 1.42857143;text-align: center;white-space: nowrap;vertical-align: middle;-ms-touch-action: manipulation;touch-action: manipulation;cursor: pointer;-webkit-user-select: none;-moz-user-select: none;-ms-user-select: none;user-select: none;background-image: none;border: 1px solid transparent;border-radius: 4px;"
+                    @click="submit_info()">
+                提交
+            </button>
+        </div>
+    </form>
+
+
+</div>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            phone: "",
+            address: "",
+        },
+        watch: {},
+        created() {
+            var vm = this;
+        },
+        methods: {
+            submit_info: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/saveUserAddress", {
+                    userId: localStorage.userId,//用户id
+                    phone: vm.phone,//电话号码
+                    address: vm.address,//地址
+                }, function (data) {
+                    if (data.code == 200) {
+                        vm.alcoholList = data.obj;
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>用户地址</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">收货地址</h1>
+    <div style=" position: absolute; width: 20%; height: 50%; left: 80%; top: 27%;" onclick="address()">添加地址</div>
+</header>
+
+<br/><br/><br/>
+
+<div id="app">
+
+    <div class="mui-card">
+        <form class="mui-input-group">
+            <div class="mui-input-row mui-radio mui-left" v-for="a in addressList">
+                <label>{{a}}</label>
+                <input name="address" v-model="defaultAddress" :value="a.id" type="radio">
+            </div>
+        </form>
+    </div>
+    {{defaultAddress}}
+</div>
+
+<script>
+    function address() {
+        location.href = "userAddAddress.html"
+    }
+
+    new Vue({
+        el: "#app",
+        data: {
+            defaultAddress: 1,
+            addressList: [],
+        },
+        watch: {},
+        created() {
+            var vm = this;
+            vm.reload();
+        },
+        methods: {
+            reload: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/getUserAddress", {
+                    userId: localStorage.userId,//用户id
+                }, function (data) {
+                    if (data.code == 200) {
+                        vm.addressList = data.obj;
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>

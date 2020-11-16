@@ -32,7 +32,7 @@
             margin: auto;
             width: 18%;
             left: 61.5%;
-            top: 32%;
+            top: 29%;
             text-align: center;
             position: absolute;
             z-index: 2;
@@ -81,10 +81,8 @@
         el: " #app",
         data: {
             baseUrl: base_path,
-            colorType: 0,
             alcoholList: [],
-            selectIndex: 0,
-            material: [],
+            colorType: 0,
         },
         watch: {},
         created() {
@@ -92,37 +90,34 @@
             vm.reload_data();
         },
         methods: {
+
             reload_data: function () {
                 var vm = this;
-                $.post(base_path + "app/alcoholTemplate/getUserCollection", {}, function (data) {
+                $.post(base_path + "app/alcoholTemplate/getUserAlcoholTemplateCollection", {
+                    userId: localStorage.userId,
+                    collection: localStorage.alcoholTemplateCollection.toString(),
+                }, function (data) {
                     if (data.code == 200) {
                         vm.alcoholList = data.obj;
                     }
                 })
-                var vm = this;
-                $.post(base_path + "app/material/findAll", {
-                    size: 1000
-                }, function (data) {
-                    vm.material = data.obj.content;
-                })
-
             },
 
             jiuhe: function () {
                 var vm = this;
                 vm.colorType = 0;
-                vm.materialId = -1;
-                vm.reload_data();
             },
-            jiuping: function (id) {
-                localStorage.selectIndex = id;
-                console.info("TestDataId=" + id)
-                location.href = "alcoholTemplateShow.html";
+            jiuping: function () {
+                var vm = this;
+                vm.colorType = 1;
             },
             quanshui: function () {
                 var vm = this;
                 vm.colorType = 2;
-                console.info("酒盒打印触发")
+            },
+            xuanze: function (id) {
+                localStorage.selectIndex = id;
+                location.href = "alcoholTemplateShow.html";
             },
             getAllById: function () {
                 var vm = this;

@@ -12,6 +12,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,7 +23,10 @@ import javax.validation.constraints.Max;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RestController
 @CrossOrigin
@@ -285,7 +289,92 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
 
+    @ApiOperation(value = "用户酒包装收藏查询")
+    @PostMapping("app/alcoholTemplate/getUserAlcoholTemplateCollection")
+    public ReturnBean getUserAlcoholTemplateCollection(Integer userId, String collection) {
 
+        //可以在中括号内加上任何想要替换的字符
+        String regEx = "[\\[\\]]";
+        String aa = "";//这里是将特殊字符换为aa字符串,""代表直接去掉
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(collection);//这里把想要替换的字符串传进来
+        String newString = m.replaceAll(aa).trim(); //将替换后的字符串存在变量newString中
+
+        if (null != newString) {
+            List list = new ArrayList();
+            if (!StringUtils.isEmpty(newString)) {
+                String[] split = newString.split(",");
+                for (String s : split) {
+                    AlcoholTemplate byId1 = alcoholTemplateService.findById(Integer.parseInt(s));
+                    list.add(byId1);
+                }
+            }
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        }
+
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+
+    @ApiOperation(value = "用户地址存储")
+    @PostMapping("app/alcoholTemplate/saveUserAddress")
+    public ReturnBean getUserAddress(Integer userId, Integer phone, String address) {
+
+        AppUser user = userService.findById(userId);
+        String string = "电话号码:" + phone + " \n收货地址:" + address;
+
+
+        if (null == user.getUserAddress()) {
+            List list = new ArrayList();
+            list.add(string);
+            user.setUserAddress(list.toString());
+            userService.add(user);
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+        } else {
+            //可以在中括号内加上任何想要替换的字符
+            String regEx = "[\\[\\]]";
+            String aa = "";//这里是将特殊字符换为aa字符串,""代表直接去掉
+            Pattern p = Pattern.compile(regEx);
+            Matcher m = p.matcher(user.getUserAddress());//这里把想要替换的字符串传进来
+            String newString = m.replaceAll(aa).trim(); //将替换后的字符串存在变量newString中
+
+            String address1 = newString + " header,ArraySeparation " + string;
+            List list = new ArrayList();
+            list.add(address1);
+            user.setUserAddress(list.toString());
+            userService.add(user);
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+        }
+    }
+
+    @ApiOperation(value = "用户地址查询")
+    @PostMapping("app/alcoholTemplate/getUserAddress")
+    public ReturnBean getUserAddress(Integer userId) {
+
+        AppUser user = userService.findById(userId);
+
+        //可以在中括号内加上任何想要替换的字符
+        String regEx = "[\\[\\]]";
+        String aa = "";//这里是将特殊字符换为aa字符串,""代表直接去掉
+        Pattern p = Pattern.compile(regEx);
+        Matcher m = p.matcher(user.getUserAddress());//这里把想要替换的字符串传进来
+        String newString = m.replaceAll(aa).trim(); //将替换后的字符串存在变量newString中
+
+        if (null != newString) {
+            List list = new ArrayList();
+            if (!StringUtils.isEmpty(newString)) {
+                String[] split = newString.split(" header,ArraySeparation ");
+                Integer i = 0;
+                for (String s : split) {
+                    list.add(s);
+                    i++;
+                }
+            }
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        }
+
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
 
     @ApiOperation(value = "app根据材料查询所有")
     @PostMapping("app/alcoholTemplate/findAllByMaterialId")

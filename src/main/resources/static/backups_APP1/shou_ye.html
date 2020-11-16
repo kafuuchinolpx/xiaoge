@@ -59,13 +59,16 @@
         },
         created() {
             var vm = this;
+            if (null == localStorage.userInfo) {
+                location.href = "index.html";
+            }
             if (localStorage.alcoholName) {
                 vm.alcoholName = localStorage.alcoholName;
             }
         },
         methods: {
             user_info() {
-                location.href = "AppUserShow.html";
+                location.href = "appUserShow.html";
             }
         }
     })

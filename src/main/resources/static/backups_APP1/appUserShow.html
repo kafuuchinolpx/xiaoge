@@ -33,7 +33,7 @@
         </li>
 
         <li class="mui-table-view-cell mui-media">
-            <a href="javascript:;" class="">
+            <a href="userAddress.html" class="">
                 <div><p style="color: black">收货地址</p></div>
             </a>
         </li>
@@ -43,18 +43,13 @@
             </a>
         </li>
         <li class="mui-table-view-cell mui-media">
-            <a href="UserCollection.html">
+            <a href="userCollection.html">
                 <div><p style="color: black">我的收藏</p></div>
             </a>
         </li>
         <li class="mui-table-view-cell mui-media">
             <a href="javascript:;" class="">
-                <div><p style="color: black">密码修改</p></div>
-            </a>
-        </li>
-        <li class="mui-table-view-cell mui-media">
-            <a href="javascript:;" class="">
-                <div><p style="color: black">问题及建议反馈</p></div>
+                <div><p style="color: black">反馈&客服</p></div>
             </a>
         </li>
         <li class="mui-table-view-cell mui-media">
@@ -63,6 +58,11 @@
             </a>
         </li>
 
+        <br/><br/><br/><br/>
+
+        <li class="mui-table-view-cell mui-media" style="text-align: center" @click="exit()">
+            <div><p style="color: #b10000">退出登录</p></div>
+        </li>
     </ul>
 
 </div>
@@ -75,8 +75,16 @@
         watch: {},
         created() {
             var vm = this;
+            if (null == localStorage.userInfo) {
+                location.href = "index.html";
+            }
         },
-        methods: {}
+        methods: {
+            exit: function () {
+                localStorage.clear();
+                location.reload();
+            }
+        }
     })
 </script>
 
