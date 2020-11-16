@@ -315,64 +315,31 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
+    @Autowired
+    UserAddressService userAddressService;
 
     @ApiOperation(value = "用户地址存储")
     @PostMapping("app/alcoholTemplate/saveUserAddress")
-    public ReturnBean getUserAddress(Integer userId, Integer phone, String address) {
-
-        AppUser user = userService.findById(userId);
-        String string = "电话号码:" + phone + " \n收货地址:" + address;
-
-
-        if (null == user.getUserAddress()) {
-            List list = new ArrayList();
-            list.add(string);
-            user.setUserAddress(list.toString());
-            userService.add(user);
-            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
-        } else {
-            //可以在中括号内加上任何想要替换的字符
-            String regEx = "[\\[\\]]";
-            String aa = "";//这里是将特殊字符换为aa字符串,""代表直接去掉
-            Pattern p = Pattern.compile(regEx);
-            Matcher m = p.matcher(user.getUserAddress());//这里把想要替换的字符串传进来
-            String newString = m.replaceAll(aa).trim(); //将替换后的字符串存在变量newString中
-
-            String address1 = newString + " header,ArraySeparation " + string;
-            List list = new ArrayList();
-            list.add(address1);
-            user.setUserAddress(list.toString());
-            userService.add(user);
-            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    public ReturnBean getUserAddress(UserAddress userAddress) {
+        List<UserAddress> byUserId = userAddressService.findByUserId(userAddress.getUserId());
+        if (null == byUserId) {
+            userAddress.setDefaultType(1);
         }
+        userAddressService.add(userAddress);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
     @ApiOperation(value = "用户地址查询")
     @PostMapping("app/alcoholTemplate/getUserAddress")
     public ReturnBean getUserAddress(Integer userId) {
+        List<UserAddress> list = userAddressService.findByUserId(userId);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+    }
 
-        AppUser user = userService.findById(userId);
-
-        //可以在中括号内加上任何想要替换的字符
-        String regEx = "[\\[\\]]";
-        String aa = "";//这里是将特殊字符换为aa字符串,""代表直接去掉
-        Pattern p = Pattern.compile(regEx);
-        Matcher m = p.matcher(user.getUserAddress());//这里把想要替换的字符串传进来
-        String newString = m.replaceAll(aa).trim(); //将替换后的字符串存在变量newString中
-
-        if (null != newString) {
-            List list = new ArrayList();
-            if (!StringUtils.isEmpty(newString)) {
-                String[] split = newString.split(" header,ArraySeparation ");
-                Integer i = 0;
-                for (String s : split) {
-                    list.add(s);
-                    i++;
-                }
-            }
-            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
-        }
-
+    @ApiOperation(value = "用户地址更改")
+    @PostMapping("app/alcoholTemplate/userAddressChange")
+    public ReturnBean userAddressChange(Integer userId, Integer defaultAddress) {
+        System.out.println(userId + "\n" + defaultAddress);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 

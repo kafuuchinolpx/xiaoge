@@ -6,9 +6,11 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <link href="css/mui.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet"/>
     <script src="js/mui.js"></script>
     <script src="js/pei_zhi.js"></script>
     <script src="js/vue.js"></script>
+    <script src="js/layer.js"></script>
     <script src="js/jquery.min.js"></script>
 </head>
 <body>
@@ -22,16 +24,14 @@
 <br/><br/><br/>
 
 <div id="app">
-
     <div class="mui-card">
         <form class="mui-input-group">
             <div class="mui-input-row mui-radio mui-left" v-for="a in addressList">
-                <label>{{a}}</label>
+                <label>电话号码:{{a.phone}}<br/>收货地址:{{a.address}}</label>
                 <input name="address" v-model="defaultAddress" :value="a.id" type="radio">
             </div>
         </form>
     </div>
-    {{defaultAddress}}
 </div>
 
 <script>
@@ -45,7 +45,12 @@
             defaultAddress: 1,
             addressList: [],
         },
-        watch: {},
+        watch: {
+            addressList(val) {
+                var vm = this;
+                vm.addressChange();
+            }
+        },
         created() {
             var vm = this;
             vm.reload();
@@ -58,6 +63,23 @@
                 }, function (data) {
                     if (data.code == 200) {
                         vm.addressList = data.obj;
+                        for (let i = 0; vm.addressList.length; i++) {
+                            if (vm.addressList[i].defaultType == 1) {
+                                vm.defaultAddress = vm.addressList[i].id
+                            }
+
+                        }
+                    }
+                })
+            },
+            addressChange: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/userAddressChange", {
+                    userId: localStorage.userId,//用户id
+                    defaultAddress: vm.defaultAddress,//用户默认设置地址
+                }, function (data) {
+                    if (data.code == 200) {
+                        layer.msg('地址已成功修改');
                     }
                 })
             }

@@ -12,6 +12,7 @@
     <script src="js/pei_zhi.js"></script>
     <script type="text/javascript" src="js/jquery.min.js"></script>
     <script src="js/layer.js"></script>
+    <script src="js/vue.js"></script>
     <style type="text/css">
         .pwd_eye {
             position: relative;
@@ -46,7 +47,7 @@
 <br>
 <div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-top:5px;margin-bottom:-4px;"></div>
 <br><br><br><br><br>
-
+<div id="app"/>
 <form style="margin-left:30px;">
     <div style="position: relative;text-align:center;text-indent:-15px;">
         <span class="mui-icon-extra mui-icon-extra-phone" style="color: white;"></span>
@@ -128,6 +129,19 @@
         });
     });
 
+    new Vue({
+        el: "#app",
+        data: {},
+        watch: {},
+        created() {
+            var vm = this;
+            if (null != localStorage.userInfo) {
+                location.href = "shou_ye.html";
+            }
+        },
+        methods: {}
+    })
+
     function repair() {
         var vm = this;
         layer.confirm('您确定要修复吗？', {
@@ -190,6 +204,7 @@
         }
     }
 
+
     // 判断手机号
     var phone = document.getElementById('phone');
     var message = document.querySelector('.message');
@@ -202,6 +217,8 @@
             location.href = "shou_ye.html";
         }
     }
+
+
 </script>
 </body>
 </html>
