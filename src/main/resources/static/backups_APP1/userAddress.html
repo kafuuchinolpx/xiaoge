@@ -46,7 +46,7 @@
             addressList: [],
         },
         watch: {
-            addressList(val) {
+            defaultAddress(val) {
                 var vm = this;
                 vm.addressChange();
             }
@@ -67,7 +67,6 @@
                             if (vm.addressList[i].defaultType == 1) {
                                 vm.defaultAddress = vm.addressList[i].id
                             }
-
                         }
                     }
                 })

@@ -325,6 +325,9 @@ public class PublicController {
         if (null == byUserId) {
             userAddress.setDefaultType(1);
         }
+        if (null == userAddress.getDefaultType()) {
+            userAddress.setDefaultType(0);
+        }
         userAddressService.add(userAddress);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
@@ -339,7 +342,18 @@ public class PublicController {
     @ApiOperation(value = "用户地址更改")
     @PostMapping("app/alcoholTemplate/userAddressChange")
     public ReturnBean userAddressChange(Integer userId, Integer defaultAddress) {
-        System.out.println(userId + "\n" + defaultAddress);
+        List<UserAddress> byUserId = userAddressService.findByUserId(userId);
+        for (UserAddress userAddress : byUserId) {
+            if (1 == userAddress.getDefaultType()) {
+                userAddress.setDefaultType(0);
+            }
+        }
+        for (UserAddress userAddress : byUserId) {
+            if (defaultAddress.equals(userAddress.getId())) {
+                userAddress.setDefaultType(1);
+            }
+        }
+        byUserId.forEach(o -> userAddressService.add(o));
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
