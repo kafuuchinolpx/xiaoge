@@ -28,5 +28,5 @@ server:
   servlet:
     context-path: /design
   port: 8080
-filePath: C:/resource/design/
-#filePath: /root/resource/design/
+#filePath: C:/resource/design/
+filePath: /root/resource/design/

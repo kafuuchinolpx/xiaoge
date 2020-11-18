@@ -7,7 +7,10 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
     <link href="css/mui.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="js/mui.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/jquery.min.js"></script>
 </head>
 <body style="background: #000000;">
 <img src="bmp/log1.jpg" width="100%" style="margin-top: 10px;"/>
@@ -21,6 +24,29 @@
 <p style="position: relative;margin: 0 auto;text-align: center;top: -60px;color: #ffffff;font-size: 24px;"
    onclick="quan_shui_ding_zhi()">泉水定制</p>
 <script>
+    new Vue({
+        el: "#app",
+        data: {alcoholName: ""},
+        watch: {
+            alcoholName(val) {
+                localStorage.alcoholName = val;
+            }
+        },
+        created() {
+            var vm = this;
+            if (null == localStorage.userInfo) {
+                location.href = "index.html";
+            }
+            if (localStorage.alcoholName) {
+                vm.alcoholName = localStorage.alcoholName;
+            }
+        },
+        methods: {
+            user_info() {
+                location.href = "appUserShow.html";
+            }
+        }
+    })
     function zhi_neng_shi_ji() {
         location.href = "xing_xi_shu_ru.html";
     }

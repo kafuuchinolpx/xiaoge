@@ -144,13 +144,32 @@ public class PublicController {
     @PostMapping("app/alcoholTemplate/findAll")
     public ReturnBean findByIdWithBoxType(@RequestParam(defaultValue = "1") Integer boxTypeId, @RequestParam(defaultValue = "1") Integer materialId,
                                           @RequestParam(defaultValue = "1") Integer styleId, @RequestParam(defaultValue = "1") Integer purposeId, String alcoholName) {
-        if (materialId == 0 && styleId == 0 && purposeId == 0) {
+        if (materialId == 0 && styleId == 0 && purposeId == 0) {//全不选择
             List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, alcoholName.length());
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
-        } else {
+        } else if (materialId == 0 && styleId > 0 && purposeId > 0) {//不选择材料其余选择
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndStyleIdAndPurposeIdAndLengthGreaterThan(boxTypeId, styleId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId == 0 && purposeId > 0) {//不选择用途其余选择
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId, materialId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId > 0 && purposeId == 0) {//不选择风格其余选择
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId == 0 && styleId == 0 && purposeId > 0) {//只选择风格
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndStyleIdAndLengthGreaterThan(boxTypeId, styleId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId == 0 && purposeId == 0) {//只选择材料
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndLengthGreaterThan(boxTypeId, materialId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId == 0 && styleId > 0 && purposeId == 0) {//只选择用途
+            List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndPurposeIdAndLengthGreaterThan(boxTypeId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId > 0 && purposeId > 0) {//全部选择
             List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, purposeId, alcoholName.length());
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
         }
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
 

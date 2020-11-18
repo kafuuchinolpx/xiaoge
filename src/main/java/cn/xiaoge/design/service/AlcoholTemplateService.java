@@ -115,4 +115,16 @@ public interface AlcoholTemplateService {
      * @return
      */
     List<AlcoholTemplate> findByIdAndSon(Integer id);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndStyleIdAndPurposeIdAndLengthGreaterThan(Integer boxTypeId, Integer styleId, Integer purposeId, int length);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, int length);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer purposeId, int length);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer styleId, int length);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndMaterialIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, int length);
+
+    List<AlcoholTemplate> findByBoxTypeIdAndPurposeIdAndLengthGreaterThan(Integer boxTypeId, Integer purposeId, int length);
 }

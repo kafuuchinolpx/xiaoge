@@ -90,6 +90,17 @@
         created() {
             var vm = this;
 
+            if (null == localStorage.materialId) {
+                localStorage.materialId = vm.materialId;
+            }
+            if (null == localStorage.purposeId) {
+                localStorage.purposeId = vm.purposeId;
+            }
+            if (null == localStorage.styleId) {
+                localStorage.styleId = vm.styleId;
+            }
+
+
             if (localStorage.materialId) {
                 vm.materialId = Number(localStorage.materialId);
             }
