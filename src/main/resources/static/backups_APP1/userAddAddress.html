@@ -62,7 +62,7 @@
                     address: vm.address,//地址
                 }, function (data) {
                     if (data.code == 200) {
-                        vm.alcoholList = data.obj;
+                        history.go(-1);//返回浏览器上一页
                     }
                 })
             }

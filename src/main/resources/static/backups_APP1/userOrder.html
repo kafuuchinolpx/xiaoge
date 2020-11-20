@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>我的订单</title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no"/>
+    <link href="css/mui.css" rel="stylesheet"/>
+    <link href="css/icons-extra.css" rel="stylesheet"/>
+    <script src="js/mui.js"></script>
+    <script src="js/pei_zhi.js"></script>
+    <script src="js/vue.js"></script>
+    <script src="js/layer.js"></script>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+
+<header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">我的订单</h1>
+</header>
+
+<br/><br/>
+
+<div id="app">
+    <div class="mui-card">
+        <form>
+            <div class="mui-input-row mui-radio mui-left">
+                <label>单号:BZ1008044036<br>类型:酒盒;收货地址:贵州省遵义市仁怀茅台镇;</label>
+            </div>
+            <div class="mui-input-row mui-radio mui-left">
+                <label>单号:BZ1008044036<br>类型:酒盒;收货地址:贵州省遵义市仁怀茅台镇;</label>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    function address() {
+        location.href = "userAddAddress.html"
+    }
+
+    new Vue({
+        el: "#app",
+        data: {
+            addressList: [],
+        },
+        watch: {},
+        created() {
+            var vm = this;
+            vm.reload();
+        },
+        methods: {
+            reload: function () {
+                var vm = this;
+                $.post(base_path + "app/alcoholTemplate/getUserOrder", {
+                    userId: localStorage.userId,//用户id
+                }, function (data) {
+                    if (data.code == 200) {
+                    }
+                })
+            }
+        }
+    })
+</script>
+</body>
+</html>
