@@ -382,4 +382,16 @@ public class PublicController {
         List<AlcoholTemplate> list = alcoholTemplateService.findAllNotBoxAndMaterialId(materialId);
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
     }
+
+    @Autowired
+    AdvertisementService advertisementService;
+
+    @ApiOperation(value = "广告用户保存")
+    @PostMapping("advertisement/userSaveData")
+    public ReturnBean advertisementUserSaveData(Advertisement advertisement) {
+        advertisementService.add(advertisement);
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+
 }
