@@ -91,7 +91,7 @@
 
 </head>
 <body>
-<div id="alcoholTemplate_app" class="container-fluid" v-cloak>
+<div id="wineBox_app" class="container-fluid" v-cloak>
     <div class="row" style="margin-top: 8px;margin-bottom: 18px">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div class="row">
@@ -106,7 +106,7 @@
                     <div class="btn btn-danger btn-sm hidden-xs" @click="delete_items()">
                         <i class="fa fa-trash-o"></i> &nbsp;批量删除
                     </div>
-                    <div class="btn btn-default btn-sm hidden-xs" @click="alcoholTemplate_out_table()">
+                    <div class="btn btn-default btn-sm hidden-xs" @click="wineBox_out_table()">
                         <i class="fa fa-file-word-o"></i> &nbsp;导出表格
                     </div>
                 </div>
@@ -116,7 +116,7 @@
                 <div class="col-lg-3 col-md-4 col-sm-5 col-xs-8">
                 </div>
             </div>
-            <table class="table table-striped table-hover" id="alcoholTemplate_table" style="word-break: break-all;">
+            <table class="table table-striped table-hover" id="wineBox_table" style="word-break: break-all;">
                 <thead>
                 <tr>
                     <td width="30px" class="notOut hidden-xs">
@@ -211,7 +211,7 @@
 
 <script>
     new Vue({
-        el: '#alcoholTemplate_app',
+        el: '#wineBox_app',
         data: {
             delete_id_list: [],
             page_index: 1,//页面索引
@@ -247,7 +247,7 @@
                 var vm = this;
                 $.ajax({
                     type: "POST",
-                    url: "/design/alcoholTemplateGroup/findAll",
+                    url: "/design/wineBoxGroup/findAll",
                     data: {},
                     dataType: "json",
                     async: false,
@@ -357,7 +357,7 @@
                     }
                 });
 
-                $.post("/design/alcoholTemplate/findAll", {
+                $.post("/design/wineBox/findAll", {
                     page: vm.page_index,
                     order: vm.order,
                     size: vm.page_size
@@ -387,7 +387,7 @@
                 layer.confirm('您确定要删除吗？', {
                     btn: ['确定', '取消'] //按钮
                 }, function () {
-                    $.post("/design/alcoholTemplate/delete", {id: id}, function (data) {
+                    $.post("/design/wineBox/delete", {id: id}, function (data) {
                         if (data.ok) {
                             vm.reload_data();
                             layer.alert(data.msg);
@@ -402,7 +402,7 @@
 
             tuijian: function (id) {
                 var vm = this;
-                $.post("/design/alcoholTemplate/recommend", {id: id}, function (data) {
+                $.post("/design/wineBox/recommend", {id: id}, function (data) {
                     if (data.ok) {
                         vm.reload_data();
                     } else {
@@ -416,7 +416,7 @@
                 let vm = this;
                 layer.prompt({title: '请输入管理员密码', formType: 1, closeBtn: 0, btn: ['确定', '取消']}, function (name, index1) {
                     layer.close(index1);
-                    $.post('/design/alcoholTemplate/recycleBin', {account: name})
+                    $.post('/design/wineBox/recycleBin', {account: name})
                         .then(function (data) {
                             if (data.code == 200) {
                                 layer.open({
@@ -426,7 +426,7 @@
                                     offset: '100px',
                                     maxmin: true, //开启最大化最小化按钮
                                     area: ['800px', '600px'],
-                                    content: '/design/alcoholTemplate/recycleBin.html',
+                                    content: '/design/wineBox/recycleBin.html',
                                     end: function () {
                                         vm.reload_data();
                                     }
@@ -450,8 +450,8 @@
                 }
             },
             //导出表格
-            alcoholTemplate_out_table: function () {
-                wordExport("酒模板", "#alcoholTemplate_table");
+            wineBox_out_table: function () {
+                wordExport("酒模板", "#wineBox_table");
             },
             //批量删除
             delete_items: function () {
@@ -462,7 +462,7 @@
                     }, function () {
                         $.ajax({
                             type: "POST",
-                            url: "/design/alcoholTemplate/delete",
+                            url: "/design/wineBox/delete",
                             data: {ids: vm.delete_id_list.toString()},
                             dataType: "json",
                             async: false,
@@ -480,7 +480,7 @@
             edit_it: function (id) {
                 var vm = this;
                 if (document.body.clientWidth < 768) {
-                    location.href = '/design/alcoholTemplate/edit.html?id=' + id + "&list=" + vm.delete_id_list + "&page=" + location.href.split("#")[1];
+                    location.href = '/design/wineBox/edit.html?id=' + id + "&list=" + vm.delete_id_list + "&page=" + location.href.split("#")[1];
                 } else {
                     layer.open({
                         type: 2,
@@ -489,7 +489,7 @@
                         offset: '100px',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '600px'],
-                        content: '/design/alcoholTemplate/edit.html?id=' + id + "&list=" + vm.delete_id_list,
+                        content: '/design/wineBox/edit.html?id=' + id + "&list=" + vm.delete_id_list,
                         end: function () {
                             vm.reload_data();
                         }
@@ -499,7 +499,7 @@
             //详情
             show_it: function (id) {
                 if (document.body.clientWidth < 768) {
-                    location.href = '/design/alcoholTemplate/show.html?id=' + id;
+                    location.href = '/design/wineBox/show.html?id=' + id;
                 } else {
                     layer.open({
                         type: 2,
@@ -508,7 +508,7 @@
                         offset: '100px',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '600px'],
-                        content: '/design/alcoholTemplate/show.html?id=' + id,
+                        content: '/design/wineBox/show.html?id=' + id,
                     });
                 }
             },
@@ -522,7 +522,7 @@
                     shade: 0.5,  //透明度
                     offset: '100px',
                     area: ['80%', '80%'],
-                    content: '/design/alcoholTemplate/groupEdit.html', //iframe的url
+                    content: '/design/wineBox/groupEdit.html', //iframe的url
                     end: function () {
                         vm.reload_data();
                     }
@@ -531,7 +531,7 @@
             //详情
             edit_Info: function (id) {
                 if (document.body.clientWidth < 768) {
-                    location.href = '/design/alcoholTemplate/editInfo.html?id=' + id;
+                    location.href = '/design/wineBox/editInfo.html?id=' + id;
                 } else {
                     let index = layer.open({
                         type: 2,
@@ -539,7 +539,7 @@
                         shade: false,
                         offset: '100px',
                         area: ['80%', '80%'],
-                        content: '/design/alcoholTemplate/editInfo.html?id=' + id,
+                        content: '/design/wineBox/editInfo.html?id=' + id,
                     });
                     layer.full(index);
                 }

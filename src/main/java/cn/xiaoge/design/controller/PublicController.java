@@ -37,6 +37,9 @@ public class PublicController {
     @Autowired
     private SystemUserService systemUserService;
 
+    @Autowired
+    private WineBoxService wineBoxService;
+
     @ApiOperation(value = "登录")
     @PostMapping("login")
     public ReturnBean login(
@@ -167,6 +170,38 @@ public class PublicController {
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
         } else if (materialId > 0 && styleId > 0 && purposeId > 0) {//全部选择
             List<AlcoholTemplate> list = alcoholTemplateService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        }
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
+    }
+
+    @ApiOperation(value = "app根据boxtypeId")
+    @PostMapping("app/wineBox/findAll")
+    public ReturnBean findAll(@RequestParam(defaultValue = "1") Integer boxTypeId, @RequestParam(defaultValue = "1") Integer materialId,
+                              @RequestParam(defaultValue = "1") Integer styleId, @RequestParam(defaultValue = "1") Integer purposeId, String alcoholName) {
+        if (materialId == 0 && styleId == 0 && purposeId == 0) {//全不选择
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId == 0 && styleId > 0 && purposeId > 0) {//不选择材料其余选择
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndStyleIdAndPurposeIdAndLengthGreaterThan(boxTypeId, styleId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId == 0 && purposeId > 0) {//不选择用途其余选择
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndMaterialIdAndPurposeIdAndLengthGreaterThan(boxTypeId, materialId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId > 0 && purposeId == 0) {//不选择风格其余选择
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId == 0 && styleId == 0 && purposeId > 0) {//只选择风格
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndStyleIdAndLengthGreaterThan(boxTypeId, styleId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId == 0 && purposeId == 0) {//只选择材料
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndMaterialIdAndLengthGreaterThan(boxTypeId, materialId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId == 0 && styleId > 0 && purposeId == 0) {//只选择用途
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndPurposeIdAndLengthGreaterThan(boxTypeId, purposeId, alcoholName.length());
+            return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
+        } else if (materialId > 0 && styleId > 0 && purposeId > 0) {//全部选择
+            List<WineBox> list = wineBoxService.findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(boxTypeId, materialId, styleId, purposeId, alcoholName.length());
             return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, list);
         }
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);

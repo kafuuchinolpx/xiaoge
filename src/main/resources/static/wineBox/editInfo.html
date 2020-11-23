@@ -120,7 +120,7 @@
 
 <body>
 
-<div id="show_alcoholTemplate_app" class="container-fluid" v-cloak>
+<div id="show_wineBox_app" class="container-fluid" v-cloak>
     <div class="img_back">
         <img class="image" v-if="obj.image" :src="'/design/'+obj.image" width="500px">
         <p class="back_color" v-bind:style="header1Style">{{headerText}}</p>
@@ -251,7 +251,7 @@
 </div>
 <script>
     new Vue({
-        el: '#show_alcoholTemplate_app',
+        el: '#show_wineBox_app',
 
         data: {
             headerText: "酱刊",
@@ -302,7 +302,7 @@
 
 
             if (vm.id > 0) {
-                $.post("/design/alcoholTemplate/findById", {id: vm.id}, function (data) {
+                $.post("/design/wineBox/findById", {id: vm.id}, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;
                         if (data.obj.bodyStyle) {
@@ -335,7 +335,7 @@
 
             saveHeader2Style() {
                 var vm = this;
-                $.post("/design/alcoholTemplate/updateStyle", {
+                $.post("/design/wineBox/updateStyle", {
                     id: vm.id,
                     headerText: vm.headerText,
                     header1Style: JSON.stringify(vm.header1Style),

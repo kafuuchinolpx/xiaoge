@@ -22,7 +22,7 @@
 
 <body>
 
-<div id="edit_alcoholTemplate_app" class="container-fluid" v-cloak>
+<div id="edit_wineBox_app" class="container-fluid" v-cloak>
     <div class="h4 text-center" onclick="history.back()"><i
             class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>酒模板
     </div>
@@ -111,7 +111,7 @@
 </div>
 <script>
     new Vue({
-        el: '#edit_alcoholTemplate_app',
+        el: '#edit_wineBox_app',
         data: {
             id: get_parameter("id"),
             obj: {},
@@ -126,7 +126,7 @@
 
             $.ajax({
                 type: "POST",
-                url: "/design/alcoholTemplateGroup/findAll",
+                url: "/design/wineBoxGroup/findAll",
                 data: {},
                 dataType: "json",
                 async: false,
@@ -217,7 +217,7 @@
             });
 
             if (vm.id > 0) {
-                $.post("/design/alcoholTemplate/findById", {id: vm.id}, function (data) {
+                $.post("/design/wineBox/findById", {id: vm.id}, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;
                         return;
@@ -247,10 +247,10 @@
                 var myUrl
                 if (vm.id != 0) {
                     //修改
-                    myUrl = "/design/alcoholTemplate/update";
+                    myUrl = "/design/wineBox/update";
                 } else {
                     //添加
-                    var myUrl = "/design/alcoholTemplate/add"
+                    var myUrl = "/design/wineBox/add"
                 }
                 $("#my_form").attr("action", myUrl).ajaxSubmit({
                     async: false,

@@ -53,14 +53,14 @@
             url("fonts/zhengxingkaijianti.ttf") format("truetype");
         }
 
-        .alcoholList {
+        .wineBoxList {
             margin: 5px auto;
             width: 500px;
             position: relative;
             text-align: center;
         }
 
-        .alcoholList div {
+        .wineBoxList div {
             text-align: left;
             line-height: 1.5;
         }
@@ -77,7 +77,7 @@
 <body style="background: #000000;">
 <div id="app" class="mui-content mui-scroll-wrapper">
     <div style="background:black;"><img src="bmp/log1.jpg" width="100%" style="margin-bottom:-4px;"></div>
-    <div class="alcoholList" v-for="(d,index) in alcoholList" v-if="showType==0?index==selectIndex:index==selectIndex1"
+    <div class="wineBoxList" v-for="(d,index) in wineBoxList" v-if="showType==0?index==selectIndex2:index==selectIndex3"
          @click="changeIndex1(1)">
         <input v-model="selectAlcoholIndex=d.id" hidden="hidden"></input>
         <img :src="baseUrl+d.image" width=" 500">
@@ -86,7 +86,7 @@
         <!-- <div v-bind:style="d.bodyStyle">{{info}}</div>  tutorialsImage-->
     </div>
     <div class="shuiYin">
-        点击图片可变色彩
+        点击图片可展开
     </div>
     <p style="text-align: center;">
         <button style=" width: 140px;color: white;font-size: 40px;text-align: center;background-color: rgb(0, 0, 255);margin: 0px 1px;text-indent: 8px;"
@@ -120,15 +120,15 @@
         el: "#app",
         data: {
             baseUrl: base_path,
-            selectIndex: 0,
-            selectIndex1: -1,
-            alcoholList: [], //数据集合
-            alcoholListCopy: [],
+            selectIndex2: 0,
+            selectIndex3: -1,
+            wineBoxList: [], //数据集合
+            wineBoxListCopy: [],
             alcoholName: localStorage.alcoholName ? localStorage.alcoholName : "",
             info: localStorage.info ? localStorage.info : "",
             boxTypeId: 1,
             showType: 0,
-            alcoholListSon: [],
+            wineBoxListSon: [],
             selectAlcoholIndex: 0,
             tutorialsImage: 1,
             skipTutorials: 0,
@@ -140,75 +140,74 @@
                     vm.reload_();
                 }
                 if (newVal == 1) {
-                    for (var i = 0; i < vm.alcoholListSon.length; i++) {
-                        vm.alcoholListSon[i].header1Style = JSON.parse(vm.alcoholListSon[i].header1Style);
-                        vm.alcoholListSon[i].header2Style = JSON.parse(vm.alcoholListSon[i].header2Style);
+                    for (var i = 0; i < vm.wineBoxListSon.length; i++) {
+                        vm.wineBoxListSon[i].header1Style = JSON.parse(vm.wineBoxListSon[i].header1Style);
+                        vm.wineBoxListSon[i].header2Style = JSON.parse(vm.wineBoxListSon[i].header2Style);
                     }
-                    vm.alcoholList = vm.alcoholListSon;
+                    vm.wineBoxList = vm.wineBoxListSon;
                 }
             },
             tutorialsImage(val) {
                 localStorage.tutorialsImage = val;
             },
-            "selectIndex": function (newVal, oldVAl) {
-                localStorage.selectIndex = newVal;
+            "selectIndex2": function (newVal, oldVAl) {
+                localStorage.selectIndex2 = newVal;
             }
         },
         created() {
             var vm = this;
-            if (null == localStorage.boxTypeId) {
-                localStorage.boxTypeId = 1;
+            if (null == localStorage.boxTypeId1) {
+                localStorage.boxTypeId1 = 1;
             }
-            $.post(base_path + "app/alcoholTemplate/findAll", {
+            $.post(base_path + "app/wineBox/findAll", {
                 alcoholName: localStorage.alcoholName,
-                boxTypeId: localStorage.boxTypeId,
-                materialId: localStorage.materialId,
-                styleId: localStorage.styleId,
-                purposeId: localStorage.purposeId,
+                boxTypeId: localStorage.boxTypeId1,
+                materialId: localStorage.materialId1,
+                styleId: localStorage.styleId1,
+                purposeId: localStorage.purposeId1,
             }, function (data) {
                 if (data.code == 200) {
-                    vm.alcoholList = data.obj;
-                    vm.alcoholListCopy = vm.alcoholList;
-                    for (var i = 0; i < vm.alcoholList.length; i++) {
-                        vm.alcoholList[i].header1Style = JSON.parse(vm.alcoholList[i].header1Style);
-                        vm.alcoholList[i].header2Style = JSON.parse(vm.alcoholList[i].header2Style);
-                        // vm.alcoholList[i].bodyStyle = JSON.parse(vm.alcoholList[i].bodyStyle);
+                    vm.wineBoxList = data.obj;
+                    vm.wineBoxListCopy = vm.wineBoxList;
+                    for (var i = 0; i < vm.wineBoxList.length; i++) {
+                        vm.wineBoxList[i].header1Style = JSON.parse(vm.wineBoxList[i].header1Style);
+                        vm.wineBoxList[i].header2Style = JSON.parse(vm.wineBoxList[i].header2Style);
+                        // vm.wineBoxList[i].bodyStyle = JSON.parse(vm.wineBoxList[i].bodyStyle);
                     }
-                    if (vm.alcoholList[vm.selectIndex]) {
-                        if (vm.alcoholList[vm.selectIndex].son) {
-                            vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                    if (vm.wineBoxList[vm.selectIndex2]) {
+                        if (vm.wineBoxList[vm.selectIndex2].son) {
+                            vm.wineBoxListSon = vm.wineBoxList[vm.selectIndex2].son;
                         }
                     }
-                    if (localStorage.selectIndex) {
-                        if (localStorage.selectIndex > vm.alcoholListCopy.length) {
-                            vm.selectIndex = 0;
+                    if (localStorage.selectIndex2) {
+                        if (localStorage.selectIndex2 > vm.wineBoxListCopy.length) {
+                            vm.selectIndex2 = 0;
                             return;
                         }
-                        vm.selectIndex = localStorage.selectIndex;
+                        vm.selectIndex2 = localStorage.selectIndex2;
                     }
                 }
             })
-
         },
         methods: { //方法
 
             reload_: function () {
                 var vm = this;
-                $.post(base_path + "app/alcoholTemplate/findAll", {
+                $.post(base_path + "app/wineBox/findAll", {
                     alcoholName: localStorage.alcoholName,
-                    boxTypeId: localStorage.boxTypeId,
-                    materialId: localStorage.materialId,
-                    styleId: localStorage.styleId,
-                    purposeId: localStorage.purposeId,
+                    boxTypeId: localStorage.boxTypeId1,
+                    materialId: localStorage.materialId1,
+                    styleId: localStorage.styleId1,
+                    purposeId: localStorage.purposeId1,
                 }, function (data) {
                     if (data.code == 200) {
-                        vm.alcoholList = data.obj;
-                        for (var i = 0; i < vm.alcoholList.length; i++) {
-                            vm.alcoholList[i].header1Style = JSON.parse(vm.alcoholList[i].header1Style);
-                            vm.alcoholList[i].header2Style = JSON.parse(vm.alcoholList[i].header2Style);
-                            // vm.alcoholList[i].bodyStyle = JSON.parse(vm.alcoholList[i].bodyStyle);
+                        vm.wineBoxList = data.obj;
+                        for (var i = 0; i < vm.wineBoxList.length; i++) {
+                            vm.wineBoxList[i].header1Style = JSON.parse(vm.wineBoxList[i].header1Style);
+                            vm.wineBoxList[i].header2Style = JSON.parse(vm.wineBoxList[i].header2Style);
+                            // vm.wineBoxList[i].bodyStyle = JSON.parse(vm.wineBoxList[i].bodyStyle);
                         }
-                        vm.alcoholListSon = vm.alcoholList[vm.selectIndex].son;
+                        vm.wineBoxListSon = vm.wineBoxList[vm.selectIndex2].son;
                     }
                 });
             }
@@ -222,58 +221,57 @@
             ,
 
             ka_he: function () {
-                localStorage.boxTypeId = 1;
+                localStorage.boxTypeId1 = 1;
                 location.reload();
             }
             ,
 
             tong_he: function () {
-                localStorage.boxTypeId = 2;
+                localStorage.boxTypeId1 = 2;
                 location.reload();
             }
             ,
 
             shu_he: function () {
-                localStorage.boxTypeId = 3;
+                localStorage.boxTypeId1 = 3;
                 location.reload();
             }
             ,
 
             changeIndex: function (out) {
                 var vm = this;
-                if (Number(vm.selectIndex) + out < 0) {
+                if (Number(vm.selectIndex2) + out < 0) {
                     alert("已经没有更多了");
                     return;
                 }
-                if (Number(vm.selectIndex) + out >= vm.alcoholListCopy.length) {
+                if (Number(vm.selectIndex2) + out >= vm.wineBoxListCopy.length) {
                     alert("已经没有更多了");
                     return;
                 }
-                var i = vm.selectIndex;
+                var i = vm.selectIndex2;
                 var sum;
                 sum = Number(i) + out;
-                vm.selectIndex = sum;
+                vm.selectIndex2 = sum;
 
                 vm.showType = 0;
-                vm.selectIndex1 = -1;
-
+                vm.selectIndex3 = -1;
 
                 vm.reload_();
 
             },
             changeIndex1: function (out) {
                 var vm = this;
-                if (vm.alcoholListCopy[vm.selectIndex].son.length) {
-                    if (vm.selectIndex1 + out >= vm.alcoholListCopy[vm.selectIndex].son.length) {
-                        vm.selectIndex1 = -1;
+                if (vm.wineBoxListCopy[vm.selectIndex2].son.length) {
+                    if (vm.selectIndex3 + out >= vm.wineBoxListCopy[vm.selectIndex2].son.length) {
+                        vm.selectIndex3 = -1;
                         vm.showType = 0;
                         return;
                     }
                     vm.showType = 1;
-                    vm.selectIndex1 = vm.selectIndex1 + out;
+                    vm.selectIndex3 = vm.selectIndex3 + out;
 
-                    if (vm.selectIndex1 < 0) {
-                        vm.selectIndex1 = 0;
+                    if (vm.selectIndex3 < 0) {
+                        vm.selectIndex3 = 0;
                     }
                 }
             }

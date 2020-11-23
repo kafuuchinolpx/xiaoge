@@ -70,7 +70,7 @@
         methods: {
             load: function () {
                 var vm = this;
-                $.post("/design/alcoholTemplate/findAllByDelete", {}, function (data) {
+                $.post("/design/wineBox/findAllByDelete", {}, function (data) {
                     if (data.ok) {
                         vm.recycleList = data.obj;
                         return;
@@ -83,7 +83,7 @@
                 layer.confirm('您确定要还原吗？', {
                     btn: ['确定', '取消'] //按钮
                 }, function () {
-                    $.post("/design/alcoholTemplate/recycleReduction", {id: id}, function (data) {
+                    $.post("/design/wineBox/recycleReduction", {id: id}, function (data) {
                         if (data.ok) {
                             vm.load();
                             layer.alert(data.msg);
@@ -96,7 +96,7 @@
             },
             show_it: function (id) {
                 if (document.body.clientWidth < 768) {
-                    location.href = '/design/alcoholTemplate/show.html?id=' + id;
+                    location.href = '/design/wineBox/show.html?id=' + id;
                 } else {
                     layer.open({
                         type: 2,
@@ -105,7 +105,7 @@
                         offset: '100px',
                         maxmin: true, //开启最大化最小化按钮
                         area: ['800px', '600px'],
-                        content: '/design/alcoholTemplate/show.html?id=' + id,
+                        content: '/design/wineBox/show.html?id=' + id,
                     });
                 }
             }, delete_it: function (id) {
@@ -113,7 +113,7 @@
                 layer.confirm('您确定要删除吗？', {
                     btn: ['确定', '取消'] //按钮
                 }, function () {
-                    $.post("/design/alcoholTemplate/recycleDelete", {id: id}, function (data) {
+                    $.post("/design/wineBox/recycleDelete", {id: id}, function (data) {
                         if (data.ok) {
                             vm.load();
                             layer.alert(data.msg);

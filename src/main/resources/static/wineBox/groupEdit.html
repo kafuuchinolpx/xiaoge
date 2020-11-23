@@ -22,7 +22,7 @@
 
 <body>
 
-<div id="edit_alcoholTemplateGroup_app" class="container-fluid" v-cloak>
+<div id="edit_wineBoxGroup_app" class="container-fluid" v-cloak>
     <div class="h4 text-center" onclick="history.back()"><i
             class="fa fa-arrow-circle-left pull-left visible-xs-block"></i>分组
     </div>
@@ -61,7 +61,7 @@
 </div>
 <script>
     new Vue({
-        el: '#edit_alcoholTemplateGroup_app',
+        el: '#edit_wineBoxGroup_app',
         data: {
             name: '',
             group_List: [],
@@ -71,7 +71,7 @@
             var vm = this;
             $.ajax({
                 type: "POST",
-                url: "/design/alcoholTemplateGroup/findAll",
+                url: "/design/wineBoxGroup/findAll",
                 data: {},
                 dataType: "json",
                 async: false,
@@ -93,7 +93,7 @@
                 var vm = this;
                 $.ajax({
                     type: "POST",
-                    url: "/design/alcoholTemplateGroup/findAll",
+                    url: "/design/wineBoxGroup/findAll",
                     data: {},
                     dataType: "json",
                     async: false,
@@ -112,7 +112,7 @@
             },
             submit_data() {
                 var vm = this;
-                $.post("/design/alcoholTemplateGroup/add", {id: vm.group_id, name: vm.name}, function (data) {
+                $.post("/design/wineBoxGroup/add", {id: vm.group_id, name: vm.name}, function (data) {
                     if (data.ok) {
                         vm.loadData();
                     } else {
@@ -134,7 +134,7 @@
                 layer.confirm('您确定要删除吗？', {
                     btn: ['确定', '取消'] //按钮
                 }, function () {
-                    $.post("/design/alcoholTemplateGroup/deleteById", {id: vm.group_id}, function (data) {
+                    $.post("/design/wineBoxGroup/deleteById", {id: vm.group_id}, function (data) {
                         if (data.ok) {
                             layer.alert(data.msg);
                             vm.loadData();
@@ -152,10 +152,10 @@
                 var myUrl
                 if (vm.id != 0) {
                     //修改
-                    myUrl = "/design/alcoholTemplate/update";
+                    myUrl = "/design/wineBox/update";
                 } else {
                     //添加
-                    var myUrl = "/design/alcoholTemplate/add"
+                    var myUrl = "/design/wineBox/add"
                 }
                 $("#my_form").attr("action", myUrl).ajaxSubmit({
                     async: false,
