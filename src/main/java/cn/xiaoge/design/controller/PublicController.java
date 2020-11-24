@@ -237,6 +237,19 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findById(id));
     }
 
+
+    @ApiOperation(value = "酒模板根据id查询单个")
+    @PostMapping("app/alcoholTemplate/findById")
+    public ReturnBean alcoholTemplateFindById(@RequestParam Integer id) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, alcoholTemplateService.findById(id));
+    }
+
+    @ApiOperation(value = "酒盒模板根据id查询单个")
+    @PostMapping("app/wineBox/findById")
+    public ReturnBean wineBoxFindById(@RequestParam Integer id) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, wineBoxService.findById(id));
+    }
+
     @Autowired
     QuotationInformationService quotationInformationService;
 

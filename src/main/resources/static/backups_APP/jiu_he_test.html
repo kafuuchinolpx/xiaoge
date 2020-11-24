@@ -79,7 +79,6 @@
     new Vue({ //渲染表格
         el: "#app",
         data: {
-            obj: {},
             user: {},
             shang_biao_bao_jia: 0,
             jiu_he_bao_jia: 0,
@@ -125,13 +124,6 @@
         },
         created() {
             var vm = this;
-            $.post(base_path + "app/alcoholTemplate/findById", {
-                id: localStorage.selectAlcoholIndex
-            }, function (data) {
-                if (data.code == 200) {
-                    vm.obj = data.obj;
-                }
-            });
             $.post(base_path + "/app/quotationInformation/findAll", {}, function (data) {
                 if (data.ok) {
                     vm.quotationInformationObj = data.obj;
@@ -144,7 +136,7 @@
                 var vm = this;
                 $.post(base_path + "app/order/add", {
                     userId: JSON.parse(localStorage.userInfo).id,
-                    boxId: JSON.stringify(vm.obj.id),
+                    boxId: JSON.stringify(localStorage.selectAlcoholIndex1),
                     boxName: localStorage.alcoholName,
                     info: JSON.stringify(vm.user),
                     wineParameters: localStorage.info
