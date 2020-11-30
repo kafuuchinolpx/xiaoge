@@ -136,7 +136,7 @@
                 var vm = this;
                 $.post(base_path + "app/order/add", {
                     userId: JSON.parse(localStorage.userInfo).id,
-                    boxId: JSON.stringify(localStorage.selectAlcoholIndex1),
+                    boxId1: JSON.stringify(localStorage.selectAlcoholIndex1),
                     boxName: localStorage.alcoholName,
                     info: JSON.stringify(vm.user),
                     wineParameters: localStorage.info
