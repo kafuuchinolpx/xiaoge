@@ -1,0 +1,1469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"> -->
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport"/>
+    <meta name="renderer" content="webkit|ie-comp|ie-stand">
+    <title>在线编辑系统</title>
+    <link rel="stylesheet" href="font/iconfont.css"/>
+    <link rel="stylesheet" href="css/swiper.min.css"/>
+    <link rel="stylesheet" href="css/common.css"/>
+    <link rel="stylesheet" href="css/LCalendar.css"/>
+    <link rel="stylesheet" href="css/style.css?v=202010230907"/>
+    <script type="text/javascript" src="js/common/jquery.min.js"></script>
+    <script>
+        window.onerror = function (msg, url, line, col, error) {
+            //没有URL不上报！上报也不知道错误
+            if (msg != "Script error." && !url) {
+                return true;
+            }
+            setTimeout(function () {
+                var data = {};
+                //不一定所有浏览器都支持col参数
+                col = col || (window.event && window.event.errorCharacter) || 0;
+
+                data.url = url;
+                data.line = line;
+                data.col = col;
+                if (!!error && !!error.stack) {
+                    //如果浏览器有堆栈信息
+                    //直接使用
+                    data.msg = error.stack.toString();
+                } else if (!!arguments.callee) {
+                    //尝试通过callee拿堆栈信息
+                    var ext = [];
+                    var f = arguments.callee.caller, c = 3;
+                    //这里只拿三层堆栈信息
+                    while (f && (--c > 0)) {
+                        ext.push(f.toString());
+                        if (f === f.caller) {
+                            break;//如果有环
+                        }
+                        f = f.caller;
+                    }
+                    ext = ext.join(",");
+                    data.msg = ext;
+                }
+                //把data上报到后台！
+                let obj = {
+                    ip: location.href,
+                    remark: JSON.stringify(data)
+                }
+                $.ajax({
+                    type: "POST",
+                    url: "https://localhost/api/Member/AddLog",
+                    data: obj,
+                    dataType: "json",
+                    success: function (data) {
+                        console.log(data)
+                    }
+                });
+            }, 0);
+
+            return true;
+        };
+        window.onunload = function () {
+            wx.miniProgram.navigateBack({})
+        }
+    </script>
+    <script type="text/javascript" src="js/common/vue.js"></script>
+    <script type="text/javascript" src="js/common/axios.min.js"></script>
+    <script type="text/javascript" src="js/common/swiper.min.js"></script>
+</head>
+<body>
+<div id="app">
+    loading...
+    <div class="operation">
+        <!-- 基础顶部操作 -->
+        <div class="basis-tool-top tool-top">
+            <div class="item" v-on:click="layerbox.layerBol=true">
+                <i class="iconfont fishqicon_155"></i>
+                <div>图层</div>
+            </div>
+            <div class="item item-list">
+                <div class="item-sm" :class="historys.length==0?'disrest':''" v-on:click="addRestores">
+                    <i class="iconfont fishqicon_1"></i>
+                    <div>撤销</div>
+                </div>
+                <div class="item-sm" :class="restores.length==0?'disrest':''" v-on:click="resetHistory">
+                    <i class="iconfont fishqicon_4"></i>
+                    <div>恢复</div>
+                </div>
+                <div class="item-sm" v-on:click.stop="draWid(null)" v-show="scaleA!=1||scaleBol">
+                    <i class="iconfont fishqicon_34"></i>
+                    <div>{{scaleBol?scalePre+'%':'恢复'}}</div>
+                </div>
+                <div class="item-sm" v-on:click.stop="saveDataTem" v-show="1==2">
+                    <i class="iconfont fishqicon_139"></i>
+                    <div>保存</div>
+                </div>
+                <div class="item-sm jumpTab" v-if="pagesData.isPrint" key="0" v-on:click.stop="jumpTab('ys')">
+                    <i class="iconfont fishqicon_2"></i>
+                    <div>印刷</div>
+                </div>
+                <div class="item-sm jumpTab" v-on:click.stop="jumpTab('dw')" v-show="1==2">
+                    <i class="iconfont fishqicon_15"></i>
+                    <div>下载</div>
+                </div>
+            </div>
+            <div class="item" v-on:click="pagebox.pageBol=true" v-show="1==2">
+                <i class="iconfont fishqicon_144"></i>
+                <div>分页</div>
+            </div>
+            <div class="item" v-on:click.stop="jumpTab('dw')">
+                <i class="iconfont fishqicon_139"></i>
+                <div>保存</div>
+            </div>
+        </div>
+        <!-- 图层层级调整 -->
+        <div class="hierarchy tool-top" :class="transformData.hierarchybol?'boxleft':''">
+            <div class="item" v-on:click.stop="hierarchyModify('a',itemNum)">
+                <i class="iconfont fishqicon_43"></i>
+                <div>上移一层</div>
+            </div>
+            <div class="item" v-on:click.stop="hierarchyModify('b',itemNum)">
+                <i class="iconfont fishqicon_42"></i>
+                <div>下移一层</div>
+            </div>
+            <div class="item" v-on:click.stop="hierarchyModify('c',itemNum)">
+                <i class="iconfont fishqicon_47"></i>
+                <div>置于顶层</div>
+            </div>
+            <div class="item" v-on:click.stop="hierarchyModify('d',itemNum)">
+                <i class="iconfont fishqicon_48"></i>
+                <div>置于底层</div>
+            </div>
+        </div>
+        <!-- 内容区域 -->
+        <div class="box" id="dragBox">
+            <!-- 编辑器内容 -->
+            <div id="box" :style="boxStyle">
+                <template v-if="pagesData.pages">
+                    <template v-for="(item,index) in pagesData.pages[pageNum].elementsJson" v-key="index">
+                        <div class="dra-item" :class="item.lock?' lockItem':''" :style="item.obj.styleJson"
+                             v-if="item.type=='text'&&item.content.type==undefined" :data-index="item.Tid"
+                             :data-type="item.type" :data-width="item.width" :data-size="item.content.fontSize">
+                            <div class="text-box" :style="item.obj.flip"
+                                 v-html="item.content.text=='双击编辑文字'?'添加标题文字':item.content.text"></div>
+                        </div>
+                        <div class="dra-item" :class="item.lock?' lockItem':''" :style="item.obj.styleJson"
+                             v-else-if="item.type=='text'&&item.content.type=='art'" :data-index="item.Tid"
+                             :data-type="item.type" :data-width="item.width" :data-size="item.content.fontSize"
+                             v-html="item.obj.el">
+                        </div>
+                        <div class="dra-item" :class="item.lock?' lockItem':''" :style="item.obj.styleJson"
+                             v-else-if="item.type=='image'||item.type=='container'||item.type=='background'||item.type=='calendar'"
+                             v-html="item.obj.el" :data-index="item.Tid" :data-type="item.type">
+                        </div>
+                        <div class="dra-item" :class="item.lock?' lockItem':''" :style="item.obj.styleJson"
+                             v-else="item.type=='svg'||item.type=='shape'" v-html="item.obj.nEl" :data-index="item.Tid"
+                             :data-type="item.type">
+                        </div>
+                    </template>
+                </template>
+            </div>
+            <!-- 水印 -->
+            <div class="water-mark-wrap"
+                 style="background: url(images/water-mark.png) center center; background-size:3rem 3rem;"
+                 v-if="waterBol"></div>
+            <!-- 遮罩 -->
+            <div class="mark-svg" v-html="markSvgcont"></div>
+            <!-- 自由变换工具 -->
+            <div class="transform" :class="transformData.className" v-show="transformData.bol"
+                 :style="transformData.styleJson">
+                <div class="transform-box">
+                    <div class="point point1" v-on:click.stop="deleteItem"><i class="iconfont fishqicon_140"></i></div>
+                    <div class="point point2">
+                        {{transformData.type=='text'?'点击编辑文字':'点击换图'}}
+                        <template v-if="transformData.type!='text'">
+                            <input name="image" accept="image/*" class="replaceimg" id="replaceimg5"
+                                   v-on:change="replaceImg('replaceimg5')" type="file">
+                        </template>
+                    </div>
+                    <div class="point point3" v-on:click.stop="hierarchyChange"><i class="iconfont fishqicon_153"></i>
+                    </div>
+                    <div class="point point4"><i class="iconfont fishqicon_154"></i></div>
+                    <div class="point point5"><i class="iconfont fishqicon_29"></i></div>
+                    <div class="point point6" v-on:click.stop="copyItem"><i class="iconfont fishqicon_13"></i></div>
+                    <div class="point point7"><i class="iconfont fishqicon_30"></i></div>
+                    <div class="point point8" v-show="transformData.type=='text'"></div>
+                </div>
+            </div>
+        </div>
+        <!-- 台历操作 -->
+        <div class="tool-bottom img-tool-box calendarbox" v-if="transformData.bol&&selectItem.type=='calendar'">
+            <div class="basis-img basis-flex">
+                <div class="item sx-change">
+                    <div class="sm-item" v-on:click.stop="selectItem.placeBol=true">
+                        占位符位置同步
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.locaBol=true">
+                        位置
+                    </div>
+                </div>
+                <div class="item dy-item">
+                    <div class="sm-item" v-on:click.stop="selectItem.rotateBol=true">
+                        旋转
+                    </div>
+                    <div class="sm-item dy-flex" v-on:click.stop="hideTransform">
+                        <div class="qu-btn">完成</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 台历占位符同步 -->
+        <div class="rotatebox tool-bottom" v-if="selectItem&&selectItem.placeBol">
+            <div class="box-title">占位符同步</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box" v-on:click.stop="placeAllChange('0')">
+                        全部
+                    </div>
+                    <div class="stitle-box" v-on:click.stop="placeAllChange('1')">
+                        正面
+                    </div>
+                    <div class="stitle-box" v-on:click.stop="placeAllChange('2')">
+                        反面
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.placeBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 台历占位符位置 -->
+        <div class="rotatebox locabox tool-bottom" v-if="selectItem&&selectItem.locaBol">
+            <div class="box-title">占位符位置大小</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box">
+                        宽度
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.width" v-on:input="placeAttr('width')"
+                           v-on:blur="touchmovePage"/>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        高度
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.height" v-on:input="placeAttr('height')"
+                           v-on:blur="touchmovePage"/>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        左边距
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.left" v-on:input="placeAttr('left')"
+                           v-on:blur="touchmovePage"/>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        上边距
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.top" v-on:input="placeAttr('top')"
+                           v-on:blur="touchmovePage"/>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.locaBol=false">完成</div>
+            </div>
+        </div>
+        <!-- Svg操作 -->
+        <div class="tool-bottom img-tool-box shapebox" v-if="transformData.bol&&selectItem.type=='svg'">
+            <div class="basis-img basis-flex">
+                <div class="item sx-change">
+                    <div class="sm-item" v-on:click.stop="selectItem.colorListBol=true">
+                        <div class="shape-color" :style="{background:selectItem.obj.colors[0].nColor}"></div>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="collectionMAjax">
+                        <i class="iconfont fishqicon_135"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.optyBol=true">
+                        <i class="iconfont fishqicon_23"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.showaBol=true">
+                        <i class="iconfont fishqicon_26"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.flipBol=true">
+                        <i class="iconfont fishqicon_27"></i>
+                    </div>
+                    <div class="sm-item" :class="selectItem.lock?'active':''"
+                         v-on:click.stop="changeTxtNature('lock',selectItem.lock,'b')">
+                        <i class="iconfont" :class="selectItem.lock?'fishqicon_30':'fishqicon_31'"></i>
+                    </div>
+                </div>
+                <div class="item dy-item">
+                    <div class="sm-item" v-if="1==2">
+                        换图
+                        <input name="image" accept="image/*" class="replaceimg" id="replaceimg4"
+                               v-on:change="replaceImg('replaceimg4')" type="file" v-on:blur="touchmovePage">
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.rotateBol=true">
+                        旋转
+                    </div>
+                    <div class="sm-item dy-flex" v-on:click.stop="hideTransform">
+                        <div class="qu-btn">完成</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 颜色修改 -->
+        <div class="rotatebox tool-bottom colorlist" v-if="colorSet&&colorSet.colorBol">
+            <div class="box-title">设置颜色</div>
+            <div class="box-cont scroll-bar">
+                <div class="colorlist-cont">
+                    <div class="color-citem" v-on:click.stop="defaultColor()">默认</div>
+                    <div class="color-citem" :style="{background:colorSet.colorSelect}"
+                         :class="colorSet.index==-1?'active':''"
+                         v-on:click.stop="setElColor('-1',colorSet.colorSelect)"></div>
+                    <div class="color-citem" v-for="(item,index) in colorSet.colorList"
+                         :class="colorSet.index==index?'active':''" :style="{background:item}"
+                         v-on:click.stop="setElColor(index,item)"></div>
+                </div>
+            </div>
+            <div class="color-bottom">
+                <div>色值</div>
+                <input type="text" class="input-color" v-model="colorSet.inputColor" v-on:blur="touchmovePage"/>
+                <div v-on:click.stop="inputColorSet">确定</div>
+                <div class="dy-item">
+                    <div class="qu-btn" v-on:click.stop="closePopChange('co')">完成</div>
+                </div>
+            </div>
+        </div>
+        <!-- svg顔色列表 -->
+        <div class="rotatebox tool-bottom svgcolor" v-if="selectItem&&selectItem.colorListBol">
+            <div class="box-title">修改svg颜色</div>
+            <div class="box-cont scroll-bar">
+                <div class="svg-colorlist">
+                    <div class="svg-citem" v-for="(item,index) in selectItem.obj.colors"
+                         :style="{background:item.nColor}"
+                         v-on:click.stop="showColor('svg',item.nColor,item.oColor)"></div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.colorListBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 容器操作 -->
+        <div class="tool-bottom img-tool-box shapebox" v-if="transformData.bol&&selectItem.type=='container'">
+            <div class="basis-img basis-flex">
+                <div class="item sx-change">
+                    <div class="sm-item" v-on:click.stop="showColor('container',selectItem.content.borderColor)">
+                        <div class="shape-color" :style="{background:selectItem.content.borderColor}">
+                            <img src="images/stroke-mask.png"/>
+                        </div>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="showTailorCalcu">
+                        <i class="iconfont fishqicon_156"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.optyBol=true">
+                        <i class="iconfont fishqicon_23"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.showaBol=true">
+                        <i class="iconfont fishqicon_26"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.flipBol=true">
+                        <i class="iconfont fishqicon_27"></i>
+                    </div>
+                    <div class="sm-item" :class="selectItem.lock?'active':''"
+                         v-on:click.stop="changeTxtNature('lock',selectItem.lock,'b')">
+                        <i class="iconfont" :class="selectItem.lock?'fishqicon_30':'fishqicon_31'"></i>
+                    </div>
+                </div>
+                <div class="item dy-item">
+                    <div class="sm-item">
+                        换图
+                        <input name="image" accept="image/*" class="replaceimg" id="replaceimg3"
+                               v-on:change="replaceImg('replaceimg3')" type="file">
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.rotateBol=true">
+                        旋转
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.borderWidthBol=true">
+                        边框宽度
+                    </div>
+                    <div class="sm-item dy-flex" v-on:click.stop="hideTransform">
+                        <div class="qu-btn">完成</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 容器边框宽度 -->
+        <div class="rotatebox tool-bottom" v-if="selectItem&&selectItem.borderWidthBol">
+            <div class="box-title">设置边框宽度</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box">
+                        宽度
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.content.borderWidth"
+                           v-on:input="pubAttrChange" min="0" max="50" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.content.borderWidth"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="50">
+                        <div class="num">50</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.borderWidthBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 形状操作 -->
+        <div class="tool-bottom img-tool-box shapebox" v-if="transformData.bol&&selectItem.type=='shape'">
+            <div class="basis-img basis-flex">
+                <div class="item sx-change">
+                    <div class="sm-item" v-on:click.stop="showColor('shapef',selectItem.content.fillColor)">
+                        <div class="shape-color" :style="{background:selectItem.content.fillColor}"></div>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="showColor('shapes',selectItem.content.strokeColor)">
+                        <div class="shape-color" :style="{background:selectItem.content.strokeColor}">
+                            <img src="images/stroke-mask.png"/>
+                        </div>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.optyBol=true">
+                        <i class="iconfont fishqicon_23"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.showaBol=true">
+                        <i class="iconfont fishqicon_26"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.flipBol=true">
+                        <i class="iconfont fishqicon_27"></i>
+                    </div>
+                    <div class="sm-item" :class="selectItem.lock?'active':''"
+                         v-on:click.stop="changeTxtNature('lock',selectItem.lock,'b')">
+                        <i class="iconfont" :class="selectItem.lock?'fishqicon_30':'fishqicon_31'"></i>
+                    </div>
+                </div>
+                <div class="item dy-item">
+                    <div class="sm-item">
+                        换图
+                        <input name="image" accept="image/*" class="replaceimg" id="replaceimg2"
+                               v-on:change="replaceImg('replaceimg2')" type="file">
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.rotateBol=true">
+                        旋转
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.strokeWidthBol=true">
+                        边框宽度
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.strokeDasharrayBol=true">
+                        边框样式
+                    </div>
+                    <div class="sm-item dy-flex" v-on:click.stop="hideTransform">
+                        <div class="qu-btn">完成</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 形状边框宽度 -->
+        <div class="rotatebox tool-bottom" v-if="selectItem&&selectItem.strokeWidthBol">
+            <div class="box-title">设置边框宽度</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box">
+                        宽度
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.content.strokeWidth"
+                           v-on:input="pubAttrChange" min="0" max="15" step="0.01" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.content.strokeWidth"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="15"
+                               step="0.01">
+                        <div class="num">15</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.strokeWidthBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 形状边框样式-->
+        <div class="rotatebox tool-bottom borderstyle" v-if="selectItem&&selectItem.strokeDasharrayBol">
+            <div class="box-title">设置边框样式</div>
+            <div class="box-cont">
+                <div class="border-list">
+                    <div class="line-item" v-for="(item,index) in borderStyle" v-on:click.stop="changeDasharray(index)">
+                        <svg xmlns="http://www.w3.org/2000/svg">
+                            <line stroke="gray" stroke-width="3" x1="0" x2="100%" y1="17" y2="17"
+                                  :stroke-dasharray="item"></line>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.strokeDasharrayBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 图片操作 -->
+        <div class="tool-bottom img-tool-box" v-if="transformData.bol&&selectItem.type=='image'">
+            <div class="basis-img basis-flex">
+                <div class="item sx-change">
+                    <div class="sm-item" v-on:click.stop="collectionMAjax">
+                        <i class="iconfont fishqicon_135"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.radiusBol=true">
+                        <i class="iconfont fishqicon_138"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.imgSizeBol=true">
+                        <i class="iconfont fishqicon_136"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="showTailorCalcu">
+                        <i class="iconfont fishqicon_156"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.optyBol=true">
+                        <i class="iconfont fishqicon_23"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.showaBol=true">
+                        <i class="iconfont fishqicon_26"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.flipBol=true">
+                        <i class="iconfont fishqicon_27"></i>
+                    </div>
+                    <div class="sm-item" :class="selectItem.lock?'active':''"
+                         v-on:click.stop="changeTxtNature('lock',selectItem.lock,'b')">
+                        <i class="iconfont" :class="selectItem.lock?'fishqicon_30':'fishqicon_31'"></i>
+                    </div>
+                </div>
+                <div class="item dy-item">
+                    <div class="sm-item">
+                        换图
+                        <input name="image" accept="image/*" class="replaceimg" id="replaceimg"
+                               v-on:change="replaceImg('replaceimg')" type="file">
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.rotateBol=true">
+                        旋转
+                    </div>
+                    <div class="sm-item dy-flex" v-on:click.stop="hideTransform">
+                        <div class="qu-btn">完成</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 元素尺寸 -->
+        <div class="imgSizebox tool-bottom" v-if="selectItem&&selectItem.imgSizeBol">
+            <div class="box-title">设置图片尺寸</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="box-change">
+                        <div class="num">宽</div>
+                        <input type="number" class="img-sizetxt" v-model="selectItem.width" v-on:input="pubAttrChange"
+                               min="0" max="100" v-on:blur="touchmovePage"/>
+                        <div class="num">px</div>
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="box-change">
+                        <div class="num">高</div>
+                        <input type="number" class="img-sizetxt" v-model="selectItem.height" v-on:input="pubAttrChange"
+                               min="0" max="100" v-on:blur="touchmovePage"/>
+                        <div class="num">px</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.imgSizeBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 图片圆角 -->
+        <div class="rotatebox tool-bottom" v-if="selectItem&&selectItem.radiusBol">
+            <div class="box-title">设置圆角</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box">
+                        圆角
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.content.radius" v-on:input="pubAttrChange"
+                           min="0" max="100" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.content.radius"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="100">
+                        <div class="num">100</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.radiusBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 文字操作 -->
+        <div class="tool-bottom text-tool-box" v-if="transformData.bol&&selectItem.type=='text'">
+            <!-- 文字操作基础菜单 -->
+            <div class="basis-text">
+                <div class="item">
+                    <div class="sm-item" v-if="(selectItem.content.type&&selectItem.obj.colorNum)"
+                         v-on:click.stop="selectItem.artColorBol=true">
+                        <i class="iconfont fishqicon_169" style="font-size: 25px;"></i>
+                    </div>
+                    <div class="sm-item" v-else-if="!selectItem.content.type"
+                         v-on:click.stop="showColor('text','#'+selectItem.content.color)">
+                        <div class="txt-color" :style="{background:'#'+selectItem.content.color}"></div>
+                    </div>
+                    <div class="sm-item font-name" v-on:click.stop="changeFont">
+                        <div class="txt-font">
+                            <span>{{selectItem.fontName}}</span>
+                            <i class="iconfont fishqicon_19"></i>
+                        </div>
+                    </div>
+                    <div class="sm-item">
+                        <div class="txt-size">
+                            <div class="size-item" v-on:click.stop="sizeChange('s','fontSize')"><i
+                                    class="iconfont fishqicon_66"></i></div>
+                            <div class="size-wz" v-on:click.stop="selectItem.fontSize=true">
+                                {{selectItem.content.fontSize}}
+                            </div>
+                            <div class="size-item" v-on:click.stop="sizeChange('add','fontSize')"><i
+                                    class="iconfont fishqicon_92"></i></div>
+                        </div>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.kerning=true">
+                        字距
+                    </div>
+                </div>
+                <div class="item sx-change" :class="selectItem.content.type?'show-art':''">
+                    <div class="sm-item" :class="selectItem.content.bold?'active':''"
+                         v-on:click.stop="changeTxtNature('bold',selectItem.content.bold,'a')">
+                        <i class="iconfont fishqicon_37"></i>
+                    </div>
+                    <div class="sm-item" :class="selectItem.content.italic?'active':''"
+                         v-on:click.stop="changeTxtNature('italic',selectItem.content.italic,'a')">
+                        <i class="iconfont fishqicon_33"></i>
+                    </div>
+                    <div class="sm-item" v-show="!selectItem.content.type"
+                         :class="selectItem.content.underline?'active':''"
+                         v-on:click.stop="changeTxtNature('underline',selectItem.content.underline,'a')">
+                        <i class="iconfont fishqicon_123"></i>
+                    </div>
+                    <div class="sm-item" v-show="!selectItem.content.type"
+                         :class="selectItem.content.deleteLine?'active':''"
+                         v-on:click.stop="changeTxtNature('deleteLine',selectItem.content.deleteLine,'a')">
+                        <i class="iconfont fishqicon_124"></i>
+                    </div>
+                    <div class="sm-item" v-show="!selectItem.content.type" :class="selectItem.fontCase?'active':''"
+                         v-on:click.stop="changeTxtNature('fontCase',selectItem.fontCase,'b')">
+                        <i class="iconfont fishqicon_38"></i>
+                    </div>
+                    <div class="sm-item" v-show="!selectItem.content.type"
+                         v-on:click.stop="changeTxtNature('alignment',selectItem.content.alignment,'c')">
+                        <i class="iconfont"
+                           :class="selectItem.content.alignment=='left'?'fishqicon_44':(selectItem.content.alignment=='center'?'fishqicon_45':(selectItem.content.alignment=='right'?'fishqicon_46':'fishqicon_121'))"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.optyBol=true">
+                        <i class="iconfont fishqicon_23"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.showaBol=true">
+                        <i class="iconfont fishqicon_26"></i>
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.flipBol=true">
+                        <i class="iconfont fishqicon_27"></i>
+                    </div>
+                    <div class="sm-item" :class="selectItem.lock?'active':''"
+                         v-on:click.stop="changeTxtNature('lock',selectItem.lock,'b')">
+                        <i class="iconfont" :class="selectItem.lock?'fishqicon_30':'fishqicon_31'"></i>
+                    </div>
+                </div>
+                <div class="item dy-item">
+                    <div class="sm-item" v-on:click.stop="editTxt">
+                        编辑文字
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.rotateBol=true">
+                        旋转
+                    </div>
+                    <div class="sm-item" v-on:click.stop="selectItem.artBol=true">
+                        文字特效
+                    </div>
+                    <div class="sm-item dy-flex" v-on:click.stop="hideTransform">
+                        <div class="qu-btn">完成</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 文字特效切换 -->
+        <div class="art-box-popup" v-if="selectItem&&selectItem.artBol" v-on:click.stop="selectItem.artBol=false">
+            <div class="art-cont">
+                <div class="artc-list scroll-bar">
+                    <div class="art-item" style="padding-top: 8px;" v-on:click.stop="changeArt(-1)">
+                        <i class="iconfont fishqicon_168"></i>
+                        <div>清除特效</div>
+                    </div>
+                    <div class="art-item" v-for="(item,index) in other.text.artTxt.artList"
+                         v-on:click.stop="changeArt(index)" :key="index">
+                        <img :src="item.thumbnail" width="100%"/>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 文字特效修改颜色 -->
+        <div class="rotatebox tool-bottom svgcolor" v-if="selectItem&&selectItem.artColorBol">
+            <div class="box-title">修改艺术字颜色</div>
+            <div class="box-cont scroll-bar">
+                <div class="svg-colorlist">
+                    <template v-if="selectItem.content.artId>82">
+                        <template v-for="(item,index) in selectItem.content.art.covers">
+                            <template v-if="(item.fill!=undefined && item.blur==undefined)">
+                                <template v-if="Array.isArray(item.fill)">
+                                    <div class="svg-citem" v-for="(fiItem,fiIndex) in item.fill"
+                                         :style="{'background':fiItem.color}"
+                                         v-on:click.stop="showColor('art',fiItem.color,'color',index,fiIndex)"></div>
+                                </template>
+                                <div v-else class="svg-citem" :style="{'background':item.fill}"
+                                     v-on:click.stop="showColor('art',item.fill,'fill',index)"></div>
+                            </template>
+                            <template v-if="(item.stroke!=undefined)">
+                                <div class="svg-citem" :style="{'background':item.stroke}"
+                                     v-on:click.stop="showColor('art',item.stroke,'stroke',index)"></div>
+                            </template>
+                            <template v-if="item.paths!=undefined">
+                                <div class="svg-citem" v-for="(pitem,pindex) in item.paths"
+                                     :style="{background:pitem.fill}"
+                                     v-on:click.stop="showColor('art',pitem.fill,'paths',index,pindex)"></div>
+                            </template>
+                        </template>
+                    </template>
+                    <template v-else>
+                        <template v-for="(item,index) in selectItem.content.art">
+                            <div class="svg-citem" v-if="(item.fill!=undefined)||(item.stroke!=undefined)"
+                                 :style="{background:(item.fill==undefined?item.stroke:item.fill)}"
+                                 v-on:click.stop="showColor('art',item.fill==undefined?item.stroke:item.fill,item.fill==undefined?'stroke':'fill',index)"></div>
+                            <template v-if="item.grad=='1'||item.grad=='2'">
+                                <div class="svg-citem" v-for="(items,indexs) in item.gradColor"
+                                     :style="{background:items}"
+                                     v-on:click.stop="showColor('art',items,'grad',index,indexs)"></div>
+                            </template>
+                        </template>
+                    </template>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="selectItem.artColorBol=false">完成</div>
+            </div>
+        </div>
+        <!-- 元素投影 -->
+        <div class="showabox tool-bottom" v-if="selectItem&&selectItem.showaBol">
+            <div class="box-title">设置投影</div>
+            <div class="box-cont">
+                <div class="showa-switch" :class="selectItem.shadow.enable?'active':''"
+                     v-on:click.stop="shadowSwitch"></div>
+                <div class="showa-mark" v-show="!selectItem.shadow.enable"></div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        颜色
+                    </div>
+                    <div class="show-color" :style="{background:selectItem.shadow.color}"
+                         v-on:click.stop="showColor('shadow',selectItem.shadow.color)"></div>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        角度
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.shadow.role" v-on:input="pubAttrChange"
+                           min="0" max="360" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.shadow.role"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="360">
+                        <div class="num">360</div>
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        距离
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.shadow.distance" v-on:input="pubAttrChange"
+                           min="0" max="100" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.shadow.distance"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="100">
+                        <div class="num">100</div>
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        扩散
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.shadow.blur" v-on:input="pubAttrChange"
+                           min="0" max="360" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.shadow.blur"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="50">
+                        <div class="num">50</div>
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        透明
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.shadow.opacity" v-on:input="pubAttrChange"
+                           min="0" max="100" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num">0</div>
+                        <input type="range" class="range-tool" v-model="selectItem.shadow.opacity"
+                               v-on:change="recordedHistory" v-on:input="pubAttrChange('nhs')" min="0" max="100">
+                        <div class="num">100</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="closePopChange('showaBol')">完成</div>
+            </div>
+        </div>
+        <!-- 元素旋转 -->
+        <div class="rotatebox tool-bottom" v-if="selectItem&&selectItem.rotateBol">
+            <div class="box-title">设置旋转角度</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box">
+                        角度
+                    </div>
+                    <input type="number" class="box-txt" v-model="rotateInt" v-on:input="rotateIntChange('a')"
+                           min="-360" max="360" step="0.1" v-on:blur="touchmovePage" v-on:focus="rotfocus=true"/>
+                    <div class="box-change">
+                        <div class="num">-360</div>
+                        <input type="range" class="range-tool" v-model="selectItem.rotate" v-on:change="recordedHistory"
+                               v-on:input="pubAttrChange('anhs')" min="-360" max="360" step="0.1">
+                        <div class="num">360</div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="closePopChange('rotateBol')">完成</div>
+            </div>
+        </div>
+        <!-- 元素透明度 -->
+        <div class="optybox tool-bottom" v-if="selectItem&&selectItem.optyBol">
+            <div class="opty-title">透明度</div>
+            <div class="opty-cont">
+                <input type="number" class="opty-txt" v-model="selectItem.opacity" min="0" max="100"
+                       v-on:input="pubAttrChange" v-on:blur="touchmovePage"/>
+                <div class="opty-change">
+                    <div class="num">0</div>
+                    <input type="range" class="range-tool" v-model="selectItem.opacity" v-on:change="recordedHistory"
+                           v-on:input="pubAttrChange('nhs')" min="0" max="100">
+                    <div class="num">100</div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="closePopChange('optyBol')">完成</div>
+            </div>
+        </div>
+        <!-- 元素翻转 -->
+        <div class="flipbox tool-bottom" v-if="selectItem&&selectItem.flipBol">
+            <div class="flip-title">选择翻转</div>
+            <div class="flip-cont">
+                <div class="flip-item" v-on:click.stop="flipChange(selectItem.flip[0],'a')">
+                    <i class="iconfont fishqicon_27"></i>
+                    <div>水平翻转</div>
+                </div>
+                <div class="flip-item" v-on:click.stop="flipChange(selectItem.flip[1]),'b'">
+                    <i class="iconfont fishqicon_25"></i>
+                    <div>垂直翻转</div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="closePopChange('flipBol')">完成</div>
+            </div>
+        </div>
+        <!-- 字体大小 -->
+        <div class="optybox tool-bottom" v-if="selectItem&&selectItem.fontSize">
+            <div class="opty-title">设置字体大小</div>
+            <div class="opty-cont">
+                <input type="number" class="opty-txt" v-model="selectItem.content.fontSize" min="12"
+                       v-on:input="fontSizeChange" v-on:blur="touchmovePage"/>
+                <div class="opty-change">
+                    <div class="num" v-on:click.stop="sizeChange('s','fontSize')"><i class="iconfont fishqicon_66"></i>
+                    </div>
+                    <input type="range" class="range-tool" v-model="selectItem.content.fontSize"
+                           v-on:change="recordedHistory" v-on:input="fontSizeChange('nhs')" min="12" max="500">
+                    <div class="num" v-on:click.stop="sizeChange('add','fontSize')"><i
+                            class="iconfont fishqicon_92"></i></div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="closePopChange('fontSize')">完成</div>
+            </div>
+        </div>
+        <!-- 设置字距 -->
+        <div class="optybox tool-bottom" v-if="selectItem&&selectItem.kerning">
+            <div class="box-title">设置字距</div>
+            <div class="box-cont">
+                <div class="box-item">
+                    <div class="stitle-box">
+                        间距
+                    </div>
+                    <input type="number" class="box-txt" v-model="selectItem.content.wordMargin"
+                           v-on:input="fontSizeChange" min="-200" max="500" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num" v-on:click.stop="sizeChange('s','wordMargin')"><i
+                                class="iconfont fishqicon_66"></i></div>
+                        <input type="range" class="range-tool" v-model="selectItem.content.wordMargin"
+                               v-on:change="recordedHistory" v-on:input="fontSizeChange('nhs')" min="-200" max="500">
+                        <div class="num" v-on:click.stop="sizeChange('add','wordMargin')"><i
+                                class="iconfont fishqicon_92"></i></div>
+                    </div>
+                </div>
+                <div class="box-item">
+                    <div class="stitle-box">
+                        行距
+                    </div>
+                    <input type="number" step="0.01" class="box-txt" v-model="selectItem.content.rowMargin"
+                           v-on:input="fontSizeChange" min="0" max="10" v-on:blur="touchmovePage"/>
+                    <div class="box-change">
+                        <div class="num" v-on:click.stop="sizeChange('s','rowMargin')"><i
+                                class="iconfont fishqicon_66"></i></div>
+                        <input type="range" class="range-tool" step="0.01" v-model="selectItem.content.rowMargin"
+                               v-on:change="recordedHistory" v-on:input="fontSizeChange('nhs')" min="0" max="10">
+                        <div class="num" v-on:click.stop="sizeChange('add','rowMargin')"><i
+                                class="iconfont fishqicon_92"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="dy-item">
+                <div class="qu-btn" v-on:click.stop="closePopChange('kerning')">完成</div>
+            </div>
+        </div>
+        <!-- 基础底部菜单 -->
+        <div class="basis-tool-bottom tool-bottom">
+            <div class="item" v-on:click="addFontsF">
+                <i class="iconfont fishqicon_10"></i>
+                <div>添加字</div>
+            </div>
+            <div class="item">
+                <input name="image" accept="image/*" id="upload" v-on:change="xmTanUploadImg" type="file">
+                <i class="iconfont fishqicon_132"></i>
+                <div>添加图</div>
+            </div>
+            <div class="item" v-on:click="materialShow">
+                <i class="iconfont fishqicon_109"></i>
+                <div>其他素材</div>
+            </div>
+            <div class="item" v-on:click="pagebox.pageBol=true" v-show="pagesData&&pagesData.pages.length>1">
+                <i class="iconfont fishqicon_144"></i>
+                <div>分页</div>
+            </div>
+        </div>
+        <!-- 添加文字弹窗 -->
+        <div class="add-text" :class="textItem.fontAttr.changeTxt?'boxleft':''" v-if="textItem">
+            <div class="text-cont">
+                <textarea class="txt-edit" rows="8" v-if="textItem.content" v-model="editPopTxt"
+                          v-on:blur="touchmovePage"></textarea>
+                <div class="text-btn">
+                    <div class="btn-tap clear-btn" v-on:click="cancelTxtAdd">取消</div>
+                    <div class="btn-tap" v-on:click="changeTxtDetermine">确定</div>
+                </div>
+            </div>
+        </div>
+        <!--修改素材名 -->
+        <div class="add-text" :class="mName.mNameBol?'boxleft':''" v-if="mName">
+            <div class="text-cont">
+                <textarea class="txt-edit" rows="8" v-model="mName.mNameTxt"></textarea>
+                <div class="text-btn">
+                    <div class="btn-tap clear-btn" v-on:click="clearChangeMname">取消</div>
+                    <div class="btn-tap" v-on:click="ensureChangeMname">确定</div>
+                </div>
+            </div>
+        </div>
+        <!-- 其他素材 -->
+        <div class="other-material" :class="other.otherBol?'boxleft':''">
+            <div class="mater-cont">
+                <div class="mater-menu">
+                    <div class="menu-item" :class="other.tabIndex==0?'active':''" v-on:click="changOtherTab"
+                         data-txt="文字" data-index="0">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_10"></i>
+                        </div>
+                        <div class="txt">文字</div>
+                    </div>
+                    <div class="menu-item" :class="other.tabIndex==1?'active':''" v-on:click="changOtherTab"
+                         data-txt="模板" data-index="1">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_17"></i>
+                        </div>
+                        <div class="txt">模板</div>
+                    </div>
+                    <div class="menu-item" :class="other.tabIndex==2?'active':''" v-on:click="changOtherTab"
+                         data-txt="形状" data-index="2">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_16"></i>
+                        </div>
+                        <div class="txt">形状</div>
+                    </div>
+                    <div class="menu-item" :class="other.tabIndex==3?'active':''" v-on:click="changOtherTab"
+                         data-txt="素材" data-index="3">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_9"></i>
+                        </div>
+                        <div class="txt">素材</div>
+                    </div>
+                    <div class="menu-item" :class="other.tabIndex==4?'active':''" v-on:click="changOtherTab"
+                         data-txt="图片容器" data-index="4">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_137"></i>
+                        </div>
+                        <div class="txt">容器</div>
+                    </div>
+                    <div class="menu-item" :class="other.tabIndex==5?'active':''" v-on:click="changOtherTab"
+                         data-txt="背景" data-index="5">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_5"></i>
+                        </div>
+                        <div class="txt">背景</div>
+                    </div>
+                    <div class="menu-item" :class="other.tabIndex==6?'active':''" v-on:click="changOtherTab"
+                         data-txt="二维码" data-index="6" v-if="1==2">
+                        <div class="icon">
+                            <i class="iconfont fishqicon_0"></i>
+                        </div>
+                        <div class="txt">二维码</div>
+                    </div>
+                </div>
+                <div class="mater-det" v-if="other">
+                    <div class="tab-content-head">{{other.title}}</div>
+                    <!-- 文字 -->
+                    <div class="mater-item" v-show="other.tabIndex==0">
+                        <div class="art-box">
+                            <div class="art-tab">
+                                <div class="art-tab-item active">艺术字</div>
+                            </div>
+                            <div class="art-list scroll-bar">
+                                <div class="art-item" v-for="(item,index) in other.text.artTxt.artList"
+                                     v-on:click.stop="addArt(index)" :key="index">
+                                    <img :src="item.thumbnail" width="100%"/>
+                                </div>
+                                <div class="template-loading" style="margin: 0 auto;" v-if="other&&other.text.loading">
+                                    <div class="blinking">
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                        <span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 模板 -->
+                    <div class="mater-item" v-show="other.tabIndex==1">
+                        <div class="mb-tab">
+                            <div class="mb-item" :class="other.mbobj.mbtab==0?'active':''" v-on:click="changeMbtab(0)">
+                                推荐
+                            </div>
+                            <div class="mb-item" :class="other.mbobj.mbtab==1?'active':''" v-on:click="changeMbtab(1)">
+                                收藏
+                            </div>
+                            <div class="mb-item" :class="other.mbobj.mbtab==2?'active':''" v-on:click="changeMbtab(2)">
+                                购买
+                            </div>
+                        </div>
+                        <div class="scroll-bar mb-list">
+                            <ul class="mb-left">
+                                <li v-for="(item,index) in other.mbobj.templateList" v-if="(index%2)==0"
+                                    v-on:click.stop="goToTemp(item.id)">
+                                    <img :src="item.cover+'?t=300'" width="100%"/>
+                                    <p>{{item.title}}</p>
+                                </li>
+                            </ul>
+                            <ul class="mb-right">
+                                <li v-for="(item,index) in other.mbobj.templateList" v-if="(index%2)!=0"
+                                    v-on:click.stop="goToTemp(item.id)">
+                                    <img :src="item.cover+'?t=300'" width="100%"/>
+                                    <p>{{item.title}}</p>
+                                </li>
+                            </ul>
+                            <div class="template-loading" v-if="other&&other.mbobj.loading">
+                                <div class="blinking">
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                    <span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 形状 -->
+                    <div class="mater-item" v-show="other.tabIndex==2">
+                        <div class="scroll-bar sh-list">
+                            <template v-for="(item,index) in other.shapeobj.shapeList">
+                                <div class="shape-title">{{item.groupName}}</div>
+                                <div class="shape-box">
+                                    <div class="shape-item" v-for="(sitem,sindex) in item.item"
+                                         v-on:click.stop="clAddShape(index,sindex)">
+                                        <img :src="sitem.thumbnailPath">
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                    <!-- 素材 -->
+                    <div class="mater-item" v-show="other.tabIndex==3">
+                        <div class="material-box" :class="other.scobj.searchBol?'searchhe':''">
+                            <div class="search-box">
+                                <input type="text" class="search-val" v-model="other.scobj.scSearchTxt"
+                                       placeholder="搜索素材" v-on:keyup.13="searchMaterial" v-on:blur="touchmovePage">
+                                <div class="search-btn" v-on:click.stop="searchMaterial">
+                                    <i class="iconfont fishqicon_14"></i>
+                                </div>
+                            </div>
+                            <div class="search-h-top" v-if="other.scobj.searchBol">
+                                <div class="top-btn" v-on:click.stop="searchGoBack">
+                                    <i class="iconfont fishqicon_22"></i>
+                                    返回
+                                </div>
+                                <div class="search-txt">
+                                    搜索<span class="txt">{{other.scobj.scSearchTxt}}</span>共有<span class="num">{{other.scobj.materialList.length}}</span>个素材
+                                </div>
+                            </div>
+                            <div class="material-tab" v-if="!other.scobj.searchBol">
+                                <div class="tab-item" :class="other.scobj.sctab==0?'active':''"
+                                     v-on:click="changeSctab(0)">素材库
+                                </div>
+                                <div class="tab-item" :class="other.scobj.sctab==1?'active':''"
+                                     v-on:click="changeSctab(1)">我的素材
+                                </div>
+                            </div>
+                            <div class="material-classify" v-if="other.scobj.sctab==0&&!other.scobj.searchBol">
+                                <ul>
+                                    <li :class="other.scobj.classifyId==0?'active':''"
+                                        v-on:click.stop="changeClassif(0)">全部
+                                    </li>
+                                    <li :class="other.scobj.classifyId==item.id?'active':''"
+                                        v-for="(item,index) in other.scobj.materialClassify" :key="index"
+                                        v-on:click.stop="changeClassif(item.id)">{{item.name}}
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="upload-img" v-if="other.scobj.sctab==1&&!other.scobj.searchBol">
+                                <div class="select-box">
+                                    <select v-model="other.scobj.classifyId" v-on:change="filtrateMaterial">
+                                        <option value="0">全部</option>
+                                        <option :value="item.id" v-for="(item,index) in other.scobj.materialClassify"
+                                                :key="index">{{item.name}}
+                                        </option>
+                                    </select>
+                                    <i class="iconfont fishqicon_19"></i>
+                                </div>
+                                <div class="upload-btn">
+                                    上传我的素材
+                                    <input accept="image/*" name="file" id="myMat-upload" v-on:change="myMaterialUpload"
+                                           multiple="multiple" type="file">
+                                </div>
+                            </div>
+                            <div class="material-recom scroll-bar"
+                                 :class="other.scobj.sctab==1&&!other.scobj.searchBol?'mymat':''">
+                                <div class="recom-item" v-for="(item,index) in other.scobj.materialList" :key="index">
+                                    <img :src="item.filePath" v-on:click.stop="clAddSvgUpload(index,'b')"
+                                         v-if="item.extension=='.svg'"/>
+                                    <img :src="item.filePath+'?t=50'" v-on:click.stop="clAddImg(index,'c')" v-else/>
+                                </div>
+                                <p class="noData" v-if="other.scobj.materialList.length==0&&other.scobj.getBol">没有素材</p>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 容器 -->
+                    <div class="mater-item" v-show="other.tabIndex==4">
+                        <div class="receptacle-category">
+                            <ul>
+                                <li :class="other.containerobj.containerCid==0?'active':''"
+                                    v-on:click.stop="changeContainerClassif(0)">全部
+                                </li>
+                                <li data-id="22" :class="other.containerobj.containerCid==item.id?'active':''"
+                                    v-for="(item,index) in other.containerobj.contClassify" :key="index"
+                                    v-on:click.stop="changeContainerClassif(item.id)">{{item.name}}
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="container-material scroll-bar">
+                            <div class="recom-item" v-for="(item,index) in other.containerobj.containerlList"
+                                 :key="index" v-on:click.stop="clAddcontainer(index)">
+                                <img :src="item.thumbnailPath">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 背景 -->
+                    <div class="mater-item" v-show="other.tabIndex==5">
+                        <div class="background-diy">
+                            <div class="back-diy-top">
+                                <div class="diy-item diy-flex">
+                                    <div class="left-b">背景色：</div>
+                                    <div class="diy-color diy-flex"
+                                         :class="pagesData.pages[pageNum].bgColor==''?'kcolor':''" v-if="pagesData">
+                                        <div class="diy-color-item set-backcolor"
+                                             :style="{background:pagesData.pages[pageNum].bgColor}"
+                                             v-on:click.stop="showColor('back',(pagesData.pages[pageNum].bgColor!=''?pagesData.pages[pageNum].bgColor:'#fff'))">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="diy-item diy-flex">
+                                    <div class="left-b">背景透明：</div>
+                                    <div class="diy-color diy-flex">
+                                        <div class="diy-color-item color-tra" v-on:click="noBackground"><i
+                                                class="iconfont fishqicon_23"></i></div>
+                                    </div>
+                                </div>
+                                <div class="diy-item">
+                                    <p>点击颜色或上传图片可更改背景</p>
+                                    <p>若无变化,请检查是否被图片遮挡</p>
+                                </div>
+                                <div class="diy-item" v-if="backgroundUrl">
+                                    <div class="img-view">
+                                        <img :src="backgroundUrl+'?t=50'" width="100%"/>
+                                    </div>
+                                </div>
+                                <div class="diy-item">
+                                    <div class="diy-btn">
+                                        +自定义背景
+                                        <input accept="image/*" id="back-upload" v-on:change="changeBackground"
+                                               type="file">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 二维码 -->
+                    <div class="mater-item" v-show="other.tabIndex==6">
+                        <div class="qr-code-item">
+                            <select>
+                                <option value="请选择"></option>
+                            </select>
+                            <i class="iconfont fishqicon_19"></i>
+                        </div>
+                        <div class="qr-code-item">
+                            <input type="text" placeholder="请输入网址" v-on:blur="touchmovePage"/>
+                        </div>
+                        <div class="qr-code-item">
+                            <div class="qr-btn">生成</div>
+                        </div>
+                        <div class="qr-code-item">
+                            <!-- <img src="images/ab_05.jpg" /> -->
+                            <p>点击二维码插入到作品中</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="close-other" v-on:click="other.otherBol=false"></div>
+        </div>
+        <!-- 图层 -->
+        <div class="layerbox" :class="layerbox.layerBol?'boxleft':''">
+            <div class="layerbox-cont">
+                <div class="layer-title">
+                    图层
+                    <i class="iconfont fishqicon_21" v-on:click="layerbox.layerBol=false"></i>
+                </div>
+                <div class="scroll-bar layer-list">
+                    <template v-if="pagesData">
+                        <div class="layer-item" :class="item.Tid==itemNum?'active':''"
+                             v-for="(item,index) in pagesData.pages[pageNum].elementsJson" :key="index"
+                             v-on:click.stop="selectElItem(item.Tid)">
+                            <div class="layer-tb" :class="item.type=='text'?'txt':''">
+                                <img v-if="(item.type=='image'||item.type=='calendar') && item.content.imgUrl"
+                                     :src="item.content.imgUrl+'?t=50'"/>
+                                <img v-else-if="(item.type=='svg'||item.type=='container'||item.type=='shape') && item.content.svgUrl"
+                                     :src="item.content.svgUrl"/>
+                                <i v-else class="iconfont fishqicon_10"></i>
+                            </div>
+                            <div class="layer-txt">
+                                {{item.name}}
+                            </div>
+                            <div class="layer-cz" v-on:click.stop="changeMname(index)">
+                                <i class="iconfont fishqicon_91"></i>
+                            </div>
+                            <div class="layer-cz">
+                                <i class="iconfont fishqicon_67" v-if="index==0"></i>
+                                <i class="iconfont fishqicon_67" v-on:click.stop="hierarchyModify('a',item.Tid)"
+                                   v-else></i>
+                            </div>
+                            <div class="layer-cz cz-rout">
+                                <i class="iconfont fishqicon_67"
+                                   v-if="index==(pagesData.pages[pageNum].elementsJson.length-1)"></i>
+                                <i class="iconfont fishqicon_67" v-on:click.stop="hierarchyModify('b',item.Tid)"
+                                   v-else></i>
+                            </div>
+                        </div>
+                    </template>
+                </div>
+            </div>
+            <div class="close-other" v-on:click="layerbox.layerBol=false"></div>
+        </div>
+        <!-- 页面 -->
+        <div class="pagebox" :class="pagebox.pageBol?'boxleft':''">
+            <div class="pagebox-cont">
+                <div class="page-title">
+                    页面
+                    <i class="iconfont fishqicon_21" v-on:click="pagebox.pageBol=false"></i>
+                </div>
+                <div class="page-list scroll-bar">
+                    <div class="page-item" :class="index==pageNum?'active':''" v-for="(item,index) in pagesData.pages"
+                         :key="index" v-on:click="changePage(index)" :style="item.pageStyle?item.pageStyle:''">
+                        <div class="page-index">{{index+1}}</div>
+                        <img v-if="item.thumbnail" :src="item.thumbnail+'?t=300'" width="100%"/>
+                        <div class="bottom-tool">
+                            <div class="tool-left">
+                                <div class="tool-item">
+                                    <i class="iconfont fishqicon_67" v-if="index==0"></i>
+                                    <i class="iconfont fishqicon_67" v-on:click.stop="canvasSorting('a',index)"
+                                       v-else></i>
+                                </div>
+                                <div class="tool-item cz-rout">
+                                    <i class="iconfont fishqicon_67" v-if="index==(pagesLength-1)"></i>
+                                    <i class="iconfont fishqicon_67 a" v-on:click.stop="canvasSorting('b',index)"
+                                       v-else></i>
+                                </div>
+                            </div>
+                            <div class="tool-right">
+                                <div class="tool-item">
+                                    <i class="iconfont fishqicon_13" v-on:click.stop="copyCanvas(index)"></i>
+                                </div>
+                                <div class="tool-item" v-if="pagesLength!=1">
+                                    <i class="iconfont fishqicon_11 b" v-on:click.stop="deleteCanvas(index)"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="add-page">
+                    <div class="add-page-btn" v-on:click.stop="addItem">+新增页面</div>
+                </div>
+            </div>
+            <div class="close-other" v-on:click="pagebox.pageBol=false"></div>
+        </div>
+        <!-- 删除画布确认 -->
+        <div class="f-temp-remove" :class="deleteCanvasObj.deleteCanvasBol?'boxleft':''">
+            <div class="f-remove-cont">
+                <p>确定删除这页?</p>
+                <div class="f-remove-btn">
+                    <a href="javascript:void(0);" class="f-closeo" v-on:click="ClearDeleteCanvas">取消</a>
+                    <a href="javascript:void(0);" class="f-enter" v-on:click="queDeleteCanvas">确定</a>
+                </div>
+            </div>
+        </div>
+        <!-- 图片裁剪 -->
+        <div class="tailoringbox" :class="tailoringboxobj.tailoringBol?'active':''">
+            <div class="tailoringbox-cont">
+                <div class="tailor-mark" :class="tailoringboxobj.type=='container'?'contcla':''"
+                     :style="tailoringboxobj.borderStyle"></div>
+                <div class="tailoringbox-img" :style="tailoringboxobj.imgStyle">
+                    <img class="zoomImgbox" :src="tailoringboxobj.imgUrl+'?t=200'"/>
+                </div>
+                <div class="tailoringbox-cz" :style="tailoringboxobj.contStyle">
+                    <div class="tamsg">手指拖动缩放裁剪</div>
+                    <div class="container-html" v-if="tailoringboxobj.type=='container'"
+                         v-html="tailoringboxobj.containerObj"></div>
+                    <div class="point-border">
+                        <div class="tailoringbox-point">
+                            <div class="point-item pit1" data-index="0"></div>
+                            <div class="point-item pit2" data-index="1"></div>
+                            <div class="point-item pit3" data-index="2"></div>
+                            <div class="point-item pit4" data-index="3"></div>
+                            <div class="point-item pit5" data-index="4"></div>
+                            <div class="point-item pit6" data-index="5"></div>
+                            <div class="point-item pit7" data-index="6"></div>
+                            <div class="point-item pit8" data-index="7"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tailoringbox-btn">
+                <div class="btn-item" v-on:click.stop="clearTailoring">
+                    <i class="iconfont fishqicon_21"></i>
+                    取消
+                </div>
+                <div class="btn-item" v-on:click.stop="changeTailoring">
+                    <i class="iconfont fishqicon_68"></i>
+                    完成
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="global-mark" :class="(!loadingBol)?'mark-hide':''">
+        <div class="mark-cont">
+            <div class="template-loading">
+                <div class="blinking">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+        <p :class="loadingBol?'active':''">加载中...</p>
+    </div>
+    <div :class="artBol?'artms-box':''">
+        <div class="opty-mark" :class="(uploadBol||artBol)?'active':''">
+            <div class="opty-msg">
+                <div class="sp-circle"></div>
+                <p v-show="artBol">字体加载中...</p>
+                <p v-show="uploadBol">正在上传图片</p>
+            </div>
+        </div>
+    </div>
+    <div class="select_box">
+        <div class="box-mark" v-show="fontMark">
+            <div class="template-loading">
+                <div class="blinking">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 台历日期选择 -->
+    <div class="desk-box" :class="deskShow?'desk-show':''">
+        <div class="desk-cont">
+            <div class="desk-item title">请选择你要制作台历的起始月份</div>
+            <div class="desk-item">
+                <div class="desk-title">
+                    起始月份
+                </div>
+                <div class="desk-det J-yearMonthPicker-single">
+                    <input type="text" readonly="readonly" placeholder="请选择日期" id="deskTime" value="">
+                </div>
+            </div>
+            <div class="desk-item">
+                <div class="desk-det desk-btn" v-on:click="getCalendarList">确定</div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="https://res.wx.qq.com/open/js/jweixin-1.4.0.js"></script>
+<script type="text/javascript" src="https://js.cdn.aliyun.dcloud.net.cn/dev/uni-app/uni.webview.1.5.1.js"></script>
+<script type="text/javascript" src="js/common/dySelect.js"></script>
+<script type="text/javascript" src="js/api.js?v=202010230907"></script>
+<script type="text/javascript" src="js/app1.js?v=202010230907"></script>
+<script type="text/javascript" src="js/zoom.js?v=202010230907"></script>
+<script type="text/javascript" src="js/dragElements.js?v=202010230907"></script>
+<script type="text/javascript" src="js/addFont.js?v=202010230907"></script>
+<script type="text/javascript" src="js/addfontArt.js?v=202010230907"></script>
+<script type="text/javascript" src="js/addImg.js?v=202010230907"></script>
+<script type="text/javascript" src="js/addSvg.js?v=202010230907"></script>
+<script type="text/javascript" src="js/addShape.js?v=202010230907"></script>
+<script type="text/javascript" src="js/addcontainer.js?v=202010230907"></script>
+<script type="text/javascript" src="js/material.js?v=202010230907"></script>
+<script type="text/javascript" src="js/common/LCalendar.js?v=202010230907"></script>
+
+<!-- <script type="text/javascript" src="//cdn.jsdelivr.net/npm/eruda"></script>
+<script>eruda.init();</script> -->
+</html>

@@ -207,6 +207,11 @@ public class PublicController {
         return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS);
     }
 
+    @ApiOperation(value = "app查询酒盒模板接口")
+    @PostMapping("app/wineBox/jiuHeFindAll")
+    public ReturnBean jiuHeFindAll(String alcoholName, Integer boxTypeId) {
+        return ReturnBean.of(ReturnBean.AnswerCode.SUCCESS, wineBoxService.findByBoxTypeIdAndLengthGreaterThan(boxTypeId, alcoholName.length()));
+    }
 
     @ApiOperation(value = "app根据waterPurpose")
     @PostMapping("app/water/findAll")

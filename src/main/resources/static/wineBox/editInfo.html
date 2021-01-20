@@ -163,7 +163,7 @@
             <p>高度</p>
             <input class="form-control" v-model="header1Style.height">
             <br>
-            <span class="btn btn-primary btn-block" @click="saveHeader2Style()">一键保存所有</span>
+
         </div>
         <div class="header2Class">
             <h2>酒标(右)样式</h2>
@@ -203,47 +203,46 @@
             <p>高度</p>
             <input class="form-control" v-model="header2Style.height">
             <br>
-
+            <span class="btn btn-primary btn-block" @click="saveHeader2Style()">一键保存所有</span>
         </div>
-        <!--        <div class="bodyClass">-->
-        <!--            <h2>酒盒样式</h2>-->
-        <!--            <p>文本</p>-->
-        <!--            <input class="form-control" v-model="bodyText" type="text">-->
-        <!--            <p>颜色</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.color" type="color">-->
-        <!--            <p>上边距</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.top">-->
-        <!--            <p>左边距</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.left">-->
-        <!--            <p>字体大小</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.fontSize">-->
-        <!--            <p>字体</p>-->
-        <!--            <select class="form-control" v-model="bodyStyle.fontFamily">-->
-        <!--                <option>阿里汉仪智能黑体</option>-->
-        <!--                <option>变体美术字</option>-->
-        <!--                <option>方正滕占敏竹刻简</option>-->
-        <!--                <option>方正字迹-吕建德行楷简体</option>-->
-        <!--                <option>个性印章</option>-->
-        <!--                <option>汉仪家国宋W</option>-->
-        <!--                <option>黄庭坚书法字体</option>-->
-        <!--                <option>李旭科书法</option>-->
-        <!--                <option>招牌字体</option>-->
-        <!--                <option>正行楷简体</option>-->
-        <!--            </select>-->
-        <!--            <p>文字方向</p>-->
-        <!--            <select class="form-control" v-model="bodyStyle.writingMode">-->
-        <!--                <option value="tb">从上到下</option>-->
-        <!--                <option value="unset">从左向右</option>-->
-        <!--            </select>-->
-        <!--            <p>X轴旋转</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.transform">-->
-        <!--            <p>宽度</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.width">-->
-        <!--            <p>高度</p>-->
-        <!--            <input class="form-control" v-model="bodyStyle.height">-->
-        <!--            <br>-->
-        <!--            <span class="btn btn-primary btn-block" @click="saveBodyStyle()">保存内容样式</span>-->
-        <!--        </div>-->
+        <div class="bodyClass">
+            <h2>酒盒样式</h2>
+            <p>文本</p>
+            <input class="form-control" v-model="bodyText" type="text">
+            <p>颜色</p>
+            <input class="form-control" v-model="bodyStyle.color" type="color">
+            <p>上边距</p>
+            <input class="form-control" v-model="bodyStyle.top">
+            <p>左边距</p>
+            <input class="form-control" v-model="bodyStyle.left">
+            <p>字体大小</p>
+            <input class="form-control" v-model="bodyStyle.fontSize">
+            <p>字体</p>
+            <select class="form-control" v-model="bodyStyle.fontFamily">
+                <option>阿里汉仪智能黑体</option>
+                <option>变体美术字</option>
+                <option>方正滕占敏竹刻简</option>
+                <option>方正字迹-吕建德行楷简体</option>
+                <option>个性印章</option>
+                <option>汉仪家国宋W</option>
+                <option>黄庭坚书法字体</option>
+                <option>李旭科书法</option>
+                <option>招牌字体</option>
+                <option>正行楷简体</option>
+            </select>
+            <p>文字方向</p>
+            <select class="form-control" v-model="bodyStyle.writingMode">
+                <option value="tb">从上到下</option>
+                <option value="unset">从左向右</option>
+            </select>
+            <p>X轴旋转</p>
+            <input class="form-control" v-model="bodyStyle.transform">
+            <p>宽度</p>
+            <input class="form-control" v-model="bodyStyle.width">
+            <p>高度</p>
+            <input class="form-control" v-model="bodyStyle.height">
+            <br>
+        </div>
     </div>
     <div>
 
@@ -339,7 +338,8 @@
                     id: vm.id,
                     headerText: vm.headerText,
                     header1Style: JSON.stringify(vm.header1Style),
-                    header2Style: JSON.stringify(vm.header2Style)
+                    header2Style: JSON.stringify(vm.header2Style),
+                    bodyStyle: JSON.stringify(vm.bodyStyle)
                 }, function (data) {
                     if (data.ok) {
                         vm.obj = data.obj;

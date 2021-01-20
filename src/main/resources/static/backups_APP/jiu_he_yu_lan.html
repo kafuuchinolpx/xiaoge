@@ -83,7 +83,7 @@
         <img :src="baseUrl+d.image" width=" 500">
         <div v-bind:style="d.header1Style">{{alcoholName}}</div>
         <div v-bind:style="d.header2Style">{{alcoholName}}</div>
-        <!-- <div v-bind:style="d.bodyStyle">{{info}}</div>  tutorialsImage-->
+        <div v-bind:style="d.bodyStyle">{{info}}</div>
     </div>
     <div class="shuiYin">
         点击图片可展开
@@ -103,7 +103,7 @@
     <p style="text-align: center; ">
         <span><button @click="changeIndex(-1)"
                       style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">上一个</button></span>
-        <button style="background: #0062CC;color: white;position: relative;top:-25px;" @click="submitIt()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;确定样式&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
+        <button style="background: #0062CC;color: white;position: relative;top:-25px;" @click="submitIt()">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;进入编辑&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</button>
         <span><button @click="changeIndex(1)"
                       style="text-align: center;position: relative;top: -25px;height: 25%; width: 25%;">下一个</button></span>
     </p>
@@ -159,12 +159,9 @@
             if (null == localStorage.boxTypeId1) {
                 localStorage.boxTypeId1 = 1;
             }
-            $.post(base_path + "app/wineBox/findAll", {
+            $.post(base_path + "app/wineBox/jiuHeFindAll", {
                 alcoholName: localStorage.alcoholName,
                 boxTypeId: localStorage.boxTypeId1,
-                materialId: localStorage.materialId1,
-                styleId: localStorage.styleId1,
-                purposeId: localStorage.purposeId1,
             }, function (data) {
                 if (data.code == 200) {
                     vm.wineBoxList = data.obj;
@@ -172,7 +169,7 @@
                     for (var i = 0; i < vm.wineBoxList.length; i++) {
                         vm.wineBoxList[i].header1Style = JSON.parse(vm.wineBoxList[i].header1Style);
                         vm.wineBoxList[i].header2Style = JSON.parse(vm.wineBoxList[i].header2Style);
-                        // vm.wineBoxList[i].bodyStyle = JSON.parse(vm.wineBoxList[i].bodyStyle);
+                        vm.wineBoxList[i].bodyStyle = JSON.parse(vm.wineBoxList[i].bodyStyle);
                     }
                     if (vm.wineBoxList[vm.selectIndex2]) {
                         if (vm.wineBoxList[vm.selectIndex2].son) {
@@ -193,19 +190,16 @@
 
             reload_: function () {
                 var vm = this;
-                $.post(base_path + "app/wineBox/findAll", {
+                $.post(base_path + "app/wineBox/jiuHeFindAll", {
                     alcoholName: localStorage.alcoholName,
                     boxTypeId: localStorage.boxTypeId1,
-                    materialId: localStorage.materialId1,
-                    styleId: localStorage.styleId1,
-                    purposeId: localStorage.purposeId1,
                 }, function (data) {
                     if (data.code == 200) {
                         vm.wineBoxList = data.obj;
                         for (var i = 0; i < vm.wineBoxList.length; i++) {
                             vm.wineBoxList[i].header1Style = JSON.parse(vm.wineBoxList[i].header1Style);
                             vm.wineBoxList[i].header2Style = JSON.parse(vm.wineBoxList[i].header2Style);
-                            // vm.wineBoxList[i].bodyStyle = JSON.parse(vm.wineBoxList[i].bodyStyle);
+                            vm.wineBoxList[i].bodyStyle = JSON.parse(vm.wineBoxList[i].bodyStyle);
                         }
                         vm.wineBoxListSon = vm.wineBoxList[vm.selectIndex2].son;
                     }

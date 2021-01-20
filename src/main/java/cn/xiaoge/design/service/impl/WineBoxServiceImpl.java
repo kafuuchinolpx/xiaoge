@@ -163,6 +163,7 @@ public class WineBoxServiceImpl implements WineBoxService {
         return null;
     }
 
+
     @Override
     public List<WineBox> findByBoxTypeIdAndMaterialIdAndStyleIdAndLengthGreaterThan(Integer boxTypeId, Integer materialId, Integer styleId, Integer purposeId, int length) {
         List<WineBox> byBoxTypeIdAndMaterialIdAndStyleIdAndLength = wineBoxRepository.findAllByBoxTypeIdAndMaterialIdAndStyleIdAndPurposeIdAndGroupIdAndLengthAndDeleteState(boxTypeId, materialId, styleId, purposeId, 0, length, 1);

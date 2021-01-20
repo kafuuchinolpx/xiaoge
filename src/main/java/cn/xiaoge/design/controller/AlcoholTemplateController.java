@@ -1,5 +1,4 @@
 package cn.xiaoge.design.controller;
-
 import cn.xiaoge.design.entity.AlcoholTemplate;
 import cn.xiaoge.design.service.AlcoholTemplateService;
 import cn.xiaoge.design.entity.vo.ReturnBean;
@@ -12,7 +11,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Size;
 import java.io.File;

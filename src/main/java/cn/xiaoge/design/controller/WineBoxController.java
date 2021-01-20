@@ -89,7 +89,7 @@ public class WineBoxController {
 
     @ApiOperation(value = "酒模板修改不为空的属性")
     @PostMapping("updateStyle")
-    public ReturnBean updateStyle(Integer id, String headerText, String header1Style, String header2Style
+    public ReturnBean updateStyle(Integer id, String headerText, String header1Style, String header2Style, String bodyStyle
 
     ) throws Exception {
 
@@ -101,6 +101,9 @@ public class WineBoxController {
         }
         if (!StringUtils.isEmpty(header2Style)) {
             wineBox.setHeader2Style(header2Style);
+        }
+        if (!StringUtils.isEmpty(bodyStyle)) {
+            wineBox.setBodyStyle(bodyStyle);
         }
         wineBox.setRemark(headerText);
         wineBoxService.updateNotNull(wineBox);
